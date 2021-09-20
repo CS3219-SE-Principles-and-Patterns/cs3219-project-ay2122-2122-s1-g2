@@ -1,1 +1,6 @@
 .DS_Store
+backend/flashcard/node_modules
+backend/game/node_modules
+backend/login/node_modules
+backend/matchmaking/node_modules
+backend/profile/node_modules
