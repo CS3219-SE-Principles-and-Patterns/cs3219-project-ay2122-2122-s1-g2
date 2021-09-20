@@ -13,6 +13,22 @@ const getJwtToken = (data) => {
 	}, ACCESS_SECRET);
 }
 
+const authTokenMW = (req, res, next) => {
+	const aHeader = req.headers['authorization'];
+	const aToken = aHeader && aHeader.split(' ')[1];t
+	if (aToken == null) {
+		return res.status(401).send("User ");
+	}
+
+	jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
+		if (err) {
+			return res.status(403).send("Access Denied: Token is no longer value");
+		}
+		req.user = user;
+		next();
+	})
+} 
+
 router.get("/", (req, res) => {
 	res.json("Login Microservice");
 })
