@@ -4,3 +4,4 @@ backend/game/node_modules
 backend/login/node_modules
 backend/matchmaking/node_modules
 backend/profile/node_modules
+frontend/node_modules
