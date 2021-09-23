@@ -17,7 +17,7 @@ const authTokenMW = (req, res, next) => {
 	const aHeader = req.headers['authorization'];
 	const aToken = aHeader && aHeader.split(' ')[1];t
 	if (aToken == null) {
-		return res.status(401).send("User ");
+		return res.status(401).send("Authentication token required");
 	}
 
 	jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
@@ -36,7 +36,7 @@ router.get("/", (req, res) => {
 router.get("/get", (req, res) => {
 	DatabaseManager.getAll((data, err) => {
 		if (err) {
-			res.status(400).json("Error: " + err);
+			res.status(400).json(err);
 		} else {
 			res.json(data);
 		}
@@ -48,7 +48,7 @@ router.get("/get/:username", (req, res) => {
 		username: req.params.username
 	}, (data, err) => {
 		if (err) {
-			res.status(400).json("Error: " + err);
+			res.status(400).json(err);
 		} else {
 			res.json(data).status(200);
 		}
@@ -58,7 +58,7 @@ router.get("/get/:username", (req, res) => {
 router.post("/login", (req, res) => {
 	DatabaseManager.get({username: req.body.username}, async (data, err) => {
 		if (err) {
-			res.status(400).json("Error: " + err);
+			res.status(400).json(err);
 		} else {
 			const pwIsCorrect = await bcrypt.compare(req.body.password, data.password);
 			if (pwIsCorrect) {
@@ -74,7 +74,7 @@ router.post("/login", (req, res) => {
 router.post("/register", (req, res) => {
 	DatabaseManager.insert(req.body, (data, err) => {
 		if (err) {
-			res.status(400).json("Error: " + err);
+			res.status(400).json(err);
 		} else {
 			res.json({accessToken: getJwtToken(data)});
 		}
@@ -84,7 +84,7 @@ router.post("/register", (req, res) => {
 router.put("/update", (req, res) => {
 	DatabaseManager.update(req.body, (data, err) => {
 		if (err) {
-			res.status(400).json("Error: " + err);
+			res.status(400).json(err);
 		} else {
 			res.json({accessToken: getJwtToken(data)});
 		}
