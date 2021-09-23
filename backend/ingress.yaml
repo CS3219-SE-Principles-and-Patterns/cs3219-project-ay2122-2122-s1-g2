@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: language-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/flashcard
+            pathType: Prefix
+            backend:
+              service:
+                name: flashcard-service
+                port:
+                  number: 70
+          - path: /api/game
+            pathType: Prefix
+            backend:
+              service:
+                name: game-service
+                port:
+                  number: 80
+          - path: /api/login
+            pathType: Prefix
+            backend:
+              service:
+                name: login-service
+                port:
+                  number: 90
+          - path: /api/matchmaking
+            pathType: Prefix
+            backend:
+              service:
+                name: matchmaking-service
+                port:
+                  number: 100
+          - path: /api/profile
+            pathType: Prefix
+            backend:
+              service:
+                name: profile-service
+                port:
+                  number: 110

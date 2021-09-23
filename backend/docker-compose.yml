@@ -1,0 +1,26 @@
+services:
+  flashcard:
+    build: flashcard/
+    image: flashcard
+    ports:
+      - "1000:1000"
+  game:
+    build: game/
+    image: game
+    ports:
+      - "2000:2000"
+  login:
+    build: login/
+    image: login
+    ports:
+      - "3000:3000"
+  matchmaking:
+    build: matchmaking/
+    image: matchmaking
+    ports:
+      - "4000:4000"
+  profile:
+    build: profile/
+    image: profile
+    ports:
+      - "5000:5000"

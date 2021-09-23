@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flashcard
+spec:
+  selector:
+    matchLabels:
+      run: flashcard
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: flashcard
+    spec:
+      containers:
+        - name: flashcard
+          image: flashcard
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 1000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game
+spec:
+  selector:
+    matchLabels:
+      run: game
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: game
+    spec:
+      containers:
+        - name: game
+          image: game
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 2000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login
+spec:
+  selector:
+    matchLabels:
+      run: login
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: login
+    spec:
+      containers:
+        - name: login
+          image: login
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matchmaking
+spec:
+  selector:
+    matchLabels:
+      run: matchmaking
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: matchmaking
+    spec:
+      containers:
+        - name: matchmaking
+          image: matchmaking
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 4000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile
+spec:
+  selector:
+    matchLabels:
+      run: profile
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: profile
+    spec:
+      containers:
+        - name: profile
+          image: profile
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
