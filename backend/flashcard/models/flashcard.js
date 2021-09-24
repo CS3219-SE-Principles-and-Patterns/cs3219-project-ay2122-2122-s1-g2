@@ -2,15 +2,21 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Blueprint of what an item would look like in our DB.
+
 const FlashcardSchema = new Schema({
-    id: {
-        type: String,
-		required: true
-    },
-	password: {
+    username: {
 		type: String,
 		required: true
-	},
+	}, 
+	flashcards: [
+		{
+			title: String,
+			difficulty: Number,
+			body: String,
+			altBody: String,
+			language: String
+		} 
+	]
 });
 
 // Makes a model of the above schema.

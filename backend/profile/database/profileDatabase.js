@@ -17,9 +17,4 @@ connection.once("open", (err) => {
     console.log("MongoDB database connection established successfully");
 });
 
-const Profile = require("../models/profile.js");
-
-const DatabaseManager = {
-}
-
-module.exports = DatabaseManager;
+module.exports = connection;

@@ -7,10 +7,10 @@ const ProfileSchema = new Schema({
         type: String,
 		required: true
     },
-	password: {
-		type: String,
+	languages: {
+		type: Array,
 		required: true
-	},
+	}
 });
 
 // Makes a model of the above schema.
