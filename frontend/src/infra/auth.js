@@ -8,3 +8,6 @@ export const loginUser = async (data) => {
 export const registerUser = async (data) => {
   return await axios.post(LOGIN_PATH + "/register", data);
 };
+export const resetPassword = async (data) => {
+  return await axios.put(LOGIN_PATH + "/update", data);
+};

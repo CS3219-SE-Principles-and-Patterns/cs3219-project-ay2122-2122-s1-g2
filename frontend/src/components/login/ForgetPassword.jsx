@@ -1,10 +1,11 @@
 import "./Login.css";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../../infra/auth";
-import { login } from "../../utils/auth/auth";
+import { resetPassword } from "../../infra/auth";
 import { landingEnum } from "../../utils/constants/enums";
+import { useState } from "react";
 
-const Login = ({ setLandingStatus }) => {
+const ForgetPassword = ({ setLandingStatus }) => {
+  const [resetted, setResetted] = useState(false);
   const {
     register,
     handleSubmit,
@@ -13,15 +14,15 @@ const Login = ({ setLandingStatus }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    let response = await loginUser(data).catch((e) => {
+    let response = await resetPassword(data).catch((e) => {
       setError("password", { message: e.response.data });
     });
 
-    if (response) login(response.data.accessToken);
+    if (response) setResetted(true);
   };
   return (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h1>Login</h1>
+      <h1>Forget Password</h1>
       <div className="login-input">
         <label>Username:</label>
         <input {...register("username", { required: true })} />
@@ -39,17 +40,17 @@ const Login = ({ setLandingStatus }) => {
           <p className="error-message">{errors.password.message}</p>
         )}
       </div>
+      {resetted && (
+        <p className="success-message">Successfully reset password!</p>
+      )}
       <div className="login-buttons">
-        <button type="submit">Log In</button>
-        <button onClick={() => setLandingStatus(landingEnum.REGISTER)}>
-          Register
-        </button>
-        <button onClick={() => setLandingStatus(landingEnum.FORGET_PASSWORD)}>
-          Forget Password
+        <button type="submit">Reset Password</button>
+        <button onClick={() => setLandingStatus(landingEnum.LOGIN)}>
+          Login
         </button>
       </div>
     </form>
   );
 };
 
-export default Login;
+export default ForgetPassword;
