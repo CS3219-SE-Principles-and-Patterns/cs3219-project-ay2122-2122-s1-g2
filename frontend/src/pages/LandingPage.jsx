@@ -2,19 +2,20 @@ import "./LandingPage.css";
 import { useState } from "react";
 import Login from "../components/login/Login";
 import Register from "../components/login/Register";
+import { landingEnum } from "../utils/constants/enums";
+import ForgetPassword from "../components/login/ForgetPassword";
 
 const LandingPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const toggleIsLogin = () => {
-    setIsLogin(!isLogin);
-  };
+  const [landingStatus, setLandingStatus] = useState(landingEnum.LOGIN);
 
   return (
     <div className="container">
-      {isLogin ? (
-        <Login toggleIsLogin={toggleIsLogin} />
+      {landingStatus === landingEnum.LOGIN ? (
+        <Login setLandingStatus={setLandingStatus} />
+      ) : landingStatus === landingEnum.REGISTER ? (
+        <Register setLandingStatus={setLandingStatus} />
       ) : (
-        <Register toggleIsLogin={toggleIsLogin} />
+        <ForgetPassword setLandingStatus={setLandingStatus} />
       )}
     </div>
   );

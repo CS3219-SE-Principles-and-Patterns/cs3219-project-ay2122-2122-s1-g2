@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { registerUser } from "../../infra/auth";
+import { landingEnum } from "../../utils/constants/enums";
 
-const Register = ({ toggleIsLogin }) => {
+const Register = ({ setLandingStatus }) => {
   const [registered, setRegistered] = useState(false);
   const {
     register,
@@ -56,7 +57,9 @@ const Register = ({ toggleIsLogin }) => {
       )}
       <div className="login-buttons">
         <button type="submit">Register</button>
-        <button onClick={toggleIsLogin}>Back to login</button>
+        <button onClick={() => setLandingStatus(landingEnum.LOGIN)}>
+          Back to login
+        </button>
       </div>
     </form>
   );
