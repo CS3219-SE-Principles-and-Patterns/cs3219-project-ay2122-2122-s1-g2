@@ -2,30 +2,3 @@
   border: black solid 2px;
   border-radius: 8px;
 }
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  height: 40vh;
-  width: 40vw;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.login-form > h1 {
-  margin: 0;
-}
-
-.login-form > button {
-  display: block;
-  width: 40%;
-  padding: 2% 0;
-}
-
-.login-input {
-  width: 90%;
-}
-.login-input > input {
-  width: 98%;
-  padding: 1%;
-}
