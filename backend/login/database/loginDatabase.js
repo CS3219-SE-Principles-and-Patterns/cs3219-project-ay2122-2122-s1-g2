@@ -113,6 +113,20 @@ const DatabaseManager = {
             });
         }
 	},
+    jwtlogin: async (req, res) => {
+        try {
+            const profile = req.user;
+            res.json({
+                message: "Success",
+                data: profile
+            });
+        } catch (err) {
+			res.json({
+                message: "Error",
+                error: err
+            });
+        }
+    },
     insert: async (req, res) => {
         try {
             const data = req.body;

@@ -13,6 +13,8 @@ router.get("/get/:username", DatabaseManager.get);
 
 router.post("/login", DatabaseManager.login);
 
+router.get("/jwtlogin", DatabaseManager.authTokenMW, DatabaseManager.jwtlogin);
+
 router.post("/register", DatabaseManager.insert);
 
 router.put("/update", DatabaseManager.authTokenMW, DatabaseManager.update);
