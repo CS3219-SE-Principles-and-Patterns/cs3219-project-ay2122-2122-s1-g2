@@ -10,7 +10,7 @@ const gameRoutes = require("./routes/gameRoutes.js");
 
 app.use("/", gameRoutes);
 
-const port = process.env.PORT || 2000;
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
 	console.log(`Server up and running on port ${port}!`);
 });

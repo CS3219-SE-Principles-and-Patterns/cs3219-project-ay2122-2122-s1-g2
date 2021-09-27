@@ -8,9 +8,9 @@ app.use(cors());
 
 const flashcardRoutes = require("./routes/flashcardRoutes.js");
 
-app.use("/", flashcardRoutes);
+app.use("/flashcard", flashcardRoutes);
 
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 2000;
 app.listen(port, () => {
 	console.log(`Server up and running on port ${port}!`);
 });
