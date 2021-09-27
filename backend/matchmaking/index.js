@@ -8,7 +8,7 @@ app.use(cors());
 
 const matchmakingRoutes = require("./routes/matchmakingRoutes.js");
 
-app.use("/", matchmakingRoutes);
+app.use("/api/matchmaking", matchmakingRoutes);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

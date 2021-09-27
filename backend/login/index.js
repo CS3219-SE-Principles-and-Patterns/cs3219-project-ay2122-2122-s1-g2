@@ -8,7 +8,7 @@ app.use(cors());
 
 const loginRoutes = require("./routes/loginRoutes.js");
 
-app.use("/", loginRoutes);
+app.use("/api/login", loginRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
