@@ -8,11 +8,7 @@ app.use(cors());
 
 const flashcardRoutes = require("./routes/flashcardRoutes.js");
 
-<<<<<<< HEAD
 app.use("/api/flashcard", flashcardRoutes);
-=======
-app.use("/flashcard", flashcardRoutes);
->>>>>>> master
 
 const port = process.env.PORT || 2000;
 app.listen(port, () => {
