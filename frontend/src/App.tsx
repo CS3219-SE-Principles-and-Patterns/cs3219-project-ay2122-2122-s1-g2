@@ -1,6 +1,8 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Home from "./pages/Home.tsx";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Game from "./pages/Game";
+import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -12,6 +14,12 @@ const App = () => {
           </Route>
           <Route path="/home">
             <Home />
+          </Route>
+          <Route path="/profile">
+            <Profile />
+          </Route>
+          <Route path="/game">
+            <Game />
           </Route>
         </Switch>
       </div>
