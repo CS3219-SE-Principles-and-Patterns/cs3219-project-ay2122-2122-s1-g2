@@ -15,7 +15,7 @@ const getJwtToken = (data) => {
 
 const authTokenMW = (req, res, next) => {
 	const aHeader = req.headers['authorization'];
-	const aToken = aHeader && aHeader.split(' ')[1];t
+	const aToken = aHeader && aHeader.split(' ')[1];
 	if (aToken == null) {
 		return res.status(401).send("User ");
 	}
