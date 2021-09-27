@@ -9,14 +9,16 @@ const LandingPage = () => {
   const [landingStatus, setLandingStatus] = useState(landingEnum.LOGIN);
 
   return (
-    <div className="container">
-      {landingStatus === landingEnum.LOGIN ? (
-        <Login setLandingStatus={setLandingStatus} />
-      ) : landingStatus === landingEnum.REGISTER ? (
-        <Register setLandingStatus={setLandingStatus} />
-      ) : (
-        <ForgetPassword setLandingStatus={setLandingStatus} />
-      )}
+    <div className="main">
+      <div className="container">
+        {landingStatus === landingEnum.LOGIN ? (
+          <Login setLandingStatus={setLandingStatus} />
+        ) : landingStatus === landingEnum.REGISTER ? (
+          <Register setLandingStatus={setLandingStatus} />
+        ) : (
+          <ForgetPassword setLandingStatus={setLandingStatus} />
+        )}
+      </div>
     </div>
   );
 };
