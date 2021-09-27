@@ -8,7 +8,7 @@ app.use(cors());
 
 const gameRoutes = require("./routes/gameRoutes.js");
 
-app.use("/", gameRoutes);
+app.use("/api/game", gameRoutes);
 
 const port = process.env.PORT || 2000;
 app.listen(port, () => {
