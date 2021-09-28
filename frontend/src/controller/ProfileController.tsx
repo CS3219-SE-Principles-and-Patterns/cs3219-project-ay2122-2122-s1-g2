@@ -2,8 +2,15 @@ import { Profile, ProfileProps } from "../domain/profile";
 import { ProfileInfra } from "../infra/profile";
 
 export class ProfileController {
-  public static editProfile = (props: ProfileProps) => {
+  public static editProfile = async (props: ProfileProps) => {
     const profile: Profile = Profile.create(props);
-    return ProfileInfra.editProfile(profile);
+    return await ProfileInfra.editProfile(profile);
+  };
+  public static getProfile = async (): Promise<Profile> => {
+    const res = await ProfileInfra.getProfile();
+    return Profile.create({
+      languages: res.languages,
+      proficiency: res.proficiency,
+    });
   };
 }

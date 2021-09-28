@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import Navbar from "../components/common/Navbar";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <Navbar />
@@ -12,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

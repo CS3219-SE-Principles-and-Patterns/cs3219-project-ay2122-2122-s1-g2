@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import Navbar from "../components/common/Navbar";
 
-const Game = () => {
+const GamePage = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <Navbar />
@@ -12,4 +12,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default GamePage;

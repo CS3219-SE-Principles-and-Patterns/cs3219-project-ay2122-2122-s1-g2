@@ -14,12 +14,13 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProfileController } from "../controller/ProfileController";
+import { Profile } from "../domain/profile";
 
-const Profile = () => {
+const ProfilePage = () => {
   const languages = ["Korean", "Japanese", "French"];
-  const [lang, setLang] = useState<string[]>([]);
+  const [langs, setLangs] = useState<string[]>([]);
   const [proficiency, setProficiency] = useState<number>(3);
   const [error, setError] = useState<string>("");
 
@@ -30,22 +31,36 @@ const Profile = () => {
     setProficiency(newProficiency as number);
   };
 
-  const handleLanguageChange = (event: SelectChangeEvent<typeof lang>) => {
+  const handleLanguageChange = (event: SelectChangeEvent<typeof langs>) => {
     const {
       target: { value },
     } = event;
-    setLang(typeof value === "string" ? value.split(",") : value);
+    setLangs(typeof value === "string" ? value.split(",") : value);
   };
 
   const onSubmit = (e: any) => {
     e.preventDefault();
     try {
-      ProfileController.editProfile({ languages: lang, proficiency });
+      ProfileController.editProfile({ languages: langs, proficiency });
       setError("");
     } catch (err: any) {
       setError(err.message);
     }
   };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profile: Profile = await ProfileController.getProfile();
+        setLangs(profile.languages);
+        setProficiency(profile.proficiency);
+      } catch (e) {
+        // do nothing
+        console.log(e);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -62,7 +77,7 @@ const Profile = () => {
                   id="demo-multiple-chip"
                   multiple
                   required
-                  value={lang}
+                  value={langs}
                   onChange={handleLanguageChange}
                   input={
                     <OutlinedInput id="select-multiple-chip" label="Language" />
@@ -113,4 +128,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

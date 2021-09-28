@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Game from "./pages/Game";
-import Home from "./pages/Home";
+import Game from "./pages/GamePage";
+import Home from "./pages/HomePage";
 import LandingPage from "./pages/LandingPage";
-import Profile from "./pages/Profile";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
             <Home />
           </Route>
           <Route path="/profile">
-            <Profile />
+            <ProfilePage />
           </Route>
           <Route path="/game">
             <Game />
