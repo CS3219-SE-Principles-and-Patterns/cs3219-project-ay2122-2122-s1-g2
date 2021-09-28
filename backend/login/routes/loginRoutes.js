@@ -15,5 +15,7 @@ router.put("/update", DatabaseManager.authTokenMW, DatabaseManager.update);
 
 router.delete("/:username", DatabaseManager.delete);
 
+router.post("/token", DatabaseManager.getAccessToken);
+
 
 module.exports = router;
