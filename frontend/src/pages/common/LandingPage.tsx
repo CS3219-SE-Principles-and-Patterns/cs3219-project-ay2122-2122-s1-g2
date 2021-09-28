@@ -1,9 +1,10 @@
 import "./LandingPage.css";
 import { useState } from "react";
-import Login from "../components/login/Login";
-import Register from "../components/login/Register";
-import { landingEnum } from "../utils/constants/enums";
-import ForgetPassword from "../components/login/ForgetPassword";
+import { landingEnum } from "../../utils/constants/enums";
+
+import ForgetPassword from "../../components/login/ForgetPassword";
+import Register from "../../components/login/Register";
+import Login from "../../components/login/Login";
 
 const LandingPage = () => {
   const [landingStatus, setLandingStatus] = useState(landingEnum.LOGIN);

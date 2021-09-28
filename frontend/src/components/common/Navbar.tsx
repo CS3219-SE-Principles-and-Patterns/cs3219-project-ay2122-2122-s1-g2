@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import HomeIcon from "@mui/icons-material/Home";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
 import GameIcon from "@mui/icons-material/SportsEsports";
+import FlashCardIcon from "@mui/icons-material/ViewCarousel";
 
 const Navbar = () => {
   const drawerWidth = 100;
@@ -46,6 +47,15 @@ const Navbar = () => {
               <IconButton>
                 <Link href="/profile">
                   <ProfileIcon fontSize="large" />
+                </Link>
+              </IconButton>
+            </Box>
+          </Grid>
+          <Grid item alignSelf="center">
+            <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
+              <IconButton>
+                <Link href="/flashcard">
+                  <FlashCardIcon fontSize="large" />
                 </Link>
               </IconButton>
             </Box>
