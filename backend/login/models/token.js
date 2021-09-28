@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Blueprint of what an item would look like in our DB.
 const TokenSchema = new Schema({
+    username: {
+        type: String,
+		required: true
+    },
     token: {
         type: String,
 		required: true

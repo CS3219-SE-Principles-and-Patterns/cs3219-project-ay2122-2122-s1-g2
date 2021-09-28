@@ -134,16 +134,22 @@ const DatabaseManager = {
 			const pwIsCorrect = await bcrypt.compare(req.body.password, profile.password);
             if (!pwIsCorrect) throw "Access denied. Incorrect user details";
 
-            const newRefreshToken = getJwtRefreshToken(profile);
-            const rToken = await Token.findOneAndDelete({token: newRefreshToken});
+            var refreshToken;
+            const rToken = await Token.findOne({username: profile.username});
             if (!rToken) {
-                const newTokenDB = new Token({token: newRefreshToken});
+                refreshToken = getJwtRefreshToken(profile);
+                const newTokenDB = new Token({
+                    username: profile.username,
+                    token: refreshToken
+                });
                 await newTokenDB.save();
+            } else {
+                refreshToken = rToken.token;
             }
             res.status(200).json({
                 message: "Success",
                 accessToken: getJwtAccessToken(profile),
-                refreshToken: newRefreshToken
+                refreshToken: refreshToken
             });
         } catch (err) {
 			res.status(400).json({
@@ -163,16 +169,22 @@ const DatabaseManager = {
                 password: hashedPw
             });
             const savedProfile = await newProfile.save();
-            const newRefreshToken = getJwtRefreshToken(profile);
-            const rToken = await Token.findOneAndDelete({token: newRefreshToken});
+            var refreshToken;
+            const rToken = await Token.findOne({username: profile.username});
             if (!rToken) {
-                const newTokenDB = new Token({token: newRefreshToken});
+                refreshToken = getJwtRefreshToken(profile);
+                const newTokenDB = new Token({
+                    username: profile.username,
+                    token: refreshToken
+                });
                 await newTokenDB.save();
+            } else {
+                refreshToken = rToken.token;
             }
             res.status(200).json({
                 message: "Success",
                 accessToken: getJwtAccessToken(savedProfile),
-                refreshToken: newRefreshToken
+                refreshToken: refreshToken
             })
         } catch (err) {
             res.status(400).json({
