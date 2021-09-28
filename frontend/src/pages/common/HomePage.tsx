@@ -1,5 +1,4 @@
 import { Box } from "@mui/system";
-import Navbar from "../../components/common/Navbar";
 
 const HomePage = () => {
   return (

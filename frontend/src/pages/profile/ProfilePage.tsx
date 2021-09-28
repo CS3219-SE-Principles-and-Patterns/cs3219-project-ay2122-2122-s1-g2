@@ -1,5 +1,4 @@
 import { Box } from "@mui/system";
-import Navbar from "../../components/common/Navbar";
 import {
   Button,
   Chip,
@@ -17,18 +16,18 @@ import {
 import { useEffect, useState } from "react";
 import { ProfileController } from "../../controller/ProfileController";
 import { Profile } from "../../domain/profile";
+import { languages } from "../../utils/constants/languages";
 
 const ProfilePage = () => {
-  const languages = ["Korean", "Japanese", "French"];
   const [langs, setLangs] = useState<string[]>([]);
   const [proficiency, setProficiency] = useState<number>(3);
+  const [proficiencies, setProficiencies] = useState<number[]>([]);
   const [error, setError] = useState<string>("");
 
-  const handleProficiencyChange = (
-    event: Event,
-    newProficiency: number | number[]
-  ) => {
-    setProficiency(newProficiency as number);
+  const handleProficiencyArrChange = (newProficiency: number, idx: number) => {
+    setProficiencies(
+      proficiencies.map((p, i) => (i === idx ? newProficiency : p))
+    );
   };
 
   const handleLanguageChange = (event: SelectChangeEvent<typeof langs>) => {
@@ -38,12 +37,18 @@ const ProfilePage = () => {
     setLangs(typeof value === "string" ? value.split(",") : value);
   };
 
-  const onSubmit = (e: any) => {
+  useEffect(() => {
+    setProficiencies(Array(langs.length).fill(3));
+  }, [langs]);
+
+  const onSubmit = async (e: any) => {
     e.preventDefault();
+
     try {
-      ProfileController.editProfile({ languages: langs, proficiency });
+      await ProfileController.editProfile({ languages: langs, proficiency });
       setError("");
     } catch (err: any) {
+      console.log(err);
       setError(err.message);
     }
   };
@@ -64,22 +69,18 @@ const ProfilePage = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
-      <h1>Edit Profile</h1>
+      <h1>Create Profile</h1>
       <Grid container justifyContent="center">
         <Box component="form">
           <Stack>
-            <FormControl sx={{ m: 1, width: 300 }}>
-              <InputLabel id="demo-multiple-chip-label">Languages</InputLabel>
+            <FormControl sx={{ m: 1, width: 300, marginBottom: "5vh" }}>
+              <InputLabel>Languages</InputLabel>
               <Select
-                labelId="demo-multiple-chip-label"
-                id="demo-multiple-chip"
                 multiple
                 required
                 value={langs}
                 onChange={handleLanguageChange}
-                input={
-                  <OutlinedInput id="select-multiple-chip" label="Language" />
-                }
+                input={<OutlinedInput label="Language" />}
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map((value) => (
@@ -98,25 +99,32 @@ const ProfilePage = () => {
                 <Typography className="error-message">{error}</Typography>
               )}
             </FormControl>
+            {proficiencies.map((proficiency, idx) => (
+              <FormControl sx={{ m: 1, width: 300 }} key={idx}>
+                <Typography textAlign="left" gutterBottom>
+                  {langs[idx]} Proficiency
+                </Typography>
+                <Slider
+                  aria-label="Proficiency"
+                  value={proficiency}
+                  step={1}
+                  min={1}
+                  max={5}
+                  marks
+                  valueLabelDisplay="auto"
+                  onChange={(event, p) =>
+                    handleProficiencyArrChange(p as number, idx)
+                  }
+                />
+              </FormControl>
+            ))}
 
-            <FormControl sx={{ m: 1, width: 300 }}>
-              <Typography textAlign="left" gutterBottom>
-                Proficiency
-              </Typography>
-              <Slider
-                aria-label="Proficiency"
-                value={proficiency}
-                step={1}
-                min={1}
-                max={5}
-                marks
-                valueLabelDisplay="auto"
-                onChange={handleProficiencyChange}
-              />
-            </FormControl>
-
-            <Button onClick={onSubmit} variant="contained">
-              Edit Profile
+            <Button
+              onClick={onSubmit}
+              sx={{ marginTop: "5vh" }}
+              variant="contained"
+            >
+              Create Profile
             </Button>
           </Stack>
         </Box>
