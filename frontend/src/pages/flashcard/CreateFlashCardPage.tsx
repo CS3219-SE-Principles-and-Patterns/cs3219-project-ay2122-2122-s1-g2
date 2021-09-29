@@ -24,7 +24,7 @@ const CreateFlashCardPage = () => {
     setError,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({});
 
   //   "flashcard": {
   //     "body": "Hi",

@@ -6,11 +6,17 @@ export class ProfileController {
     const profile: Profile = Profile.create(props);
     return await ProfileInfra.editProfile(profile);
   };
+
+  public static createProfile = async (props: ProfileProps) => {
+    const profile: Profile = Profile.create(props);
+    return await ProfileInfra.createProfile(profile);
+  };
+
   public static getProfile = async (): Promise<Profile> => {
     const res = await ProfileInfra.getProfile();
     return Profile.create({
       languages: res.languages,
-      proficiency: res.proficiency,
+      proficiencies: res.proficiencies,
     });
   };
 }

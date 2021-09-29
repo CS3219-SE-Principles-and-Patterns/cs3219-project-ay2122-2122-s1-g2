@@ -18,11 +18,26 @@ import { ProfileController } from "../../controller/ProfileController";
 import { Profile } from "../../domain/profile";
 import { languages } from "../../utils/constants/languages";
 
-const ProfilePage = () => {
+const ProfilePage = (props: any) => {
+  const isEdit = props.isEdit;
   const [langs, setLangs] = useState<string[]>([]);
-  const [proficiency, setProficiency] = useState<number>(3);
   const [proficiencies, setProficiencies] = useState<number[]>([]);
   const [error, setError] = useState<string>("");
+  const profileMsg = isEdit ? "Edit Profile" : "Create Profile";
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profile: Profile = await ProfileController.getProfile();
+        setLangs(profile.languages);
+        setProficiencies(profile.proficiencies);
+      } catch (e) {
+        // do nothing
+        console.log(e);
+      }
+    };
+    if (isEdit) fetchProfile();
+  }, [isEdit]);
 
   const handleProficiencyArrChange = (newProficiency: number, idx: number) => {
     setProficiencies(
@@ -35,17 +50,25 @@ const ProfilePage = () => {
       target: { value },
     } = event;
     setLangs(typeof value === "string" ? value.split(",") : value);
+    setProficiencies(Array(value.length).fill(3));
   };
-
-  useEffect(() => {
-    setProficiencies(Array(langs.length).fill(3));
-  }, [langs]);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
-      await ProfileController.editProfile({ languages: langs, proficiency });
+      if (isEdit) {
+        await ProfileController.editProfile({
+          languages: langs,
+          proficiencies,
+        });
+      } else {
+        await ProfileController.createProfile({
+          languages: langs,
+          proficiencies,
+        });
+      }
+
       setError("");
     } catch (err: any) {
       console.log(err);
@@ -53,23 +76,9 @@ const ProfilePage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const profile: Profile = await ProfileController.getProfile();
-        setLangs(profile.languages);
-        setProficiency(profile.proficiency);
-      } catch (e) {
-        // do nothing
-        console.log(e);
-      }
-    };
-    fetchProfile();
-  }, []);
-
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
-      <h1>Create Profile</h1>
+      <h1>{profileMsg}</h1>
       <Grid container justifyContent="center">
         <Box component="form">
           <Stack>
@@ -124,7 +133,7 @@ const ProfilePage = () => {
               sx={{ marginTop: "5vh" }}
               variant="contained"
             >
-              Create Profile
+              {profileMsg}
             </Button>
           </Stack>
         </Box>

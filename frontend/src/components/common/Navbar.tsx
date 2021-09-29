@@ -45,7 +45,7 @@ const Navbar = () => {
           <Grid item alignSelf="center">
             <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
               <IconButton>
-                <Link href="/profile">
+                <Link href="/profile/create">
                   <ProfileIcon fontSize="large" />
                 </Link>
               </IconButton>

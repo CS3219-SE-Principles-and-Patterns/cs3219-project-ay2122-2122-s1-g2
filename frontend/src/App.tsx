@@ -20,8 +20,11 @@ const App = () => {
             <Route path="/home">
               <Home />
             </Route>
-            <Route path="/profile">
-              <ProfilePage />
+            <Route path="/profile/create">
+              <ProfilePage isEdit={false} />
+            </Route>
+            <Route path="/profile/edit">
+              <ProfilePage isEdit={true} />
             </Route>
             <Route path="/flashcard">
               <CreateFlashCardPage />
