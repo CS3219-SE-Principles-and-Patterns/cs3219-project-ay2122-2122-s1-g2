@@ -1,22 +1,23 @@
-require('dotenv').config()
+require("dotenv").config();
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const db = process.env.MONGO_URI;
 // Connect to MongoDB
 
-mongoose.connect(db, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .catch((err) => {
-        console.log(err)
-    });
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 const connection = mongoose.connection;
 connection.once("open", (err) => {
-    console.log("MongoDB database connection established successfully");
+  console.log("MongoDB database connection established successfully");
 });
 
 const Profile = require("../models/profile.js");
@@ -170,9 +171,9 @@ const DatabaseManager = {
             });
             const savedProfile = await newProfile.save();
             var refreshToken;
-            const rToken = await Token.findOne({username: profile.username});
+            const rToken = await Token.findOne({username: savedProfile.username});
             if (!rToken) {
-                refreshToken = getJwtRefreshToken(profile);
+                refreshToken = getJwtRefreshToken(savedProfile);
                 const newTokenDB = new Token({
                     username: profile.username,
                     token: refreshToken

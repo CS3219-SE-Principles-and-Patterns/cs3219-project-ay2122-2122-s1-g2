@@ -7,16 +7,18 @@ const app = require("../index");
 describe('Testing Login Routes', () => {
 	const testUsername = "notjustatest";
 	const testPassword = "itsalifestyle";
+	console.log(testUsername);
 	context('POST: /api/login/register', () => {
 		it('Inserts into database', done => {
 			chai.request(app)
 				.post(`/api/login/register`)
 				.send({ 
-					username: testUsername,
-					password: testPassword
+					"username": testUsername,
+					"password": testPassword
 				})
 				.then((res) => {
 					if (res.error) {
+						// console.log(res);
 						done(res.error.text);
 					} else {
 						done();

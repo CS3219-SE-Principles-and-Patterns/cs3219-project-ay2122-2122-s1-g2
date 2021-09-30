@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { loginUser } from "../../infra/auth";
 import { login } from "../../utils/auth/auth";
 import { landingEnum } from "../../utils/constants/enums";
+import { useState } from "react";
+import { Redirect } from "react-router";
 
 const Login = ({ setLandingStatus }) => {
   const {
@@ -12,14 +14,22 @@ const Login = ({ setLandingStatus }) => {
     formState: { errors },
   } = useForm();
 
+  const [success, setSuccess] = useState(false);
+
   const onSubmit = async (data) => {
     let response = await loginUser(data).catch((e) => {
       setError("password", { message: e.response.data });
     });
 
-    if (response) login(response.data.accessToken);
+    if (response) {
+      console.log(response);
+      login(response.data.accessToken);
+      setSuccess(true);
+    }
   };
-  return (
+  return success ? (
+    <Redirect to="/home" />
+  ) : (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
       <h1>Login</h1>
       <div className="login-input">
