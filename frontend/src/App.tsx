@@ -2,10 +2,11 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Game from "./pages/game/GamePage";
 import Home from "./pages/common/HomePage";
 import LandingPage from "./pages/common/LandingPage";
-import ProfilePage from "./pages/profile/ProfilePage";
+import CreateProfilePage from "./pages/profile/CreateProfilePage";
 import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import { Box } from "@mui/system";
 import Navbar from "./components/common/Navbar";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 const App = () => {
   return (
@@ -20,11 +21,15 @@ const App = () => {
             <Route path="/home">
               <Home />
             </Route>
+
             <Route path="/profile/create">
-              <ProfilePage isEdit={false} />
+              <CreateProfilePage isEdit={false} />
             </Route>
             <Route path="/profile/edit">
-              <ProfilePage isEdit={true} />
+              <CreateProfilePage isEdit={true} />
+            </Route>
+            <Route path="/profile">
+              <ProfilePage />
             </Route>
             <Route path="/flashcard">
               <CreateFlashCardPage />
