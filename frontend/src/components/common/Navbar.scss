@@ -1,0 +1,8 @@
+@use "../../variables" as v;
+.icon {
+  color: v.$secondary;
+}
+
+.home-icon {
+  color: v.$primary;
+}

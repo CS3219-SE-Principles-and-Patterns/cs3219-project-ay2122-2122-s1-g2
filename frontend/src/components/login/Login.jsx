@@ -18,7 +18,8 @@ const Login = ({ setLandingStatus }) => {
 
   const onSubmit = async (data) => {
     let response = await loginUser(data).catch((e) => {
-      setError("password", { message: e.response.data });
+      console.log(e.response);
+      setError("password", { message: e.response.data.error });
     });
 
     if (response) {

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Container,
   FormControl,
   Input,
   InputLabel,
@@ -9,13 +10,19 @@ import {
   Select,
   Slider,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
+
 import { useForm, Controller } from "react-hook-form";
 import { FlashCardController } from "../../controller/FlashCardController";
 import { languages } from "../../utils/constants/languages";
 import "./CreateFlashCardPage.css";
+import {
+  CssTextField,
+  CssSelect,
+  CssSlider,
+  CssButton,
+} from "../common/Components";
 
 const CreateFlashCardPage = () => {
   const {
@@ -43,87 +50,93 @@ const CreateFlashCardPage = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }} textAlign="center">
-      <h1>Create FlashCard</h1>
-      <Box
-        component="form"
-        display="flex"
-        justifyContent="center"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Stack className="stack" spacing={2}>
-          <FormControl>
-            <TextField
-              required
-              label="FlashCard Title"
-              {...register("title", { required: true })}
-            />
-          </FormControl>
-          <FormControl>
-            <InputLabel id="demo-multiple-chip-label">Language</InputLabel>
-            <Select
-              required
-              onChange={() => console.log("hi")}
-              input={<OutlinedInput label="Difficulty" />}
-            >
-              {languages.map((language) => (
-                <MenuItem key={language} value={language}>
-                  {language}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl>
-            <TextField
-              required
-              label="Text in Language"
-              {...register("altText", { required: true })}
-            />
-          </FormControl>
-          <FormControl>
-            <TextField
-              required
-              label="Text in English"
-              {...register("body", { required: true })}
-            />
-          </FormControl>
-          <FormControl>
-            <TextField
-              label="Notes"
-              {...register("notes")}
-              multiline
-              rows={2}
-              maxRows={4}
-            />
-          </FormControl>
-          <FormControl>
-            <Typography textAlign="left" gutterBottom>
-              Difficulty
-            </Typography>
-            <Controller
-              control={control}
-              name="difficulty"
-              defaultValue={1}
-              render={({ field: { onChange, value } }) => (
-                <Slider
-                  aria-label="Difficulty"
-                  step={1}
-                  min={1}
-                  max={5}
-                  marks
-                  valueLabelDisplay="auto"
-                  onChange={onChange}
-                />
-              )}
-            />
-          </FormControl>
+    <Container>
+      <Box sx={{ flexGrow: 1, m: 2 }} textAlign="center">
+        <h1>Create FlashCard</h1>
+        <Box
+          component="form"
+          display="flex"
+          justifyContent="center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Stack className="stack" spacing={2}>
+            <FormControl>
+              <CssTextField
+                required
+                label="FlashCard Title"
+                {...register("title", { required: true })}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel id="demo-multiple-chip-label">Language</InputLabel>
+              <CssSelect
+                required
+                onChange={() => console.log("hi")}
+                input={<OutlinedInput label="Difficulty" />}
+              >
+                {languages.map((language) => (
+                  <MenuItem key={language} value={language}>
+                    {language}
+                  </MenuItem>
+                ))}
+              </CssSelect>
+            </FormControl>
+            <FormControl>
+              <CssTextField
+                required
+                label="Text in Language"
+                {...register("altText", { required: true })}
+              />
+            </FormControl>
+            <FormControl>
+              <CssTextField
+                required
+                label="Text in English"
+                {...register("body", { required: true })}
+              />
+            </FormControl>
+            <FormControl>
+              <CssTextField
+                label="Notes"
+                {...register("notes")}
+                multiline
+                rows={2}
+                maxRows={4}
+              />
+            </FormControl>
+            <FormControl>
+              <Typography textAlign="left" gutterBottom>
+                Difficulty
+              </Typography>
+              <Controller
+                control={control}
+                name="difficulty"
+                defaultValue={1}
+                render={({ field: { onChange, value } }) => (
+                  <CssSlider
+                    aria-label="Difficulty"
+                    step={1}
+                    min={1}
+                    max={5}
+                    marks
+                    valueLabelDisplay="auto"
+                    onChange={onChange}
+                  />
+                )}
+              />
+            </FormControl>
 
-          <Button type="submit" sx={{ marginTop: "5vh" }} variant="contained">
-            Create FlashCard
-          </Button>
-        </Stack>
+            <CssButton
+              type="submit"
+              sx={{ marginTop: "5vh" }}
+              variant="outlined"
+            >
+              Create FlashCard
+            </CssButton>
+          </Stack>
+        </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 
