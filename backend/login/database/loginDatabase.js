@@ -132,6 +132,7 @@ const DatabaseManager = {
     login: async (req, res) => {
 		try {
             const profile = await Profile.findOne({ username: req.body.username });
+            if (!profile) throw "Access denied. Incorrect user details"; 
 			const pwIsCorrect = await bcrypt.compare(req.body.password, profile.password);
             if (!pwIsCorrect) throw "Access denied. Incorrect user details";
 
@@ -147,11 +148,16 @@ const DatabaseManager = {
             } else {
                 refreshToken = rToken.token;
             }
-            res.status(200).json({
-                message: "Success",
-                accessToken: getJwtAccessToken(profile),
-                refreshToken: refreshToken
-            });
+
+            res.cookie("refresh_token", refreshToken, {
+                httpOnly: true,
+                secure: true
+                })
+                .status(200)
+                .json({
+                    message: "Success",
+                    accessToken: getJwtAccessToken(profile),
+                });
         } catch (err) {
 			res.status(400).json({
                 error: err.toString()
@@ -175,18 +181,23 @@ const DatabaseManager = {
             if (!rToken) {
                 refreshToken = getJwtRefreshToken(savedProfile);
                 const newTokenDB = new Token({
-                    username: profile.username,
+                    username: savedProfile.username,
                     token: refreshToken
                 });
                 await newTokenDB.save();
             } else {
                 refreshToken = rToken.token;
             }
-            res.status(200).json({
-                message: "Success",
-                accessToken: getJwtAccessToken(savedProfile),
-                refreshToken: refreshToken
-            })
+
+            res.cookie("refresh_token", refreshToken, {
+                httpOnly: true,
+                secure: true
+                })
+                .status(200)
+                .json({
+                    message: "Success",
+                    accessToken: getJwtAccessToken(savedProfile),
+                });
         } catch (err) {
             res.status(400).json({
                 error: err.toString()
@@ -196,6 +207,9 @@ const DatabaseManager = {
     delete: async (req, res) => {
         try {
             const profile = await Profile.deleteOne({username: req.params.username});
+            const refresh_token = await Token.deleteOne({username: req.params.username});
+            if (!profile) throw "Profile not found";
+            if (!refresh_token) console.log("Refresh token not found when deleting"); 
             res.status(200).json({
                 message: "Success",
                 data: profile
@@ -205,7 +219,7 @@ const DatabaseManager = {
                 error: err.toString()
             });
         }
-	},
+	}
 }
 
 module.exports = DatabaseManager;
