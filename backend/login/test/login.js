@@ -13,11 +13,18 @@ describe('Testing Login Routes', () => {
 		password: testPassword
 	};
 	context('POST: /api/login/register', () => {
-		it('Inserts into database', async () => {
+		it('Inserts into database with correct details', async () => {
 			const res = await chai.request(app)
 				.post(`/api/login/register`)
 				.send(loginDetails);
 			assert.ifError(res.error);
+		});
+
+		it('Throws error with already created username', async () => {
+			const res = await chai.request(app)
+				.post(`/api/login/register`)
+				.send(loginDetails);
+			assert.ifError(!res.error);
 		});
 	});
 
@@ -44,11 +51,31 @@ describe('Testing Login Routes', () => {
 	});
 
 	context('POST: /api/login/login', () => {
-		it('Able to login', async () => {
+		it('Able to login with correct userdetails', async () => {
 			const res = await chai.request(app)
 				.post(`/api/login/login`)
 				.send(loginDetails);
 			assert.ifError(res.error);
+		});
+
+		it('Throw error upon incorrect username', async () => {
+			const res = await chai.request(app)
+				.post(`/api/login/login`)
+				.send({ 
+					username: "nottheusername",
+					password: testPassword
+				});
+			assert.ifError(!res.error);
+		});
+
+		it('Throw error upon incorrect password', async () => {
+			const res = await chai.request(app)
+				.post(`/api/login/login`)
+				.send({ 
+					username: testUsername,
+					password: "notthepassword"
+				});
+			assert.ifError(!res.error);
 		});
 	});
 
@@ -78,7 +105,9 @@ describe('Testing Login Routes', () => {
 			const loginRes = await chai.request(app)
 				.post(`/api/login/login`)
 				.send(loginDetails);
-			const refreshToken = loginRes.body.refreshToken;
+			const setCookie = loginRes.headers['set-cookie'][0];
+			const regex = new RegExp("^refresh_token=(.*?);").exec(setCookie);
+			const refreshToken = regex[1];
 
 			const tokenRes = await chai.request(app)
 				.post(`/api/login/token`)
@@ -89,7 +118,7 @@ describe('Testing Login Routes', () => {
 				.put(`/api/login/update`)
 				.send(loginDetails)
 				.set("Authorization", `Bearer ${accessToken}`);
-			
+
 			assert.ifError(updateRes.error);
 		});
 	});
