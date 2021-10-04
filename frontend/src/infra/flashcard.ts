@@ -6,4 +6,8 @@ export class FlashCardInfra {
   public static createFlashCard = (data: any): Promise<any> => {
     return axios.post(FLASHCARD_PATH + "/", data);
   };
+
+  public static getFlashCard = (id: string): Promise<any> => {
+    return axios.get(FLASHCARD_PATH + "/" + id);
+  };
 }

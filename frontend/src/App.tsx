@@ -7,6 +7,7 @@ import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import { Box } from "@mui/system";
 import Navbar from "./components/common/Navbar";
 import ProfilePage from "./pages/profile/ProfilePage";
+import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
 
 const App = () => {
   return (
@@ -31,8 +32,12 @@ const App = () => {
             <Route path="/profile">
               <ProfilePage />
             </Route>
-            <Route path="/flashcard">
+
+            <Route path="/flashcard/create">
               <CreateFlashCardPage />
+            </Route>
+            <Route path="/flashcard/:id">
+              <FlashCardDetailPage />
             </Route>
             <Route path="/game">
               <Game />

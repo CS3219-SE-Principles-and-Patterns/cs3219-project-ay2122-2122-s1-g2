@@ -48,7 +48,7 @@ const Navbar = () => {
           </Grid>
           <Grid item>
             <IconButton>
-              <Link href="/flashcard">
+              <Link href="/flashcard/create">
                 <FlashCardIcon className="icon" fontSize="large" />
               </Link>
             </IconButton>
