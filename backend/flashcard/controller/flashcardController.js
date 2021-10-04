@@ -4,10 +4,10 @@ require('dotenv').config()
 const Flashcard = require("../models/flashcard.js");
 
 const authTokenMW = (req, res) => {
-    const ACCESS_SECRET = process.env.ACCESS_SECRET;
-    //const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
+    //const ACCESS_SECRET = process.env.ACCESS_SECRET;
+    const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
 	const aHeader = req.headers['authorization'];
-	const aToken = aHeader && aHeader.split(' ')[1];
+    const aToken = aHeader && aHeader.split(' ')[1];
     if (aToken == null) {
 		return res.status(401).send("User ");
 	}
@@ -26,7 +26,7 @@ exports.get = (req, res) => {
     if (!user) return;
     Flashcard.findOne({username: user.username}, (err, flashCard) => {
         if (err) {
-            res.json({
+            res.status(400).json({
                 message: "Error",
                 error: err
             });
@@ -60,7 +60,7 @@ exports.create = (req, res) => {
     flashcard.flashcards = req.body.flashcards ? req.body.flashcards : [];
     Flashcard.findOne({username: user.username}, (err, oldUserCard) => {
         if (err) {
-            res.json({
+            res.status(400).json({
                 message: "Error",
                 error: err
             })
@@ -68,7 +68,7 @@ exports.create = (req, res) => {
             // no such profile exists so we just put it in
             flashcard.save((err) => {
                 if (err) {
-                    res.json({
+                    res.status(400).json({
                         message: "Error",
                         error: err
                     })
@@ -83,14 +83,14 @@ exports.create = (req, res) => {
             oldUserCard.flashcards = req.body.flashcards ? req.body.flashcards: oldUserCard.flashcards;
             oldUserCard.save((err) => {
                 if (err) {
-                    res.json({
+                    res.status(400).json({
                         message: "Update failed",
                         error: err
                     })
                 } else {
                     res.json({
                         message: "Flashcards updated",
-                        data: oldProfile
+                        data: oldUserCard.flashcards
                     })
                 }
             })
@@ -116,15 +116,16 @@ exports.put = (req, res) => {
     var flashCard = req.body.flashcard;
     Flashcard.findOne({username: user.username}, (err, userCard) => {
         if (err) {
-            res.json({
+            res.status(400).json({
                 message: "Error",
                 error: err
             })
         } else {
+            // assumes user already exists
             userCard.flashcards.push(flashCard);
             userCard.save((err) => {
                 if (err) {
-                    res.json({
+                    res.status(400).json({
                         message: "Error",
                         error: err
                     });
