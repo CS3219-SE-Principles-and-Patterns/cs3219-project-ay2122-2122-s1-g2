@@ -3,14 +3,18 @@ const Schema = mongoose.Schema;
 
 // Blueprint of what an item would look like in our DB.
 const GameSchema = new Schema({
-    id: {
+    username: {
         type: String,
 		required: true
     },
-	password: {
+	proficiency: {
 		type: String,
 		required: true
 	},
+	rating: {
+		type: Number,
+		default: 1000 
+	}
 });
 
 // Makes a model of the above schema.

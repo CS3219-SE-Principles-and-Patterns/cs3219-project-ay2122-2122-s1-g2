@@ -57,23 +57,6 @@ const DatabaseManager = {
       return res.status(401).send("Authentication token required");
     }
 
-    jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
-      if (err) {
-        return res.status(403).send("Access Denied: Token is no longer valid");
-      }
-      req.user = user;
-      next();
-    });
-  },
-  getAccessToken: async (req, res) => {
-    const refreshToken = req.body.token;
-    if (refreshToken == null) return res.status(401);
-    // if token not in database, send unauthorized
-    const token = await Token.findOne({ token: refreshToken });
-    if (!token) {
-      res.status(401);
-    }
-
     jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
       if (err) return res.sendStatus(401);
       const accessToken = getJwtAccessToken({
@@ -140,6 +123,7 @@ const DatabaseManager = {
   login: async (req, res) => {
     try {
       const profile = await Profile.findOne({ username: req.body.username });
+      if (!profile) throw "Access denied. Incorrect user details";
       const pwIsCorrect = await bcrypt.compare(
         req.body.password,
         profile.password
@@ -158,19 +142,19 @@ const DatabaseManager = {
       } else {
         refreshToken = rToken.token;
       }
+
       res
-        .cookie("refreshToken", JSON.stringify(refreshToken), {
+        .cookie("refresh_token", refreshToken, {
           httpOnly: true,
           secure: true,
         })
         .status(200)
-        .send({
+        .json({
           message: "Success",
           accessToken: getJwtAccessToken(profile),
-          refreshToken: refreshToken,
         });
     } catch (err) {
-      res.status(400).send({
+      res.status(400).json({
         error: err.toString(),
       });
     }
@@ -192,18 +176,24 @@ const DatabaseManager = {
       if (!rToken) {
         refreshToken = getJwtRefreshToken(savedProfile);
         const newTokenDB = new Token({
-          username: profile.username,
+          username: savedProfile.username,
           token: refreshToken,
         });
         await newTokenDB.save();
       } else {
         refreshToken = rToken.token;
       }
-      res.status(200).json({
-        message: "Success",
-        accessToken: getJwtAccessToken(savedProfile),
-        refreshToken: refreshToken,
-      });
+
+      res
+        .cookie("refresh_token", refreshToken, {
+          httpOnly: true,
+          secure: true,
+        })
+        .status(200)
+        .json({
+          message: "Success",
+          accessToken: getJwtAccessToken(savedProfile),
+        });
     } catch (err) {
       res.status(400).json({
         error: err.toString(),
@@ -215,6 +205,11 @@ const DatabaseManager = {
       const profile = await Profile.deleteOne({
         username: req.params.username,
       });
+      const refresh_token = await Token.deleteOne({
+        username: req.params.username,
+      });
+      if (!profile) throw "Profile not found";
+      if (!refresh_token) console.log("Refresh token not found when deleting");
       res.status(200).json({
         message: "Success",
         data: profile,
