@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Game from "./pages/game/GamePage";
+import Game from "./pages/game/GameMainPage";
 import Home from "./pages/common/HomePage";
 import LandingPage from "./pages/common/LandingPage";
 import CreateProfilePage from "./pages/profile/CreateProfilePage";
