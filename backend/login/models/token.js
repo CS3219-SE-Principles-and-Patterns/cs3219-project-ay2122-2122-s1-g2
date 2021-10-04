@@ -2,23 +2,19 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Blueprint of what an item would look like in our DB.
-const GameSchema = new Schema({
+const TokenSchema = new Schema({
     username: {
         type: String,
 		required: true
     },
-	proficiency: {
-		type: String,
+    token: {
+        type: String,
 		required: true
-	},
-	rating: {
-		type: Number,
-		default: 1000 
-	}
+    },
 });
 
 // Makes a model of the above schema.
-const Game = mongoose.model("Game", GameSchema);
+const Token = mongoose.model("Token", TokenSchema);
 
 // Exporting the model so that it can be used in server.js and/or other files.
-module.exports = Game;
+module.exports = Token;

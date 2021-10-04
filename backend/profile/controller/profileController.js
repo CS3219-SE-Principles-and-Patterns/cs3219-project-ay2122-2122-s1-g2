@@ -9,7 +9,7 @@ const authTokenMW = (req, res) => {
 	const aHeader = req.headers['authorization'];
 	const aToken = aHeader && aHeader.split(' ')[1];
     if (aToken == null) {
-		return res.status(401).send("User ");
+		return res.status(401).send("Invalid Token");
 	}
     userCred = {}
 	jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
@@ -48,17 +48,15 @@ exports.create = (req, res) => {
     profile.languages = req.body.languages ? req.body.languages : [];
     Profile.findOne({username: profile.username}, (err, oldProfile) => {
         if (err) {
-            res.json({
-                message: "Error",
-                error: err
+            res.status(400).json({
+                error: err.toString()
             })
         } else if (!oldProfile) {
             // no such profile exists so we just put it in
             profile.save((err) => {
                 if (err) {
-                    res.json({
-                        message: "Error",
-                        error: err
+                    res.status(400).json({
+                        error: err.toString()
                     })
                 } else {
                     res.json({
@@ -71,9 +69,8 @@ exports.create = (req, res) => {
             oldProfile.languages = req.body.languages ? req.body.languages: oldProfile.languages;
             oldProfile.save((err) => {
                 if (err) {
-                    res.json({
-                        message: "Update failed",
-                        error: err
+                    res.status(400).json({
+                        error: err.toString()
                     })
                 } else {
                     res.json({
@@ -91,9 +88,8 @@ exports.put = (req, res) => {
     if (!user) return;
     Profile.findOne({username: user.username}, (err, oldProfile) => {
         if (err || ! oldProfile) {
-            res.json({
-                message: "Error",
-                error: err
+            res.status(400).json({
+                error: err.toString()
             })
         } else {
             var languages = oldProfile.languages;
@@ -101,8 +97,7 @@ exports.put = (req, res) => {
             oldProfile.languages = languages;
             oldProfile.save((err) => {
                 if (err) {
-                    res.json({
-                        message: "Error",
+                    res.status(400).json({
                         error: err
                     })
                 } else {

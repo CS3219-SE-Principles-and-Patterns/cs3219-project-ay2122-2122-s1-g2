@@ -1,0 +1,3 @@
+cd login
+npm test
+
