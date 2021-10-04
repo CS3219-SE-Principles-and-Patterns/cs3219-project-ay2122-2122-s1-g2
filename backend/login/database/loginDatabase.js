@@ -158,7 +158,6 @@ const DatabaseManager = {
       } else {
         refreshToken = rToken.token;
       }
-      //res.setHeader("Set-Cookie", [`refreshToken=${refreshToken}`]);
       res
         .cookie("refreshToken", JSON.stringify(refreshToken), {
           httpOnly: true,
