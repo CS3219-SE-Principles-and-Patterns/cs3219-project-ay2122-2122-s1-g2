@@ -1,7 +1,7 @@
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../../infra/auth";
-import { login } from "../../utils/auth/auth";
+import { login, getAccessToken } from "../../utils/auth/auth";
 import { landingEnum } from "../../utils/constants/enums";
 import { useState } from "react";
 import { Redirect } from "react-router";
@@ -20,10 +20,10 @@ const Login = ({ setLandingStatus }) => {
     let response = await loginUser(data).catch((e) => {
       setError("password", { message: e.response.data });
     });
-
+    console.log(getAccessToken());
     if (response) {
       console.log(response);
-      login(response.data.accessToken);
+      login(response.data);
       setSuccess(true);
     }
   };

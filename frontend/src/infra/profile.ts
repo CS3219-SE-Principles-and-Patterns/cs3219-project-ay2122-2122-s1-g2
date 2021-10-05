@@ -1,5 +1,4 @@
-import { axiosConfig as axios } from "../utils/auth/auth";
-
+import axios from "axios";
 const PROFILE_PATH = "http://localhost/api/profile/";
 // const PROFILE_PATH = "http://localhost:3000/profile/";
 

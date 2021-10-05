@@ -1,5 +1,4 @@
-import { axiosConfig as axios } from "../utils/auth/auth";
-
+import axios from "axios";
 const FLASHCARD_PATH = "http://localhost/api/flashcard";
 
 export class FlashCardInfra {
