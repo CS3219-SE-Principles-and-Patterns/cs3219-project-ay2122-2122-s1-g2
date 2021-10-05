@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -10,6 +10,7 @@ import "./FlashCardDetailPage.scss";
 const FlashCardDetailPage = (props: any) => {
   const { id } = useParams<{ id: string }>();
   const [flashcard, setFlashcard] = useState<FlashCard>();
+
   useEffect(() => {
     const getFlashCard = async () =>
       setFlashcard(await FlashCardController.getFlashCard(id));
@@ -40,6 +41,7 @@ const FlashCardDetailPage = (props: any) => {
               <Typography sx={{ marginTop: "3vh" }}>
                 Difficulty: {flashcard.difficulty}
               </Typography>
+
               <Box className="notes-box">
                 <Typography className="header">Notes: </Typography>
                 <Typography sx={{ fontSize: "15px" }}>

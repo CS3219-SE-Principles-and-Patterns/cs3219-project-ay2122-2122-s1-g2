@@ -23,16 +23,22 @@ import {
   CssSlider,
   CssButton,
 } from "../common/Components";
+import { useParams } from "react-router";
+import { useEffect } from "react";
 
-const CreateFlashCardPage = () => {
+const CreateFlashCardPage = (props: any) => {
   const {
     register,
     handleSubmit,
     setError,
     control,
+    setValue,
     formState: { errors },
   } = useForm({});
 
+  const isEdit = props.isEdit;
+  const flashcardMsg = isEdit ? "Edit Flashcard" : "Create Flashcard";
+  const { id } = useParams<{ id: string }>();
   //   "flashcard": {
   //     "body": "Hi",
   //     "altText: "Anneyong",
@@ -43,16 +49,49 @@ const CreateFlashCardPage = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      await FlashCardController.createFlashCard(data);
+      if (isEdit) {
+        await FlashCardController.editFlashCard(data, id);
+      } else {
+        await FlashCardController.createFlashCard(data);
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
+  useEffect(() => {
+    const fetchFlashcard = async () => {
+      try {
+        // const flashcard: Flashcard = await FlashCardController.getFlashcard();
+
+        const flashcard = {
+          body: "Hi",
+          altText: "Anneyong",
+          difficulty: 3,
+          language: "Japanese",
+          title: "Hello world!",
+        };
+        setValue("body", flashcard.body);
+        setValue("altText", flashcard.altText);
+        setValue("difficulty", flashcard.difficulty);
+
+        setValue("language", {
+          key: flashcard.language,
+          value: flashcard.language,
+        });
+        setValue("title", flashcard.title);
+      } catch (e) {
+        // do nothing
+        console.log(e);
+      }
+    };
+    if (isEdit) fetchFlashcard();
+  }, [isEdit]);
+
   return (
     <Container>
       <Box sx={{ flexGrow: 1, m: 2 }} textAlign="center">
-        <h1>Create FlashCard</h1>
+        <h1>{flashcardMsg}</h1>
         <Box
           component="form"
           display="flex"
@@ -69,17 +108,24 @@ const CreateFlashCardPage = () => {
             </FormControl>
             <FormControl>
               <InputLabel id="demo-multiple-chip-label">Language</InputLabel>
-              <CssSelect
-                required
-                onChange={() => console.log("hi")}
-                input={<OutlinedInput label="Difficulty" />}
-              >
-                {languages.map((language) => (
-                  <MenuItem key={language} value={language}>
-                    {language}
-                  </MenuItem>
-                ))}
-              </CssSelect>
+              <Controller
+                control={control}
+                name="language"
+                render={({ field: { onChange, value } }) => (
+                  <CssSelect
+                    required
+                    onChange={onChange}
+                    defaultValue={"Korean"}
+                    input={<OutlinedInput label="Language" />}
+                  >
+                    {languages.map((language) => (
+                      <MenuItem key={language} value={language}>
+                        {language}
+                      </MenuItem>
+                    ))}
+                  </CssSelect>
+                )}
+              />
             </FormControl>
             <FormControl>
               <CssTextField
@@ -131,7 +177,7 @@ const CreateFlashCardPage = () => {
               sx={{ marginTop: "5vh" }}
               variant="outlined"
             >
-              Create FlashCard
+              {flashcardMsg}
             </CssButton>
           </Stack>
         </Box>

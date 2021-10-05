@@ -34,7 +34,10 @@ const App = () => {
             </Route>
 
             <Route path="/flashcard/create">
-              <CreateFlashCardPage />
+              <CreateFlashCardPage isEdit={false} />
+            </Route>
+            <Route path="/flashcard/edit/:id">
+              <CreateFlashCardPage isEdit={true} />
             </Route>
             <Route path="/flashcard/:id">
               <FlashCardDetailPage />

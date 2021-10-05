@@ -10,4 +10,9 @@ export class FlashCardController {
   public static getFlashCard = async (id: string): Promise<FlashCard> => {
     return FlashCard.create(await FlashCardInfra.getFlashCard(id));
   };
+
+  public static editFlashCard = async (props: FlashCardProps, id: string) => {
+    const flashCard: FlashCard = FlashCard.create(props);
+    return await FlashCardInfra.editFlashCard(flashCard, id);
+  };
 }
