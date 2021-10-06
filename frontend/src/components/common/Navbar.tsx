@@ -4,6 +4,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
 import GameIcon from "@mui/icons-material/SportsEsports";
 import FlashCardIcon from "@mui/icons-material/ViewCarousel";
+import "./Navbar.scss";
 
 const Navbar = () => {
   const drawerWidth = 100;
@@ -16,58 +17,48 @@ const Navbar = () => {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-
+          flexDirection: "column",
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            backgroundColor: "navy",
+            backgroundColor: "#313584",
           },
         }}
       >
         <Grid
-          container
-          flexDirection="column"
+          display="flex"
           justifyContent="center"
-          textAlign="center"
-          spacing={{ xs: 2, md: 3 }}
+          sx={{ marginBottom: "25vh", marginTop: "5vh" }}
         >
-          <Grid item alignSelf="center">
-            <Box
-              sx={{ width: 50, height: 50, bgcolor: "yellow", marginTop: 5 }}
-            >
-              <IconButton>
-                <Link href="/home">
-                  <HomeIcon fontSize="large" />
-                </Link>
-              </IconButton>
-            </Box>
+          <Grid item sx={{ backgroundColor: "#ffd8bdff" }}>
+            <IconButton>
+              <Link href="/home">
+                <HomeIcon className="home-icon" fontSize="large" />
+              </Link>
+            </IconButton>
           </Grid>
-          <Grid item alignSelf="center">
-            <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
-              <IconButton>
-                <Link href="/profile/create">
-                  <ProfileIcon fontSize="large" />
-                </Link>
-              </IconButton>
-            </Box>
+        </Grid>
+        <Grid display="flex" flexDirection="column" alignItems="center">
+          <Grid item>
+            <IconButton>
+              <Link href="/profile/create">
+                <ProfileIcon className="icon" fontSize="large" />
+              </Link>
+            </IconButton>
           </Grid>
-          <Grid item alignSelf="center">
-            <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
-              <IconButton>
-                <Link href="/flashcard">
-                  <FlashCardIcon fontSize="large" />
-                </Link>
-              </IconButton>
-            </Box>
+          <Grid item>
+            <IconButton>
+              <Link href="/flashcard/create">
+                <FlashCardIcon className="icon" fontSize="large" />
+              </Link>
+            </IconButton>
           </Grid>
-          <Grid item alignSelf="center">
-            <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
-              <IconButton>
-                <Link href="/game">
-                  <GameIcon fontSize="large" />
-                </Link>
-              </IconButton>
-            </Box>
+          <Grid item>
+            <IconButton>
+              <Link href="/game">
+                <GameIcon className="icon" fontSize="large" />
+              </Link>
+            </IconButton>
           </Grid>
         </Grid>
       </Drawer>

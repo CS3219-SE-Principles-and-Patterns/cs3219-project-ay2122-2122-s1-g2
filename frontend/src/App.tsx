@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Game from "./pages/game/GamePage";
+import Game from "./pages/game/GameMainPage";
 import Home from "./pages/common/HomePage";
 import LandingPage from "./pages/common/LandingPage";
 import CreateProfilePage from "./pages/profile/CreateProfilePage";
@@ -7,6 +7,7 @@ import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import { Box } from "@mui/system";
 import Navbar from "./components/common/Navbar";
 import ProfilePage from "./pages/profile/ProfilePage";
+import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
 
 const App = () => {
   return (
@@ -31,8 +32,15 @@ const App = () => {
             <Route path="/profile">
               <ProfilePage />
             </Route>
-            <Route path="/flashcard">
-              <CreateFlashCardPage />
+
+            <Route path="/flashcard/create">
+              <CreateFlashCardPage isEdit={false} />
+            </Route>
+            <Route path="/flashcard/edit/:id">
+              <CreateFlashCardPage isEdit={true} />
+            </Route>
+            <Route path="/flashcard/:id">
+              <FlashCardDetailPage />
             </Route>
             <Route path="/game">
               <Game />

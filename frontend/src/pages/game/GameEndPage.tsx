@@ -4,12 +4,12 @@ import { useState } from "react";
 import { gameState } from "../../utils/constants/enums";
 import { CssButton } from "../common/Components";
 
-const GamePage = (props: any) => {
+const GameEndPage = (props: any) => {
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
-      <Typography>Game ongoing</Typography>
+      <Typography>Game over</Typography>
     </Box>
   );
 };
 
-export default GamePage;
+export default GameEndPage;
