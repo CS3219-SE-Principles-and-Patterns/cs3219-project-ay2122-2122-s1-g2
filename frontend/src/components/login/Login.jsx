@@ -20,9 +20,7 @@ const Login = ({ setLandingStatus }) => {
     let response = await loginUser(data).catch((e) => {
       setError("password", { message: e.response.data });
     });
-    console.log(getAccessToken());
     if (response) {
-      console.log(response);
       login(response.data);
       setSuccess(true);
     }
