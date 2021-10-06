@@ -2,17 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 const { Server } = require("socket.io");
+const server = require("../index")
 const io = new Server(server);
-const socket = io();
-// const DatabaseManager = require("../database/matchmakingDatabase.js");
 
-router.get("/", (req, res) => {
-	res.json("Matchmaking Microservice");
-})
+const DatabaseManager = require("../database/matchmakingDatabase.js"); 
+
+router.get("/:username", DatabaseManager.getUserRecord); // should have authentication but currently i never add the authTokenMW thingy
+router.get("/", DatabaseManager.getAll);
 
 let players = [];
-
-let onlinePlayers = set();
 
 const playerMatcher = (player) => {
 	player.matchFound = false;
@@ -21,6 +19,7 @@ const playerMatcher = (player) => {
 			player.room = players[i].room; // make them both have the same room
 			player.matchFound = true;
 			players[i].matchFound = true;
+			// remove both players from the array of players in the waiting queue
 			deletePlayer(player.username);
 			deletePlayer(players[i].username);
 			return true;
@@ -34,7 +33,7 @@ const playerMatcher = (player) => {
 			if (player.matchFound) {
 				return true;
 			}
-			setTimeout(resolve, 10000); // 10 1 minute timeouts so that can check if the player ever gets a match
+			setTimeout(resolve, 100); // 10 100ms timeouts so that can check if the player ever gets a match
 		}
 	})
 	return player.matchFound;
@@ -47,14 +46,42 @@ const deletePlayer = (id) => {
 	}
 }
 
+const startGame = (roomId, socket) => {
+	let score = 0;
+	let result = true;
+	new Promise(resolve => {
+		let numberOfRounds = 5; // arbitrary for now
+		while (numberOfRounds != 0) {
+			numberOfRounds--;
+			// need to link to flashcard db or maybe even have a quiz db which we prepopulate?
+			io.to(roomId).emit("flashcard", {question: "Select the correct answer", correctAnswer: 1, answers: ["Hi", "No", "Eat", "Sh"]});
+			socket.on(roomId, (result, timing) => { // need to use this hack method to make sure we only listen to events pertaining to this room - not sure if it will work
+				score += result * (1000 - timing); // result will be 1 for victory 0 for loss
+			})  // unsure how to get win or loss tbh need help there (probably frontend broadcast winner into the room)
+			// 1 minute max timing
+			setTimeout(resolve, 1000);
+		}
+	});
+	return {score, result};
+}
+
 io.on('connection', (socket) => {
-	onlinePlayers.add(socket.id);
-	socket.on('Match Player', (player) => {
+	socket.on('Match Player', async (player) => {
+        /* player from frontend will look like 
+        {
+            username: "Ambrose",
+            language: "Korean"
+        }
+        */
+	    player.rating = DatabaseManager.getRating(player);
 		players.push(player);
-		if (playerMatcher(player)) {
-			// match exists
+		if (playerMatcher(player.username)) {
 			socket.emit("match found");
-			socket.join(player.room);
+			socket.join(player.room); // we set this in the playerMatcher function
+			let {score, result} = await startGame(player.room, socket); // this is the actual game 
+			player[rating] += score;	
+			player.result = result;
+			await DatabaseManager.put(player);
 		} else {
 			socket.emit("no match found");
 		}
@@ -62,7 +89,7 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on("disconnect", () => {
-		onlinePlayers.delete(socket.id);
+		console.log("Some player disconnected");
 	})
 })
 

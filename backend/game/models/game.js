@@ -7,14 +7,18 @@ const GameSchema = new Schema({
         type: String,
 		required: true
     },
-	proficiency: {
-		type: String,
-		required: true
-	},
-	rating: {
-		type: Number,
-		default: 1000 
-	}
+	rating : [
+		{
+			language: String,
+			rating: Number
+		}
+	],
+	history : [
+		{
+			language: String,
+			result: Boolean
+		}
+	]
 });
 
 // Makes a model of the above schema.
