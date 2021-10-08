@@ -45,6 +45,7 @@ const DatabaseManager = {
     authTokenMW: (req, res, next) => {
 		const aHeader = req.headers['authorization'];
 		const aToken = aHeader && aHeader.split(' ')[1];
+        console.log(req.headers);
 		if (aToken == null) {
 			return res.status(401).send("Authentication token required");
 		}
