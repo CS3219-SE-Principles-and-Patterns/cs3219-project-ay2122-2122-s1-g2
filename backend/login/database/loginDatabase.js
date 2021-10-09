@@ -21,10 +21,8 @@ connection.once("open", (err) => {
   console.log("MongoDB database connection established successfully");
 });
 
-const ACCESS_SECRET =
-  "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
-const REFRESH_SECRET =
-  "32c9438a16cfbdae22d57a79d6ad4d462c2399ebd186c1aa82b8fc504b96e4c0a440a0f230802143c6f8137d6f65640e861cb300add22f6b38789b725132ab54";
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_SECRET;
 const ACCESS_TOKEN_EXPIRY = 3600;
 const REFRESH_TOKEN_EXPIRY = 86400;
 
@@ -72,7 +70,7 @@ const DatabaseManager = {
   },
   getAccessToken: async (req, res) => {
     const { refreshToken } = req.body;
-    if (!refreshToken) return res.status(401).json({ error: "abc" });
+    if (!refreshToken) return res.status(401).json({ error: "Could not find refreshToken" });
     const token = await Token.findOne({ token: refreshToken });
     if (!token) return res.status(403);
     jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {

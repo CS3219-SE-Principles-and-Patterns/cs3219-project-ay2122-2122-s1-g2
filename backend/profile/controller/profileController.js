@@ -5,24 +5,21 @@ const Profile = require("../models/profile");
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
 const ProfileController = {
-  authTokenMW: (req, res, next) => {
-    const aHeader = req.headers["authorization"];
-    const aToken = aHeader && aHeader.split(" ")[1];
-    if (aToken == null) {
-      console.log("401 Errar");
-      return res.status(401).send("Authentication token required");
-    }
+    authTokenMW: (req, res, next) => {
+        const aHeader = req.headers["authorization"];
+        const aToken = aHeader && aHeader.split(" ")[1];
+        if (aToken == null) {
+            return res.status(401).send("Authentication token required");
+        }
 
-    console.log("Verifying jwt");
-    jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
-      if (err) {
-        return res.status(403).send("Access Denied: Token is no longer valid");
-      }
-      console.log("Finish middleware");
-      req.user = user;
-      next();
-    });
-  },
+        jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
+            if (err) {
+                return res.status(403).send("Access Denied: Token is no longer valid");
+            }
+            req.user = user;
+            next();
+        });
+    },
   get: async (req, res) => {
     // the req will mention username and we will use that to find the profile
     try {
@@ -58,6 +55,7 @@ const ProfileController = {
       if (languages.length != proficiencies.length)
         return res.status(401).json({
           error: "Languages and Proficiencies array should be of same size",
+>>>>>>> master
         });
 
       const savedProfile = await currProfile.save();
@@ -89,6 +87,20 @@ const ProfileController = {
           error: "Languages and Proficiencies array should be of same size",
         });
 
+<<<<<<< HEAD
+            const savedProfile = await currProfile.save();
+            res.json({
+                message: "Success",
+                data: savedProfile,
+            });
+        } catch (err) {
+            res.status(400).json({
+                error: err.toString(),
+            });
+        }
+    },
+}
+=======
       const savedProfile = await currProfile.save();
       res.json({
         message: "Success",
@@ -102,5 +114,6 @@ const ProfileController = {
     }
   },
 };
+>>>>>>> master
 
 module.exports = ProfileController;
