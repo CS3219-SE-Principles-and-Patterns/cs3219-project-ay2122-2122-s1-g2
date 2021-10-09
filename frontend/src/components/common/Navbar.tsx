@@ -1,10 +1,10 @@
-import { Drawer, Grid, IconButton, Link } from "@mui/material";
+import { Drawer, Grid, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import HomeIcon from "@mui/icons-material/Home";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
 import GameIcon from "@mui/icons-material/SportsEsports";
 import FlashCardIcon from "@mui/icons-material/ViewCarousel";
-
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const drawerWidth = 100;
   return (
@@ -36,7 +36,7 @@ const Navbar = () => {
               sx={{ width: 50, height: 50, bgcolor: "yellow", marginTop: 5 }}
             >
               <IconButton>
-                <Link href="/home">
+                <Link to="/home">
                   <HomeIcon fontSize="large" />
                 </Link>
               </IconButton>
@@ -45,7 +45,7 @@ const Navbar = () => {
           <Grid item alignSelf="center">
             <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
               <IconButton>
-                <Link href="/profile/create">
+                <Link to="/profile/create">
                   <ProfileIcon fontSize="large" />
                 </Link>
               </IconButton>
@@ -54,7 +54,7 @@ const Navbar = () => {
           <Grid item alignSelf="center">
             <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
               <IconButton>
-                <Link href="/flashcard">
+                <Link to="/flashcard">
                   <FlashCardIcon fontSize="large" />
                 </Link>
               </IconButton>
@@ -63,7 +63,7 @@ const Navbar = () => {
           <Grid item alignSelf="center">
             <Box sx={{ width: 50, height: 50, bgcolor: "yellow" }}>
               <IconButton>
-                <Link href="/game">
+                <Link to="/game">
                   <GameIcon fontSize="large" />
                 </Link>
               </IconButton>

@@ -7,40 +7,45 @@ import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import { Box } from "@mui/system";
 import Navbar from "./components/common/Navbar";
 import ProfilePage from "./pages/profile/ProfilePage";
+import AuthProvider from "./components/common/AuthProvider";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 const App = () => {
   return (
-    <Router>
-      <div className="app">
-        <Box sx={{ display: "flex" }}>
-          <Navbar />
-          <Switch>
-            <Route path="/" exact>
-              <LandingPage />
-            </Route>
-            <Route path="/home">
-              <Home />
-            </Route>
+    <AuthProvider>
+      <Router>
+        <div className="app">
+          <Box sx={{ display: "flex" }}>
+            <Navbar />
+            <Switch>
+              <Route path="/" exact>
+                <LandingPage />
+              </Route>
+              <ProtectedRoute children={<Home />} path="/home" />
 
-            <Route path="/profile/create">
-              <CreateProfilePage isEdit={false} />
-            </Route>
-            <Route path="/profile/edit">
-              <CreateProfilePage isEdit={true} />
-            </Route>
-            <Route path="/profile">
-              <ProfilePage />
-            </Route>
-            <Route path="/flashcard">
-              <CreateFlashCardPage />
-            </Route>
-            <Route path="/game">
-              <Game />
-            </Route>
-          </Switch>
-        </Box>
-      </div>
-    </Router>
+              <ProtectedRoute
+                children={<CreateProfilePage isEdit={false} />}
+                path="/profile/create"
+              />
+
+              <ProtectedRoute
+                children={<CreateProfilePage isEdit={true} />}
+                path="/profile/edit"
+              />
+
+              <ProtectedRoute children={<ProfilePage />} path="/profile" />
+
+              <ProtectedRoute
+                children={<CreateFlashCardPage />}
+                path="/flashcard"
+              />
+
+              <ProtectedRoute children={<Game />} path="/game" />
+            </Switch>
+          </Box>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 };
 

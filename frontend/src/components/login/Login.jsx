@@ -1,10 +1,10 @@
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../../infra/auth";
-import { login, getAccessToken } from "../../utils/auth/auth";
 import { landingEnum } from "../../utils/constants/enums";
 import { useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
+import { getNewAccessToken } from "../../infra/auth";
 
 const Login = ({ setLandingStatus }) => {
   const {
@@ -16,12 +16,32 @@ const Login = ({ setLandingStatus }) => {
 
   const [success, setSuccess] = useState(false);
 
+  const setTimeoutAsync = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
+  const silentRefresh = async (expiresIn, refreshToken) => {
+    await setTimeoutAsync(expiresIn);
+    const response = await getNewAccessToken({ refreshToken: refreshToken });
+    if (response) {
+      const {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+        expiresIn: newExpiresIn,
+      } = response.data;
+      localStorage.setItem("accessToken", newAccessToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
+      await silentRefresh(newExpiresIn, newRefreshToken);
+    }
+  };
   const onSubmit = async (data) => {
     let response = await loginUser(data).catch((e) => {
       setError("password", { message: e.response.data });
     });
     if (response) {
-      login(response.data);
+      const { accessToken, refreshToken, expiresIn } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      silentRefresh(expiresIn, refreshToken);
       setSuccess(true);
     }
   };

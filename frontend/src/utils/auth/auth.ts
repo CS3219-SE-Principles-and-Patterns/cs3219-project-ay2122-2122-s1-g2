@@ -1,20 +1,12 @@
-export const setTokens = (accessToken: string, refreshToken: string) => {
-  localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("refreshToken", refreshToken);
-};
-export const getAccessToken = () => {
-  return localStorage.getItem("accessToken");
-};
-export const getRefreshToken = () => {
-  return localStorage.getItem("refreshToken");
-};
-
-interface loginInterface {
-  accessToken: string;
-  expiresIn: number;
-  refreshToken: string;
-}
-
-export const login = ({ accessToken, refreshToken }: loginInterface) => {
-  setTokens(accessToken, refreshToken);
+import axios from "axios";
+export const getAxiosInstance = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+  let config = {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+      "x-refresh-token": refreshToken,
+    },
+  };
+  return axios.create(config);
 };
