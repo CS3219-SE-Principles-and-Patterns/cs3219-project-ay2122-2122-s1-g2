@@ -7,11 +7,12 @@ const DatabaseManager = require("../database/profileDatabase.js");
 // 	res.json("Profile Microservices are up");
 // })
 
-var profileController = require("../controller/profileController");
+var ProfileController = require("../controller/profileController");
 
-router.route('/')
-	.post(profileController.create)
-	.put(profileController.put)
-	.get(profileController.get);
+router
+  .route("/")
+  .post(ProfileController.create)
+  .put(ProfileController.authTokenMW, ProfileController.update)
+  .get(ProfileController.authTokenMW, ProfileController.get);
 
 module.exports = router;

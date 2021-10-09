@@ -1,112 +1,99 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config()
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const Profile = require("../models/profile");
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
-const authTokenMW = (req, res) => {
-    const ACCESS_SECRET = process.env.ACCESS_SECRET;
-    //const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
-	const aHeader = req.headers['authorization'];
-	const aToken = aHeader && aHeader.split(' ')[1];
-    if (aToken == null) {
-		return res.status(401).send("Invalid Token");
-	}
-    userCred = {}
-	jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
-		if (err) {
-			return res.status(403).send("Access Denied: Token is no longer valid");
-		}
-        userCred = user;
-	})
-    return userCred;
-}
+const ProfileController = {
+    authTokenMW: (req, res, next) => {
+        const aHeader = req.headers["authorization"];
+        const aToken = aHeader && aHeader.split(" ")[1];
+        if (aToken == null) {
+            return res.status(401).send("Authentication token required");
+        }
 
-exports.get = (req, res) => {
-    // the req will mention username and we will use that to find the profile
-    const user = authTokenMW(req, res);
-    if (!user) return;
-    Profile.findOne({username: user.username}, (err, profile) => {
-        if (err) {
-            res.json({
-                message: "Error",
-                error: err
-            })
-        } else {
+        jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
+            if (err) {
+                return res.status(403).send("Access Denied: Token is no longer valid");
+            }
+            req.user = user;
+            next();
+        });
+    },
+    get: async (req, res) => {
+        // the req will mention username and we will use that to find the profile
+        try {
+        const user = req.user;
+        if (!user)
+            return res
+            .status(401)
+            .json({ error: "Unable to get user details from middleware" });
+        const profile = await Profile.findOne({ username: user.username });
+        res.json({
+            message: "Success",
+            data: profile,
+        });
+        } catch (err) {
+        res.status(400).json({
+            error: err.toString(),
+        });
+        }
+    },
+    create: async (req, res) => {
+        try {
+        const { username } = req.body;
+        const currProfile = await Profile.findOne({ username: username });
+
+        if (!currProfile)
+            return res
+            .status(401)
+            .json({ error: "Unable to get user details from database" });
+
+        const { languages, proficiencies } = req.body;
+        currProfile.languages = languages;
+        currProfile.proficiencies = proficiencies;
+        if (languages.length != proficiencies.length)
+            return res.status(401)
+            .json({ error: "Languages and Proficiencies array should be of same size" });
+
+        const savedProfile = await currProfile.save();
+        res.json({
+            message: "Success",
+            data: savedProfile,
+        });
+        } catch (err) {
+        console.log(err);
+        res.status(400).json({
+            error: err.toString(),
+        });
+        }
+    },
+    update: async (req, res) => {
+        try {
+            const user = req.user;
+            const currProfile = await Profile.findOne({ username: user.username });
+            if (!currProfile)
+                return res
+                .status(401)
+                .json({ error: "Unable to get user details from database" });
+
+            const { languages, proficiencies } = req.body;
+            currProfile.languages = languages;
+            currProfile.proficiencies = proficiencies;
+            if (languages.length != proficiencies.length)
+                return res.status(401)
+                .json({ error: "Languages and Proficiencies array should be of same size" });
+            const savedProfile = await currProfile.save();
             res.json({
                 message: "Success",
-                data: profile
-            })
+                data: savedProfile,
+            });
+        } catch (err) {
+            res.status(400).json({
+                error: err.toString(),
+            });
         }
-    })
+    },
 }
 
-exports.create = (req, res) => {
-    var profile = Profile();
-    const user = authTokenMW(req, res);
-    if (!user) return;
-    profile.username = user.username;
-    profile.languages = req.body.languages ? req.body.languages : [];
-    Profile.findOne({username: profile.username}, (err, oldProfile) => {
-        if (err) {
-            res.status(400).json({
-                error: err.toString()
-            })
-        } else if (!oldProfile) {
-            // no such profile exists so we just put it in
-            profile.save((err) => {
-                if (err) {
-                    res.status(400).json({
-                        error: err.toString()
-                    })
-                } else {
-                    res.json({
-                        message: "Success",
-                        data: profile
-                    })
-                }
-            })
-        } else {
-            oldProfile.languages = req.body.languages ? req.body.languages: oldProfile.languages;
-            oldProfile.save((err) => {
-                if (err) {
-                    res.status(400).json({
-                        error: err.toString()
-                    })
-                } else {
-                    res.json({
-                        message: "Profile updated",
-                        data: oldProfile
-                    })
-                }
-            })
-        }
-    })   
-}
-
-exports.put = (req, res) => {
-    const user = authTokenMW(req, res);
-    if (!user) return;
-    Profile.findOne({username: user.username}, (err, oldProfile) => {
-        if (err || ! oldProfile) {
-            res.status(400).json({
-                error: err.toString()
-            })
-        } else {
-            var languages = oldProfile.languages;
-            languages.push(req.body.language);
-            oldProfile.languages = languages;
-            oldProfile.save((err) => {
-                if (err) {
-                    res.status(400).json({
-                        error: err
-                    })
-                } else {
-                    res.json({
-                        message: "Success",
-                        data: oldProfile
-                    })
-                }
-            })           
-        }
-    })
-}
+module.exports = ProfileController;

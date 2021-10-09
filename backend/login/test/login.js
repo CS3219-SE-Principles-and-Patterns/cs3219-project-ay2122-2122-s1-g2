@@ -105,13 +105,11 @@ describe('Testing Login Routes', () => {
 			const loginRes = await chai.request(app)
 				.post(`/api/login/login`)
 				.send(loginDetails);
-			const setCookie = loginRes.headers['set-cookie'][0];
-			const regex = new RegExp("^refresh_token=(.*?);").exec(setCookie);
-			const refreshToken = regex[1];
+			const refreshToken = loginRes.body.refreshToken;
 
 			const tokenRes = await chai.request(app)
 				.post(`/api/login/token`)
-				.send({token: refreshToken});
+				.send({refreshToken: refreshToken});
 			const accessToken = tokenRes.body.accessToken;
 
 			const updateRes = await chai.request(app)
