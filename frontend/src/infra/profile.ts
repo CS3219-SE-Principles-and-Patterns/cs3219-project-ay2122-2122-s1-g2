@@ -1,6 +1,6 @@
 import { getAxiosInstance as axios } from "../utils/auth/auth";
-export const PROFILE_PATH = "http://localhost/api/profile/";
-// const PROFILE_PATH = "http://localhost:3000/profile/";
+// export const PROFILE_PATH = "http://localhost/api/profile/";
+export const PROFILE_PATH = "http://localhost:5000/api/profile/";
 
 export class ProfileInfra {
   public static editProfile = (data: any): Promise<any> => {

@@ -4,10 +4,14 @@ const Schema = mongoose.Schema;
 // Blueprint of what an item would look like in our DB.
 const ProfileSchema = new Schema({
     username: {
-        type: String,
-		required: true
-    },
+		type: String,
+		required: true,
+	},
 	languages: {
+		type: Array,
+		required: true
+	},
+	proficiencies: {
 		type: Array,
 		required: true
 	}

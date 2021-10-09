@@ -25,7 +25,7 @@ const ACCESS_SECRET =
   "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
 const REFRESH_SECRET =
   "32c9438a16cfbdae22d57a79d6ad4d462c2399ebd186c1aa82b8fc504b96e4c0a440a0f230802143c6f8137d6f65640e861cb300add22f6b38789b725132ab54";
-const ACCESS_TOKEN_EXPIRY = 3;
+const ACCESS_TOKEN_EXPIRY = 3600;
 const REFRESH_TOKEN_EXPIRY = 86400;
 
 const getJwtAccessToken = (data) => {
@@ -173,9 +173,7 @@ const DatabaseManager = {
         refreshToken = rToken.token;
       }
 
-      res
-        .status(200)
-        .cookie("refresh", refreshToken, { httpOnly: true })
+      res.status(200)
         .json({
           message: "Success",
           accessToken: getJwtAccessToken(profile),
@@ -213,15 +211,12 @@ const DatabaseManager = {
         refreshToken = rToken.token;
       }
 
-      res
-        .cookie("refresh_token", refreshToken, {
-          httpOnly: true,
-          secure: true,
-        })
-        .status(200)
+      res.status(200)
         .json({
           message: "Success",
           accessToken: getJwtAccessToken(savedProfile),
+          refreshToken: refreshToken,
+          expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
         });
     } catch (err) {
       res.status(400).json({
