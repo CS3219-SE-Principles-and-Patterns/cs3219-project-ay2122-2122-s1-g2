@@ -1,0 +1,33 @@
+@use "variables" as v;
+
+html {
+  min-height: 100vh;
+  background-color: v.$secondary;
+}
+
+.app {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: x-large;
+  color: v.$primary;
+}
+
+input,
+select,
+button {
+  font-family: inherit;
+  font-size: inherit;
+  // color: v.$primary !important;
+}
+
+h1 {
+  font-size: 50px;
+}
+
+input {
+  border: 1px solid v.$primary;
+  width: 100px;
+}
