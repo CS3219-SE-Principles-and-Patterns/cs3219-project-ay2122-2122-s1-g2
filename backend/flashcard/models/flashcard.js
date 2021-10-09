@@ -10,11 +10,12 @@ const FlashcardSchema = new Schema({
 	}, 
 	flashcards: [
 		{
-			title: String,
-			difficulty: Number,
-			body: String,
-			altBody: String,
-			language: String
+			title: {type: String, default: ""},
+			difficulty: {type: Number, default: 1},
+			body: {type: String, default: ""},
+			altBody: {type: String, default: ""},
+			language: String,
+			notes: {type: String, default: ""}
 		} 
 	]
 });

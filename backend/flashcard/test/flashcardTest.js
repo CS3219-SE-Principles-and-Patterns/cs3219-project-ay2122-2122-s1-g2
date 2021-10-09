@@ -19,19 +19,21 @@ const flashcard = {
         altText: "Anneyong",
         difficulty: 3,
         language: "Korean",
-        title: "Hello world!"
+        title: "Hello world!",
+        notes: "I am anneyong howseyong your day"
     }
 }
 
 const flashcards = 
 {
-    "flashcards": [
+    flashcards: [
         {
-            "body": "Hi",
-            "title": "ML",
-            "language": "tagalog",
-            "altText": "yolo",
-            "difficulty": 5 
+            body: "Hi",
+            title: "ML",
+            language: "tagalog",
+            altText: "yolo",
+            difficulty: 5,
+            notes: "Hi there I am playing ML" 
         }
     ]
 }
