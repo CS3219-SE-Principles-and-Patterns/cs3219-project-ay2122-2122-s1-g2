@@ -2,12 +2,16 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { registerUser } from "../../infra/auth";
 import { landingEnum } from "../../utils/constants/enums";
+import CreateProfilePage from "../../pages/profile/CreateProfilePage";
 
 const Register = ({ setLandingStatus }) => {
   const [registered, setRegistered] = useState(false);
+  const [page, setPage] = useState(0);
+
   const {
     register,
     handleSubmit,
+    getValues,
     setError,
     formState: { errors },
     watch,
@@ -18,9 +22,12 @@ const Register = ({ setLandingStatus }) => {
     const response = await registerUser(data).catch((e) => {
       setError("username", { message: e.response.data });
     });
-    if (response) setRegistered(true);
+    if (response) {
+      setRegistered(true);
+      setPage(1);
+    }
   };
-  return (
+  return page === 0 ? (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
       <h1>Register</h1>
       <div className="login-input">
@@ -62,6 +69,8 @@ const Register = ({ setLandingStatus }) => {
         </button>
       </div>
     </form>
+  ) : (
+    <CreateProfilePage username={getValues("username")} />
   );
 };
 

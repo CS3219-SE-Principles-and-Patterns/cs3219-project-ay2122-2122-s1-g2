@@ -9,9 +9,11 @@ const DatabaseManager = require("../database/profileDatabase.js");
 
 var ProfileController = require("../controller/profileController");
 
-router.route('/')
-	.post(ProfileController.authTokenMW, ProfileController.update)
-	.put(ProfileController.authTokenMW, ProfileController.update)
-	.get(ProfileController.authTokenMW, ProfileController.get);
+router
+  .route("/")
+  .post(ProfileController.create)
+  .post(ProfileController.authTokenMW, ProfileController.update)
+  .put(ProfileController.authTokenMW, ProfileController.update)
+  .get(ProfileController.authTokenMW, ProfileController.get);
 
 module.exports = router;
