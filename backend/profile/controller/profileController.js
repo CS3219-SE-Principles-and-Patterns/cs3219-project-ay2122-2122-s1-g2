@@ -53,10 +53,8 @@ const ProfileController = {
       currProfile.languages = languages;
       currProfile.proficiencies = proficiencies;
       if (languages.length != proficiencies.length)
-        return res.status(401).json({
-          error: "Languages and Proficiencies array should be of same size",
->>>>>>> master
-        });
+        return res.status(401)
+        .json({ error: "Languages and Proficiencies array should be of same size" });
 
       const savedProfile = await currProfile.save();
       res.json({
@@ -72,48 +70,30 @@ const ProfileController = {
   },
   update: async (req, res) => {
     try {
-      const user = req.user;
-      const currProfile = await Profile.findOne({ username: user.username });
-      if (!currProfile)
-        return res
-          .status(401)
-          .json({ error: "Unable to get user details from database" });
+        const user = req.user;
+        const currProfile = await Profile.findOne({ username: user.username });
+        if (!currProfile)
+            return res
+            .status(401)
+            .json({ error: "Unable to get user details from database" });
 
-      const { languages, proficiencies } = req.body;
-      currProfile.languages = languages;
-      currProfile.proficiencies = proficiencies;
-      if (languages.length != proficiencies.length)
-        return res.status(401).json({
-          error: "Languages and Proficiencies array should be of same size",
+        const { languages, proficiencies } = req.body;
+        currProfile.languages = languages;
+        currProfile.proficiencies = proficiencies;
+        if (languages.length != proficiencies.length)
+            return res.status(401)
+            .json({ error: "Languages and Proficiencies array should be of same size" );
+        const savedProfile = await currProfile.save();
+        res.json({
+            message: "Success",
+            data: savedProfile,
         });
-
-<<<<<<< HEAD
-            const savedProfile = await currProfile.save();
-            res.json({
-                message: "Success",
-                data: savedProfile,
-            });
-        } catch (err) {
-            res.status(400).json({
-                error: err.toString(),
-            });
-        }
+    } catch (err) {
+        res.status(400).json({
+            error: err.toString(),
+        });
+    }
     },
 }
-=======
-      const savedProfile = await currProfile.save();
-      res.json({
-        message: "Success",
-        data: savedProfile,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
-  },
-};
->>>>>>> master
 
 module.exports = ProfileController;
