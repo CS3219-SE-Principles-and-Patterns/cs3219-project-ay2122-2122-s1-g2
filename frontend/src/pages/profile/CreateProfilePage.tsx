@@ -26,6 +26,7 @@ const CreateProfilePage = (props: any) => {
   const [proficiencies, setProficiencies] = useState<number[]>([]);
   const [error, setError] = useState<string>("");
   const profileMsg = isEdit ? "Edit Profile" : "Create Profile";
+  const username = props.username;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -66,6 +67,7 @@ const CreateProfilePage = (props: any) => {
         });
       } else {
         await ProfileController.createProfile({
+          username: username,
           languages: langs,
           proficiencies,
         });
