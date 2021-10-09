@@ -9,16 +9,13 @@ const ProfileController = {
         const aHeader = req.headers["authorization"];
         const aToken = aHeader && aHeader.split(" ")[1];
         if (aToken == null) {
-            console.log("401 Errar");
             return res.status(401).send("Authentication token required");
         }
 
-        console.log("Verifying jwt");
         jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
             if (err) {
                 return res.status(403).send("Access Denied: Token is no longer valid");
             }
-            console.log("Finish middleware");
             req.user = user;
             next();
         });
@@ -58,7 +55,6 @@ const ProfileController = {
                 data: savedProfile,
             });
         } catch (err) {
-            console.log(err);
             res.status(400).json({
                 error: err.toString(),
             });
