@@ -41,7 +41,7 @@ const Login = ({ setLandingStatus }) => {
       const { accessToken, refreshToken, expiresIn } = response.data;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      silentRefresh(expiresIn, refreshToken);
+      // silentRefresh(expiresIn, refreshToken);
       setSuccess(true);
     }
   };

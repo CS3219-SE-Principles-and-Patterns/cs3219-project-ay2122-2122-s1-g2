@@ -72,7 +72,7 @@ const DatabaseManager = {
   },
   getAccessToken: async (req, res) => {
     const { refreshToken } = req.body;
-    if (!refreshToken) return res.status(401);
+    if (!refreshToken) return res.status(401).json({ error: "abc" });
     const token = await Token.findOne({ token: refreshToken });
     if (!token) return res.status(403);
     jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
