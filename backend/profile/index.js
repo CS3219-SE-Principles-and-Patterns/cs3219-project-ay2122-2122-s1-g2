@@ -4,7 +4,14 @@ const cors = require("cors");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+	'allowHeaders': ['sessionId', 'Content-Type', 'x-refresh-token'],
+	'origin': '*',
+	'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	'preflightContinue': false,
+	'credentials': true, 
+	'origin': true
+}));
 
 const profileRoutes = require("./routes/profileRoutes.js");
 
