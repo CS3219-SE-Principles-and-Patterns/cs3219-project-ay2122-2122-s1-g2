@@ -62,7 +62,8 @@ const startGame = (roomId, socket) => {
 			setTimeout(resolve, 1000);
 		}
 	});
-	return {score, result};
+	let actualres = result == 1;
+	return {score, actualres};
 }
 
 io.on('connection', (socket) => {
