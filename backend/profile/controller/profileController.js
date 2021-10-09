@@ -20,58 +20,30 @@ const ProfileController = {
             next();
         });
     },
-  get: async (req, res) => {
-    // the req will mention username and we will use that to find the profile
-    try {
-      const user = req.user;
-      if (!user)
-        return res
-          .status(401)
-          .json({ error: "Unable to get user details from middleware" });
-      const profile = await Profile.findOne({ username: user.username });
-      res.json({
-        message: "Success",
-        data: profile,
-      });
-    } catch (err) {
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
-  },
-  create: async (req, res) => {
-    try {
-      const { username } = req.body;
-      const currProfile = await Profile.findOne({ username: username });
-
-      if (!currProfile)
-        return res
-          .status(401)
-          .json({ error: "Unable to get user details from database" });
-
-      const { languages, proficiencies } = req.body;
-      currProfile.languages = languages;
-      currProfile.proficiencies = proficiencies;
-      if (languages.length != proficiencies.length)
-        return res.status(401)
-        .json({ error: "Languages and Proficiencies array should be of same size" });
-
-      const savedProfile = await currProfile.save();
-      res.json({
-        message: "Success",
-        data: savedProfile,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
-  },
-  update: async (req, res) => {
-    try {
+    get: async (req, res) => {
+        // the req will mention username and we will use that to find the profile
+        try {
         const user = req.user;
-        const currProfile = await Profile.findOne({ username: user.username });
+        if (!user)
+            return res
+            .status(401)
+            .json({ error: "Unable to get user details from middleware" });
+        const profile = await Profile.findOne({ username: user.username });
+        res.json({
+            message: "Success",
+            data: profile,
+        });
+        } catch (err) {
+        res.status(400).json({
+            error: err.toString(),
+        });
+        }
+    },
+    create: async (req, res) => {
+        try {
+        const { username } = req.body;
+        const currProfile = await Profile.findOne({ username: username });
+
         if (!currProfile)
             return res
             .status(401)
@@ -82,17 +54,45 @@ const ProfileController = {
         currProfile.proficiencies = proficiencies;
         if (languages.length != proficiencies.length)
             return res.status(401)
-            .json({ error: "Languages and Proficiencies array should be of same size" );
+            .json({ error: "Languages and Proficiencies array should be of same size" });
+
         const savedProfile = await currProfile.save();
         res.json({
             message: "Success",
             data: savedProfile,
         });
-    } catch (err) {
+        } catch (err) {
+        console.log(err);
         res.status(400).json({
             error: err.toString(),
         });
-    }
+        }
+    },
+    update: async (req, res) => {
+        try {
+            const user = req.user;
+            const currProfile = await Profile.findOne({ username: user.username });
+            if (!currProfile)
+                return res
+                .status(401)
+                .json({ error: "Unable to get user details from database" });
+
+            const { languages, proficiencies } = req.body;
+            currProfile.languages = languages;
+            currProfile.proficiencies = proficiencies;
+            if (languages.length != proficiencies.length)
+                return res.status(401)
+                .json({ error: "Languages and Proficiencies array should be of same size" });
+            const savedProfile = await currProfile.save();
+            res.json({
+                message: "Success",
+                data: savedProfile,
+            });
+        } catch (err) {
+            res.status(400).json({
+                error: err.toString(),
+            });
+        }
     },
 }
 
