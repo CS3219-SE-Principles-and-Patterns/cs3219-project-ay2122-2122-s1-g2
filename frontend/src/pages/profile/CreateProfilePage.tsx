@@ -10,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
   Slider,
+  Container,
   Typography,
   Grid,
 } from "@mui/material";
@@ -17,6 +18,7 @@ import { useEffect, useState } from "react";
 import { ProfileController } from "../../controller/ProfileController";
 import { Profile } from "../../domain/profile";
 import { languages } from "../../utils/constants/languages";
+import { CssButton, CssSelect, CssSlider } from "../common/Components";
 
 const CreateProfilePage = (props: any) => {
   const isEdit = props.isEdit;
@@ -77,68 +79,70 @@ const CreateProfilePage = (props: any) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }} textAlign="center">
-      <h1>{profileMsg}</h1>
-      <Grid container justifyContent="center">
-        <Box component="form">
-          <Stack>
-            <FormControl sx={{ m: 1, width: 300, marginBottom: "5vh" }}>
-              <InputLabel>Languages</InputLabel>
-              <Select
-                multiple
-                required
-                value={langs}
-                onChange={handleLanguageChange}
-                input={<OutlinedInput label="Language" />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
+    <Container>
+      <Box sx={{ flexGrow: 1 }} textAlign="center">
+        <h1>{profileMsg}</h1>
+        <Grid container justifyContent="center">
+          <Box component="form">
+            <Stack>
+              <FormControl sx={{ m: 1, width: 300, marginBottom: "5vh" }}>
+                <InputLabel>Languages</InputLabel>
+                <Select
+                  multiple
+                  required
+                  value={langs}
+                  onChange={handleLanguageChange}
+                  input={<OutlinedInput label="Language" />}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  {languages.map((language) => (
+                    <MenuItem key={language} value={language}>
+                      {language}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {error && (
+                  <Typography className="error-message">{error}</Typography>
                 )}
-              >
-                {languages.map((language) => (
-                  <MenuItem key={language} value={language}>
-                    {language}
-                  </MenuItem>
-                ))}
-              </Select>
-              {error && (
-                <Typography className="error-message">{error}</Typography>
-              )}
-            </FormControl>
-            {proficiencies.map((proficiency, idx) => (
-              <FormControl sx={{ m: 1, width: 300 }} key={idx}>
-                <Typography textAlign="left" gutterBottom>
-                  {langs[idx]} Proficiency
-                </Typography>
-                <Slider
-                  aria-label="Proficiency"
-                  value={proficiency}
-                  step={1}
-                  min={1}
-                  max={5}
-                  marks
-                  valueLabelDisplay="auto"
-                  onChange={(event, p) =>
-                    handleProficiencyArrChange(p as number, idx)
-                  }
-                />
               </FormControl>
-            ))}
+              {proficiencies.map((proficiency, idx) => (
+                <FormControl sx={{ m: 1, width: 300 }} key={idx}>
+                  <Typography textAlign="left" gutterBottom>
+                    {langs[idx]} Proficiency
+                  </Typography>
+                  <CssSlider
+                    aria-label="Proficiency"
+                    value={proficiency}
+                    step={1}
+                    min={1}
+                    max={5}
+                    marks
+                    valueLabelDisplay="auto"
+                    onChange={(event, p) =>
+                      handleProficiencyArrChange(p as number, idx)
+                    }
+                  />
+                </FormControl>
+              ))}
 
-            <Button
-              onClick={onSubmit}
-              sx={{ marginTop: "5vh" }}
-              variant="contained"
-            >
-              {profileMsg}
-            </Button>
-          </Stack>
-        </Box>
-      </Grid>
-    </Box>
+              <CssButton
+                onClick={onSubmit}
+                sx={{ marginTop: "5vh" }}
+                variant="outlined"
+              >
+                {profileMsg}
+              </CssButton>
+            </Stack>
+          </Box>
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 
