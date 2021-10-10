@@ -1,31 +1,32 @@
 import { Route, Redirect, RouteProps } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAxiosInstance as axios } from "../../utils/auth/auth";
+import { getAxiosInstance as axios, removeTokens } from "../../utils/auth/auth";
+import { ACCESS_TOKEN } from "../../utils/constants/tokens";
 
 const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
-  const accessToken = localStorage.getItem("accessToken");
-  const refreshToken = localStorage.getItem("refreshToken");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const f = async () => {
+    const verifyAccessToken = async () => {
       try {
-        console.log("Running f");
-        const res = await axios().post(
-          "http://localhost:3000/api/login/token",
-          {
-            refreshToken: refreshToken,
-          }
-        );
+        await axios().post("http://localhost:3000/api/login/verify");
         setIsAuthenticated(true);
         setIsLoading(false);
       } catch (e) {
+        removeTokens();
         setIsLoading(false);
         setIsAuthenticated(false);
       }
     };
-    f();
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
+    if (accessToken) {
+      verifyAccessToken();
+    } else {
+      removeTokens();
+      setIsLoading(false);
+      setIsAuthenticated(false);
+    }
   });
   return isLoading ? (
     <p>Loading</p>
