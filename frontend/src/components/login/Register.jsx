@@ -88,7 +88,7 @@ const Register = ({ setLandingStatus }) => {
                 variant="outlined"
                 type="submit"
                 justifySelf="center"
-                sx={{ width: "50%" }}
+                sx={{ width: "50%", marginTop: "20px" }}
               >
                 Register
               </CssButton>
