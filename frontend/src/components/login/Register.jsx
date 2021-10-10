@@ -20,8 +20,9 @@ const Register = ({ setLandingStatus }) => {
   password.current = watch("password", "");
   const onSubmit = async (data) => {
     const response = await registerUser(data).catch((e) => {
-      setError("username", { message: e.response.data });
+      setError("username", { message: e.response.data.error });
     });
+
     if (response) {
       setRegistered(true);
       setPage(1);
@@ -70,7 +71,10 @@ const Register = ({ setLandingStatus }) => {
       </div>
     </form>
   ) : (
-    <CreateProfilePage username={getValues("username")} />
+    <CreateProfilePage
+      username={getValues("username")}
+      setLandingStatus={setLandingStatus}
+    />
   );
 };
 
