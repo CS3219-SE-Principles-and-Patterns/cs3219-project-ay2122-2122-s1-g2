@@ -67,6 +67,7 @@ const startGame = (roomId, socket) => {
 }
 
 io.on('connection', (socket) => {
+	console.log("In backend")
 	socket.on('Match Player', async (player) => {
         /* player from frontend will look like 
         {

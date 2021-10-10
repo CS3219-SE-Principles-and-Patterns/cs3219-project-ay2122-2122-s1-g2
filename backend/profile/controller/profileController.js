@@ -59,7 +59,6 @@ const ProfileController = {
                 currProfile.proficiencies = proficiencies;
                 savedProfile = await currProfile.save();
             }
-            console.log(savedProfile)
             res.json({
                 message: "Success",
                 data: savedProfile,
