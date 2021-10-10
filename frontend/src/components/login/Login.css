@@ -1,34 +1,13 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  height: 45vh;
-  width: 40vw;
   justify-content: space-around;
-  align-items: center;
+  height: 50vh;
+  width: 60vh;
 }
 
-.login-form > h1 {
-  margin: 0;
-}
-
-.login-buttons {
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.login-buttons > button {
-  display: block;
-  width: 10vw;
-  padding: 2% 0;
-}
-
-.login-input {
-  width: 90%;
-}
-.login-input > input {
-  width: 98%;
-  padding: 1%;
+.login-form > h4 {
+  font-weight: bold;
 }
 
 .error-message {

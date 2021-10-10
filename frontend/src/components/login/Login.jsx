@@ -6,6 +6,9 @@ import { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { getNewAccessToken } from "../../infra/auth";
 import { setTokens } from "../../utils/auth/auth";
+import { FormControl, Grid, Typography } from "@mui/material";
+import { CssButton, CssTextField } from "../../pages/common/Components";
+import { Box } from "@mui/system";
 
 const Login = ({ setLandingStatus }) => {
   const {
@@ -47,35 +50,60 @@ const Login = ({ setLandingStatus }) => {
   return success ? (
     <Redirect to="/home" />
   ) : (
-    <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h1>Login</h1>
-      <div className="login-input">
-        <label>Username:</label>
-        <input {...register("username", { required: true })} />
-        {errors.username?.type === "required" && (
-          <p className="error-message">Username is required!</p>
-        )}
-      </div>
-      <div className="login-input">
-        <label>Password:</label>
-        <input {...register("password", { required: true })} />
-        {errors.password?.type === "required" && (
-          <p className="error-message">Password is required!</p>
-        )}
-        {errors.password && (
-          <p className="error-message">{errors.password.message}</p>
-        )}
-      </div>
-      <div className="login-buttons">
-        <button type="submit">Log In</button>
-        <button onClick={() => setLandingStatus(landingEnum.REGISTER)}>
-          Register
-        </button>
-        <button onClick={() => setLandingStatus(landingEnum.FORGET_PASSWORD)}>
-          Forget Password
-        </button>
-      </div>
-    </form>
+    <Grid container sx={{ width: "80vw" }}>
+      <Grid container sm={6}></Grid>
+      <Grid container sm={6}>
+        <Grid item xs={5}></Grid>
+        <Grid item xs={7}>
+          <Typography>
+            Don't have an Account?{" "}
+            <b onClick={() => setLandingStatus(landingEnum.REGISTER)}>
+              Register
+            </b>
+          </Typography>
+        </Grid>
+        <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+          <Typography variant="h4">Language Learners</Typography>
+          <FormControl>
+            <CssTextField
+              label="Username"
+              {...register("username", { required: true })}
+            />
+            {errors.username?.type === "required" && (
+              <p className="error-message">Username is required!</p>
+            )}
+          </FormControl>
+          <FormControl>
+            <CssTextField
+              label="Password"
+              {...register("password", { required: true })}
+            />
+            {errors.password?.type === "required" && (
+              <p className="error-message">Password is required!</p>
+            )}
+            {errors.password && (
+              <p className="error-message">{errors.password.message}</p>
+            )}
+            <Typography>
+              Forget Password?{"  "}
+              <b onClick={() => setLandingStatus(landingEnum.FORGET_PASSWORD)}>
+                Click Here
+              </b>
+            </Typography>
+          </FormControl>
+          <Box flex textAlign="center">
+            <CssButton
+              variant="outlined"
+              type="submit"
+              justifySelf="center"
+              sx={{ width: "50%" }}
+            >
+              Log In
+            </CssButton>
+          </Box>
+        </form>
+      </Grid>
+    </Grid>
   );
 };
 
