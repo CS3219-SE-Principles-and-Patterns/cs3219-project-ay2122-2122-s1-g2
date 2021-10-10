@@ -41,7 +41,7 @@ const Navbar = () => {
         <Grid display="flex" flexDirection="column" alignItems="center">
           <Grid item>
             <IconButton>
-              <Link to="/profile/create">
+              <Link to="/profile">
                 <ProfileIcon className="icon" fontSize="large" />
               </Link>
             </IconButton>

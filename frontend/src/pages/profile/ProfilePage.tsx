@@ -5,8 +5,8 @@ const ProfilePage = () => {
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
       <Typography variant="h2">Profile</Typography>
-      <Button component={Link} variant="contained" to="/profile/create">
-        Create Profile
+      <Button component={Link} variant="contained" to="/profile/edit">
+        Edit Profile
       </Button>
     </Box>
   );
