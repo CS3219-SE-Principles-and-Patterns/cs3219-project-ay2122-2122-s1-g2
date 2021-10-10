@@ -24,6 +24,3 @@ jobs:
     - name: Test Login microservice
       working-directory: ./backend/login  
       run: npm install; npm test
-    - name: Test Flashcard microservice
-      working-directory: ./backend/flashcard  
-      run: npm install; npm test
