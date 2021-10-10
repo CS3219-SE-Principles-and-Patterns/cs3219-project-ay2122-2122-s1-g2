@@ -2,23 +2,29 @@ import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
-import socketClient from "socket.io-client";
 
 const GamePage = (props: any) => {
     const [question, setQuestion] = useState<string>("Not yet");
     const [answer, setAnswer] = useState<string>("");
+    const [correctAnswer, setCorrectAnswer] = useState<string>("");
     const [answers, setAnswers] = useState<string[]>([]);
+    const [timing, setTiming] = useState<any>(new Date())
     const socket = props.socket;
     useEffect(() => {
         socket.on("flashcard", (data: any) => {
             setQuestion(data.question);
-            setAnswer(data.answers);
-            console.log(data)
+            setAnswers(data.answers);
+            setCorrectAnswer(data.correctAnswer);
+            setTiming(new Date())
         })
     }, [])
 
     const handleSubmit = (event: any) => {
-        socket.emit(socket.room_id, answer);
+        var currTime: any = new Date();
+        var time = Math.abs(currTime - timing);
+        var result = answer == correctAnswer;
+        console.log(time)
+        socket.emit("answer", {gameRes: result, timing: time, } ); // idk how to get this timing yet
         handleQuestionChange();
     }
 
@@ -26,7 +32,7 @@ const GamePage = (props: any) => {
         socket.on("flashcard", (data: any) => {
             setQuestion(data.question);
             setAnswers(data.answers);
-            console.log(data)
+            setCorrectAnswer(data.correctAnswer);
         })
     }
 
