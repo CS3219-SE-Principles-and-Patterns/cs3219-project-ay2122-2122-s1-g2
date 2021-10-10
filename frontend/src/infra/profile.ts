@@ -1,5 +1,5 @@
 import { getAxiosInstance as axios } from "../utils/auth/auth";
-// export const PROFILE_PATH = "http://localhost/api/profile/";
+
 export const PROFILE_PATH = "http://localhost:5000/api/profile/";
 
 export class ProfileInfra {

@@ -19,14 +19,17 @@ import { ProfileController } from "../../controller/ProfileController";
 import { Profile } from "../../domain/profile";
 import { languages } from "../../utils/constants/languages";
 import { CssButton, CssSelect, CssSlider } from "../common/Components";
+import { landingEnum } from "../../utils/constants/enums";
 
 const CreateProfilePage = (props: any) => {
   const isEdit = props.isEdit;
+
   const [langs, setLangs] = useState<string[]>([]);
   const [proficiencies, setProficiencies] = useState<number[]>([]);
   const [error, setError] = useState<string>("");
   const profileMsg = isEdit ? "Edit Profile" : "Create Profile";
   const username = props.username;
+  const [success, setSuccess] = useState<string>("");
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -73,6 +76,7 @@ const CreateProfilePage = (props: any) => {
         });
       }
 
+      setSuccess("Profile successfully created!");
       setError("");
     } catch (err: any) {
       console.log(err);
@@ -140,6 +144,19 @@ const CreateProfilePage = (props: any) => {
               >
                 {profileMsg}
               </CssButton>
+
+              {success !== "" && (
+                <>
+                  <p>{success}</p>
+                  <CssButton
+                    onClick={() => props.setLandingStatus(landingEnum.LOGIN)}
+                    sx={{ marginTop: "5vh" }}
+                    variant="outlined"
+                  >
+                    Login
+                  </CssButton>
+                </>
+              )}
             </Stack>
           </Box>
         </Grid>

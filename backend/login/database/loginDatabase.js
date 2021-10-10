@@ -68,9 +68,13 @@ const DatabaseManager = {
       next();
     });
   },
+  verify: async (req, res) => {
+    res.status(200).send("Valid access token!");
+  },
   getAccessToken: async (req, res) => {
     const { refreshToken } = req.body;
-    if (!refreshToken) return res.status(401).json({ error: "Could not find refreshToken" });
+    if (!refreshToken)
+      return res.status(401).json({ error: "Could not find refreshToken" });
     const token = await Token.findOne({ token: refreshToken });
     if (!token) return res.status(403);
     jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
@@ -171,13 +175,12 @@ const DatabaseManager = {
         refreshToken = rToken.token;
       }
 
-      res.status(200)
-        .json({
-          message: "Success",
-          accessToken: getJwtAccessToken(profile),
-          refreshToken: refreshToken,
-          expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
-        });
+      res.status(200).json({
+        message: "Success",
+        accessToken: getJwtAccessToken(profile),
+        refreshToken: refreshToken,
+        expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
+      });
     } catch (err) {
       res.status(400).json({
         error: err.toString(),
@@ -209,13 +212,12 @@ const DatabaseManager = {
         refreshToken = rToken.token;
       }
 
-      res.status(200)
-        .json({
-          message: "Success",
-          accessToken: getJwtAccessToken(savedProfile),
-          refreshToken: refreshToken,
-          expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
-        });
+      res.status(200).json({
+        message: "Success",
+        accessToken: getJwtAccessToken(savedProfile),
+        refreshToken: refreshToken,
+        expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
+      });
     } catch (err) {
       res.status(400).json({
         error: err.toString(),
