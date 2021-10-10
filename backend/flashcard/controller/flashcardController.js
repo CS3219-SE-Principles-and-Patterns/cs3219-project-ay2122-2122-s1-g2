@@ -7,7 +7,7 @@ const authTokenMW = (req, res) => {
     const ACCESS_SECRET = process.env.ACCESS_SECRET;
     //const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
 	const aHeader = req.headers['authorization'];
-	const aToken = aHeader && aHeader.split(' ')[1];
+    const aToken = aHeader && aHeader.split(' ')[1];
     if (aToken == null) {
 		return res.status(401).send("User ");
 	}
@@ -26,9 +26,9 @@ exports.get = (req, res) => {
     if (!user) return;
     Flashcard.findOne({username: user.username}, (err, flashCard) => {
         if (err) {
-            res.json({
-                message: "Error",
-                error: err
+            res.status(400).json({
+                message: "Error in getting user credentials",
+                error: err.toString()
             });
         } else {
             res.json({
@@ -47,7 +47,8 @@ Sample post request
             "title": "ML",
             "language": "tagalog",
             "altText": "yolo",
-            "difficulty": 5 
+            "difficulty": 5 ,
+            "notes": "this is for me to learn!!"
         }
     ]
 }
@@ -60,17 +61,17 @@ exports.create = (req, res) => {
     flashcard.flashcards = req.body.flashcards ? req.body.flashcards : [];
     Flashcard.findOne({username: user.username}, (err, oldUserCard) => {
         if (err) {
-            res.json({
-                message: "Error",
-                error: err
+            res.status(400).json({
+                message: "Error in accessing mongodb database",
+                error: err.toString()
             })
         } else if (!oldUserCard) {
             // no such profile exists so we just put it in
             flashcard.save((err) => {
                 if (err) {
-                    res.json({
-                        message: "Error",
-                        error: err
+                    res.status(400).json({
+                        message: "Error in saving new flashcard",
+                        error: err.toString()
                     })
                 } else {
                     res.json({
@@ -83,14 +84,14 @@ exports.create = (req, res) => {
             oldUserCard.flashcards = req.body.flashcards ? req.body.flashcards: oldUserCard.flashcards;
             oldUserCard.save((err) => {
                 if (err) {
-                    res.json({
-                        message: "Update failed",
-                        error: err
+                    res.status(400).json({
+                        message: "Updating flashcard failed",
+                        error: err.toString()
                     })
                 } else {
                     res.json({
                         message: "Flashcards updated",
-                        data: oldProfile
+                        data: oldUserCard.flashcards
                     })
                 }
             })
@@ -106,7 +107,8 @@ Sample request for putting new flashcard:
         "altText: "Anneyong",
         "difficulty": 3,
         "language": "Korean",
-        "title": "Hello world!"
+        "title": "Hello world!",
+        "notes": "This is for me to learn"
     }
 }
 */
@@ -116,16 +118,17 @@ exports.put = (req, res) => {
     var flashCard = req.body.flashcard;
     Flashcard.findOne({username: user.username}, (err, userCard) => {
         if (err) {
-            res.json({
-                message: "Error",
-                error: err
+            res.status(400).json({
+                message: "Error in accessing Mongodb database",
+                error: err.toString()
             })
         } else {
+            // assumes user already exists
             userCard.flashcards.push(flashCard);
             userCard.save((err) => {
                 if (err) {
-                    res.json({
-                        message: "Error",
+                    res.status(400).json({
+                        message: "Error in putting new flashcard in",
                         error: err
                     });
                 } else {
@@ -173,5 +176,3 @@ exports.put = (req, res) => {
 // }
 
 // module.exports = DatabaseController;
-
-// need to implement delete flashcard functionality
