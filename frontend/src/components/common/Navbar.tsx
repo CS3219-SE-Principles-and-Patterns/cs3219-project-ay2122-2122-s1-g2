@@ -15,12 +15,15 @@ const NavBar = () => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const drawer = (
+  const drawer = (isMobile: boolean) => (
     <>
       <Grid
         display="flex"
         justifyContent="center"
-        sx={{ marginBottom: "25vh", marginTop: "5vh" }}
+        sx={{
+          marginBottom: `${isMobile ? "2vh" : "25vh"}`,
+          marginTop: "5vh",
+        }}
       >
         <Grid item sx={{ backgroundColor: "#ffd8bdff" }}>
           <IconButton>
@@ -69,7 +72,7 @@ const NavBar = () => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            edge="end"
+            edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
@@ -98,7 +101,7 @@ const NavBar = () => {
           display: { xs: "block", sm: "none" },
         }}
       >
-        {drawer}
+        {drawer(true)}
       </Drawer>
       <Drawer
         variant="permanent"
@@ -116,7 +119,7 @@ const NavBar = () => {
           display: { xs: "none", sm: "block" },
         }}
       >
-        {drawer}
+        {drawer(false)}
       </Drawer>
     </Box>
   );

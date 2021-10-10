@@ -31,3 +31,12 @@ input {
   border: 1px solid v.$primary;
   width: 100px;
 }
+
+body {
+  margin-top: 4vh;
+}
+@media (min-width: 600px) {
+  body {
+    margin-top: 0;
+  }
+}
