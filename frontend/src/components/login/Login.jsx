@@ -5,6 +5,7 @@ import { landingEnum } from "../../utils/constants/enums";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { getNewAccessToken } from "../../infra/auth";
+import { setTokens } from "../../utils/auth/auth";
 
 const Login = ({ setLandingStatus }) => {
   const {
@@ -28,21 +29,18 @@ const Login = ({ setLandingStatus }) => {
         refreshToken: newRefreshToken,
         expiresIn: newExpiresIn,
       } = response.data;
-      localStorage.setItem("accessToken", newAccessToken);
-      localStorage.setItem("refreshToken", newRefreshToken);
+      setTokens(newAccessToken, newRefreshToken);
       await silentRefresh(newExpiresIn, newRefreshToken);
     }
   };
   const onSubmit = async (data) => {
     let response = await loginUser(data).catch((e) => {
-      console.log(e.response);
       setError("password", { message: e.response.data.error });
     });
     if (response) {
       const { accessToken, refreshToken, expiresIn } = response.data;
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      // silentRefresh(expiresIn, refreshToken);
+      setTokens(accessToken, refreshToken);
+      silentRefresh(expiresIn, refreshToken);
       setSuccess(true);
     }
   };

@@ -19,6 +19,6 @@ router.delete("/:username", DatabaseManager.delete);
 
 router.post("/token", DatabaseManager.getAccessToken);
 
-router.post("/check", DatabaseManager.authTokenMW);
+router.post("/verify", DatabaseManager.authTokenMW, DatabaseManager.verify);
 
 module.exports = router;
