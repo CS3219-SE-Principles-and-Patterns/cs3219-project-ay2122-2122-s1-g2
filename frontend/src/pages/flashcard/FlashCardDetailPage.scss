@@ -30,7 +30,7 @@
   display: flex;
 }
 
-div .header {
+div > .header {
   font-weight: bold;
   margin-bottom: 3px;
 }
@@ -39,7 +39,7 @@ div .header {
   margin-top: 15vh;
 }
 
-div .flashcard-text {
+div > .flashcard-text {
   text-align: center;
   width: 100%;
   align-self: center;
