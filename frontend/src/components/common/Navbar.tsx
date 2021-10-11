@@ -15,13 +15,13 @@ const NavBar = () => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const drawer = (isMobile: boolean) => (
+  const drawer = (
     <>
       <Grid
         display="flex"
         justifyContent="center"
         sx={{
-          marginBottom: `${isMobile ? "2vh" : "25vh"}`,
+          marginBottom: { xs: "2vh", sm: "25vh" },
           marginTop: "5vh",
         }}
       >
@@ -101,7 +101,7 @@ const NavBar = () => {
           display: { xs: "block", sm: "none" },
         }}
       >
-        {drawer(true)}
+        {drawer}
       </Drawer>
       <Drawer
         variant="permanent"
@@ -119,7 +119,7 @@ const NavBar = () => {
           display: { xs: "none", sm: "block" },
         }}
       >
-        {drawer(false)}
+        {drawer}
       </Drawer>
     </Box>
   );
