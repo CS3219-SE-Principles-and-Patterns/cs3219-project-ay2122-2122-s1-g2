@@ -11,6 +11,10 @@ export class FlashCardInfra {
     return axios().get(FLASHCARD_PATH + "/" + id);
   };
 
+  public static getAllFlashCards = (): Promise<any> => {
+    return axios().get(FLASHCARD_PATH + "/");
+  };
+
   public static editFlashCard = (data: any, id: string): Promise<any> => {
     return axios().put(FLASHCARD_PATH + "/edit/" + id, data);
   };

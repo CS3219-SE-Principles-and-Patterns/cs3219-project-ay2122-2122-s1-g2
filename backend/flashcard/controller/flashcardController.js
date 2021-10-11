@@ -1,43 +1,7 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config()
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const Flashcard = require("../models/flashcard.js");
-
-const authTokenMW = (req, res) => {
-    const ACCESS_SECRET = process.env.ACCESS_SECRET;
-    //const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
-	const aHeader = req.headers['authorization'];
-    const aToken = aHeader && aHeader.split(' ')[1];
-    if (aToken == null) {
-		return res.status(401).send("User ");
-	}
-    userCred = {}
-	jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
-		if (err) {
-			return res.status(403).send("Access Denied: Token is no longer valid");
-		}
-        userCred = user;
-	})
-    return userCred;
-}
-
-exports.get = (req, res) => {
-    const user = authTokenMW(req, res);
-    if (!user) return;
-    Flashcard.findOne({username: user.username}, (err, flashCard) => {
-        if (err) {
-            res.status(400).json({
-                message: "Error in getting user credentials",
-                error: err.toString()
-            });
-        } else {
-            res.json({
-                message: "Success",
-                data: flashCard.flashcards
-            });
-        }
-    });
-}
 /*
 Sample post request
 {
@@ -53,126 +17,109 @@ Sample post request
     ]
 }
 */
-exports.create = (req, res) => {
-    var flashcard = Flashcard();
-    const user = authTokenMW(req, res);
-    if (!user) return;
-    flashcard.username = user.username;
-    flashcard.flashcards = req.body.flashcards ? req.body.flashcards : [];
-    Flashcard.findOne({username: user.username}, (err, oldUserCard) => {
-        if (err) {
-            res.status(400).json({
-                message: "Error in accessing mongodb database",
-                error: err.toString()
-            })
-        } else if (!oldUserCard) {
-            // no such profile exists so we just put it in
-            flashcard.save((err) => {
-                if (err) {
-                    res.status(400).json({
-                        message: "Error in saving new flashcard",
-                        error: err.toString()
-                    })
-                } else {
-                    res.json({
-                        message: "Success",
-                        data: flashcard
-                    })
-                }
-            })
-        } else {
-            oldUserCard.flashcards = req.body.flashcards ? req.body.flashcards: oldUserCard.flashcards;
-            oldUserCard.save((err) => {
-                if (err) {
-                    res.status(400).json({
-                        message: "Updating flashcard failed",
-                        error: err.toString()
-                    })
-                } else {
-                    res.json({
-                        message: "Flashcards updated",
-                        data: oldUserCard.flashcards
-                    })
-                }
-            })
-        }
-    })   
-}
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
-/*
-Sample request for putting new flashcard:
-{
-    "flashcard": {
-        "body": "Hi",
-        "altText: "Anneyong",
-        "difficulty": 3,
-        "language": "Korean",
-        "title": "Hello world!",
-        "notes": "This is for me to learn"
+const FlashcardController = {
+  authTokenMW: (req, res, next) => {
+    const aHeader = req.headers["authorization"];
+    const aToken = aHeader && aHeader.split(" ")[1];
+    if (aToken == null) {
+      return res.status(401).send("Authentication token required");
     }
-}
-*/
-exports.put = (req, res) => {
-    const user = authTokenMW(req, res);
-    if (!user) return;
-    var flashCard = req.body.flashcard;
-    Flashcard.findOne({username: user.username}, (err, userCard) => {
-        if (err) {
-            res.status(400).json({
-                message: "Error in accessing Mongodb database",
-                error: err.toString()
-            })
-        } else {
-            // assumes user already exists
-            userCard.flashcards.push(flashCard);
-            userCard.save((err) => {
-                if (err) {
-                    res.status(400).json({
-                        message: "Error in putting new flashcard in",
-                        error: err
-                    });
-                } else {
-                    res.json({
-                        message: "Update successful",
-                        data: userCard
-                    });
-                }
-            })
-        }
+
+    jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).send("Access Denied: Token is no longer valid");
+      }
+      req.user = user;
+      next();
     });
-}
+  },
+  get: async (req, res) => {
+    const user = req.user;
+    if (!user)
+      return res
+        .status(401)
+        .json({ error: "Unable to get user details from middleware" });
+    try {
+      const flashcard = await Flashcard.findOne({ username: user.username });
+      res.json({
+        message: "Success",
+        data: flashcard.flashcards,
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: "Error in getting user credentials",
+        error: err.toString(),
+      });
+    }
+  },
 
-// const DatabaseController = {
-//     authTokenMW: (req, res, next) => {
-// 		const aHeader = req.headers['authorization'];
-// 		const aToken = aHeader && aHeader.split(' ')[1];
-// 		if (aToken == null) {
-// 			return res.status(401).send("Authentication token required");
-// 		}
-	
-// 		jwt.verify(aToken, ACCESS_SECRET, (err, user) => {
-// 			if (err) {
-// 				return res.status(403).send("Access Denied: Token is no longer valid");
-// 			}
-// 			req.user = user;
-// 			next();
-// 		})
-// 	},
-//     get: async (req, res) => {
-//         try {
-//             const user = authTokenMW(req, res);
-//             if (!user) return;
-//             const flashCard = await Flashcard.findOne({username: user.username});
-//             res.status(200).json({
-//                 message: "Success",
-//                 data: flashCard.flashcards
-//             });
-//         } catch (err) {
-//             res.status(400).json({
-//                 error: err.toString()
-//             });
-//         } 
-//     },
-// }
+  create: async (req, res) => {
+    const user = req.user;
+    const newFlashcard = req.body;
+    if (!user)
+      return res
+        .status(401)
+        .json({ error: "Unable to get user details from middleware" });
+    var flashcard = Flashcard();
+    flashcard.username = user.username;
+    var oldUserCard;
+    try {
+      oldUserCard = await Flashcard.findOne({ username: user.username });
+    } catch (err) {
+      res.status(400).json({
+        message: "Error in creating mongodb database",
+        error: err.toString(),
+      });
+    }
+    try {
+      if (!oldUserCard) {
+        // no such profile exists so we just put it in
+        flashcard.flashcards = [newFlashcard];
+        console.log("saving one new flashcard", flashcard);
+        await flashcard.save();
+        return res.status(200).json({
+          message: "Success",
+          data: flashcard,
+        });
+      }
+      oldUserCard.flashcards.push(newFlashcard);
+      console.log("saving updated flashcard", oldUserCard);
+      await oldUserCard.save();
+      return res.status(200).json({
+        message: "Flashcards updated",
+        data: oldUserCard,
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: "Error in saving new flashcard",
+        error: err.toString(),
+      });
+    }
+  },
+  put: async (req, res) => {
+    const user = req.user;
+    if (!user)
+      return res
+        .status(401)
+        .json({ error: "Unable to get user details from middleware" });
+    var flashCard = req.body.flashcard;
 
-// module.exports = DatabaseController;
+    try {
+      const userCard = await Flashcard.findOne({ username: user.username });
+      userCard.flashcards.push(flashCard);
+      await userCard.save();
+      return res.json({
+        message: "Update successful",
+        data: userCard,
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: "Error in putting new flashcard in",
+        error: err.toString(),
+      });
+    }
+  },
+};
+module.exports = FlashcardController;

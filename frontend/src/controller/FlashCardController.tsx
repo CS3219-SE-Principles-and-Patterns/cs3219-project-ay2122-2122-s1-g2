@@ -10,6 +10,11 @@ export class FlashCardController {
   public static getFlashCard = async (id: string): Promise<FlashCard> => {
     return FlashCard.create(await FlashCardInfra.getFlashCard(id));
   };
+  public static getAllFlashCards = async (): Promise<FlashCard[]> => {
+    const res = await FlashCardInfra.getAllFlashCards();
+    const flashcards: [] = res.data.data;
+    return flashcards.map((flashcard) => FlashCard.create(flashcard));
+  };
 
   public static editFlashCard = async (props: FlashCardProps, id: string) => {
     const flashCard: FlashCard = FlashCard.create(props);

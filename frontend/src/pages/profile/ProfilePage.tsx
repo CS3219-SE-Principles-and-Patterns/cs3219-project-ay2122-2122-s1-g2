@@ -14,7 +14,9 @@ import {
 import LanguageLearnersLogo from "./LanguageLearnersLogo.png";
 import { CssTextField } from "../common/Components";
 
-import { ProfileInfra } from "../../infra/profile";
+import { ProfileController } from "../../controller/ProfileController";
+import { FlashCardController } from "../../controller/FlashCardController";
+import { FlashCard } from "../../domain/flashcard";
 
 const ProfileDetails = () => {
   const [hasProfile, setHasProfile] = useState(false);
@@ -25,8 +27,8 @@ const ProfileDetails = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await ProfileInfra.getProfile();
-        const profile = res.data.data;
+        const profile = await ProfileController.getProfile();
+        console.log(profile);
         setUsername(profile.username);
         setLangs(profile.languages);
         setProficiencies(profile.proficiencies);
@@ -112,7 +114,28 @@ const FlashCardDetails = () => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
   };
-  useEffect(() => {}, []);
+  const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        const cards = await FlashCardController.getAllFlashCards();
+        setFlashcards(cards);
+      } catch {}
+    };
+    fetchFlashcards();
+    setLoading(false);
+  }, []);
+  if (loading) return <p>Loading...</p>;
+  const flashcardsList = flashcards.map((flashcard) => {
+    return (
+      <Grid item sm={4}>
+        <Box sx={{ backgroundColor: "#313584", height: "20vh" }}></Box>
+        <Typography>{flashcard.title}</Typography>
+        <Typography>{flashcard.language}</Typography>
+      </Grid>
+    );
+  });
   return (
     <>
       <Box sx={{ marginBottom: "2vh" }}>
@@ -131,7 +154,9 @@ const FlashCardDetails = () => {
           <CssTextField label="Search"></CssTextField>
         </Grid>
       </Grid>
-      <Grid></Grid>
+      <Grid container spacing={2} sx={{ marginTop: "2vh" }}>
+        {flashcardsList}
+      </Grid>
     </>
   );
 };
