@@ -15,8 +15,9 @@ export class ProfileController {
   public static getProfile = async (): Promise<Profile> => {
     const res = await ProfileInfra.getProfile();
     return Profile.create({
-      languages: res.languages,
-      proficiencies: res.proficiencies,
+      languages: res.data.data.languages,
+      proficiencies: res.data.data.proficiencies,
+      username: res.data.data.username
     });
   };
 }

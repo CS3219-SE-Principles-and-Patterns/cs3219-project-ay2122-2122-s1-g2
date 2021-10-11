@@ -23,7 +23,6 @@ const GamePage = (props: any) => {
         var currTime: any = new Date();
         var time = Math.abs(currTime - timing);
         var result = answer == correctAnswer;
-        console.log(time)
         socket.emit("answer", {gameRes: result, timing: time, } ); // idk how to get this timing yet
         handleQuestionChange();
     }

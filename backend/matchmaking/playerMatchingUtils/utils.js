@@ -1,6 +1,6 @@
 let players = [];
 
-const delay = () => new Promise(res => setTimeout(res, 10000)); // 100 ms timeout?
+const delay = (ms) => new Promise(res => setTimeout(res, ms * 1000)); // 100 ms timeout?
 	
 const playerMatcher = async (socket, player, time) => {
     if (player.matchFound) {
@@ -9,7 +9,6 @@ const playerMatcher = async (socket, player, time) => {
         deletePlayer(player.username)
         return true
     }
-    console.log(player)
     if (time == 0) {
         return false;
     }
@@ -34,7 +33,7 @@ const playerMatcher = async (socket, player, time) => {
 		}
 	}
 	player.room = player.username;
-    await delay();
+    await delay(5);
     return playerMatcher(socket, player, time - 1);
 }
 

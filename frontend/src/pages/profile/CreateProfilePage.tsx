@@ -65,6 +65,7 @@ const CreateProfilePage = (props: any) => {
     try {
       if (isEdit) {
         await ProfileController.editProfile({
+          username: username,
           languages: langs,
           proficiencies,
         });

@@ -1,5 +1,5 @@
 export interface ProfileProps {
-  username?: string;
+  username: string;
   languages: string[];
   proficiencies: number[];
 }
@@ -7,7 +7,7 @@ export interface ProfileProps {
 export class Profile implements ProfileProps {
   languages: string[];
   proficiencies: number[];
-  username?: string;
+  username: string;
   private constructor(props: ProfileProps) {
     this.languages = props.languages;
     this.proficiencies = props.proficiencies;
