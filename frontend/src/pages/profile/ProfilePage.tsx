@@ -7,8 +7,12 @@ import {
   LinearProgress,
   Button,
   Typography,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import LanguageLearnersLogo from "./LanguageLearnersLogo.png";
+import { CssTextField } from "../common/Components";
 
 import { ProfileInfra } from "../../infra/profile";
 
@@ -35,7 +39,7 @@ const ProfileDetails = () => {
   }, [hasProfile]);
 
   const GetProficiencies = () => (
-    <Box>
+    <>
       {langs.map((lang, idx) => (
         <Grid container key={lang} sx={{ marginBottom: "2vh" }}>
           <Grid item sm={6} textAlign="left">
@@ -63,19 +67,22 @@ const ProfileDetails = () => {
           </Grid>
         </Grid>
       ))}
-    </Box>
+    </>
   );
 
   return (
     <Grid item textAlign="left">
-      <Box sx={{ width: { sm: "60%" } }}>
+      <Box sx={{ width: { sm: "30%" } }}>
         <img
           src={LanguageLearnersLogo}
           alt="LanguageLearnerIcon"
           style={{ width: "100%" }}
         />
       </Box>
-      <Typography variant={"h5"} sx={{ marginTop: "3%", marginBottom: "5%" }}>
+      <Typography
+        variant={"h5"}
+        sx={{ marginTop: "3%", marginBottom: "5%", fontWeight: "bold" }}
+      >
         {username}
       </Typography>
       <Button
@@ -101,37 +108,41 @@ const ProfileDetails = () => {
 };
 
 const FlashCardDetails = () => {
+  const [sort, setSort] = useState("Date added");
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setSort(event.target.value);
+  };
+  useEffect(() => {}, []);
   return (
-    <div>
-      <Grid item textAlign="left">
-        <h2>What is Lorem Ipsum?</h2>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </p>
+    <>
+      <Box sx={{ marginBottom: "2vh" }}>
+        <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
+          My Flashcards
+        </Typography>
+      </Box>
+      <Grid container justifyContent={"space-between"}>
+        <Grid item>
+          <Select value={sort} onChange={handleChange}>
+            <MenuItem value={"Date added"}>Date added</MenuItem>
+            <MenuItem value={"Alphabetical"}>Alphabetical</MenuItem>
+          </Select>
+        </Grid>
+        <Grid item>
+          <CssTextField label="Search"></CssTextField>
+        </Grid>
       </Grid>
-    </div>
+      <Grid></Grid>
+    </>
   );
 };
 
 const ProfilePage = () => {
   return (
-    <Box sx={{ flexGrow: 1 }} textAlign="center">
-      <Typography variant={"h4"} className="header">
-        Language Learners
-      </Typography>
-      <br />
+    <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
-        spacing={2}
-        sx={{ padding: { xs: " 0 4vw", sm: "0 2vw" } }}
+        spacing={6}
+        sx={{ padding: { xs: "0 4vw", sm: "4vh 2vw 0 2vw" } }}
       >
         <Grid item xs={12} sm={4}>
           <ProfileDetails />
