@@ -34,17 +34,17 @@ const startGame = async (player, socket, rounds, result, questions) => {
 	socket.on("answer", (data) => { // need to use this hack method to make sure we only listen to events pertaining to this room - not sure if it will work
 		var increment = 0
 		if (data.gameRes) increment = 1
-		player.score += (increment / 5) * (10000 - data.timing); // result will be 1 for victory 0 for loss
+		player.score += (increment / 1200) * (60000 - data.timing); // the max a player can increase in a game is 50 in 1 round
 		result += increment
 	})
 	socket.on("disconnect", () => {
 		// if they disconnect during game instant loss
 		let finalScore = -100; // penalty
 		let finalResult = false;
-		// need to commuincate this with the other guy somehow
+		// need to commuincate this with the other guy somehow => ping socket room
 		return {finalScore, finalResult};
 	})
-	await delay()
+	await delay(60) // 1 minute rounds
 	return startGame(player, socket, rounds - 1, result, questions);
 }
 

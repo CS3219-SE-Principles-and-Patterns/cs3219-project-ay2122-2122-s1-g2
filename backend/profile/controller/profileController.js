@@ -29,6 +29,7 @@ const ProfileController = {
             .status(401)
             .json({ error: "Unable to get user details from middleware" });
         const profile = await Profile.findOne({ username: user.username });
+        profile.username = user.username
         res.json({
             message: "Success",
             data: profile,
