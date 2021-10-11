@@ -24,20 +24,28 @@ const server = http.listen(port, () => {
 	console.log(`Server up and running on port ${port}!`);
 });
 
-const startGame = async (player, socket, rounds, result) => {
+const startGame = async (player, socket, rounds, result, questions) => {
 	if (rounds == 0) {
 		let score = player.score
 		let actualRes = result >= 3
 		return {score, actualRes};
 	}
-	console.log(socket.rooms)
-	io.to(socket.rooms[1]).emit("flashcard", {question: "Select the correct answer", correctAnswer: 1, answers: ["Hi", "No", "Eat", "Sh"]});
-	socket.on(socket.rooms[1], (gameRes, timing) => { // need to use this hack method to make sure we only listen to events pertaining to this room - not sure if it will work
-		player.score += gameRes * (1000 - timing); // result will be 1 for victory 0 for loss
-		result += gameRes 
-	})  // unsure how to get win or loss tbh need help there (probably frontend broadcast winner into the room)
+	socket.emit("flashcard", questions[5-rounds])
+	socket.on("answer", (data) => { // need to use this hack method to make sure we only listen to events pertaining to this room - not sure if it will work
+		var increment = 0
+		if (data.gameRes) increment = 1
+		player.score += (increment / 5) * (10000 - data.timing); // result will be 1 for victory 0 for loss
+		result += increment
+	})
+	socket.on("disconnect", () => {
+		// if they disconnect during game instant loss
+		let finalScore = -100; // penalty
+		let finalResult = false;
+		// need to commuincate this with the other guy somehow
+		return {finalScore, finalResult};
+	})
 	await delay()
-	return startGame(player, socket, rounds - 1, result);
+	return startGame(player, socket, rounds - 1, result, questions);
 }
 
 io.on('connection', (socket) => {
@@ -52,12 +60,18 @@ io.on('connection', (socket) => {
 	    player.rating = await DatabaseManager.getRating(player);
 		var isMatched = await playerMatcher(socket, player, 10)
 		if (isMatched) {
+			// here we get the database in so we find like 5 random mcqs and send them in
+			var questions = [{question: "Select the correct answer", correctAnswer: "No", answers: ["Hi", "No", "Eat", "Sh"]},
+			{question: "Select what your heart chooses", correctAnswer: "Noooo", answers: ["Hiiii", "Noooo", "Eatttt", "Shhhh"]},
+			{question: "Select my answer", correctAnswer: "No", answers: ["Hi", "No", "Eat", "Sh"]},
+			{question: "Select the wrong answer", correctAnswer: "No", answers: ["Hi", "No", "Eat", "Sh"]}, 
+			{question: "correct answer", correctAnswer: "No", answers: ["Hi", "No", "Eat", "Sh"]}]
 			socket.emit("match found");
 			player.score = 0;
-			let {score, result} = await startGame(player, socket, 5, 0); // this is the actual game 
+			let {score, result} = await startGame(player, socket, 5, 0, questions); // this is the actual game 
 			player.rating += score;	
 			player.result = result;
-			await DatabaseManager.put(player);
+			//await DatabaseManager.put(player);
 		} else {
 			socket.emit("no match found");
 			deletePlayer(player.username);
