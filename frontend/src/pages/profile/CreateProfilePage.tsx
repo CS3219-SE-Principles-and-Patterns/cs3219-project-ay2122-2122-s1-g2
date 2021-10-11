@@ -14,6 +14,7 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
+import { Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ProfileController } from "../../controller/ProfileController";
 import { Profile } from "../../domain/profile";
@@ -137,14 +138,14 @@ const CreateProfilePage = (props: any) => {
                   />
                 </FormControl>
               ))}
-
-              <CssButton
+              {success ? <Redirect to="/profile" /> : <CssButton
                 onClick={onSubmit}
                 sx={{ marginTop: "5vh" }}
                 variant="outlined"
               >
                 {profileMsg}
               </CssButton>
+              }
 
               {success !== "" && (
                 <>
