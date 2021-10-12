@@ -114,8 +114,8 @@ const CreateFlashCardPage = (props: any) => {
                 render={({ field: { onChange, value } }) => (
                   <CssSelect
                     required
-                    onChange={onChange}
                     defaultValue={"Korean"}
+                    {...register("language", { required: true })}
                     input={<OutlinedInput label="Language" />}
                   >
                     {languages.map((language) => (
