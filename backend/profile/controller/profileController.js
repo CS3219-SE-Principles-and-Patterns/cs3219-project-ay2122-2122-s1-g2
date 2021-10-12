@@ -42,29 +42,26 @@ const ProfileController = {
     },
     create: async (req, res) => {
         try {
-            const username = req.user.username;
+            const { username } = req.body;
             const currProfile = await Profile.findOne({ username: username });
-            const { languages, proficiencies } = req.body;
-            if (languages.length != proficiencies.length)
-                return res.status(400)
-                .json({ error: "Languages and Proficiencies array should be of same size" });
-            
-            var savedProfile;
-            if (!currProfile){
-                const newProfile = Profile();
-                newProfile.languages = languages;
-                newProfile.proficiencies = proficiencies;
-                savedProfile = await newProfile.save();
-            } else {
-                currProfile.languages = languages;
-                currProfile.proficiencies = proficiencies;
-                savedProfile = await currProfile.save();
-            }
-            res.json({
-                message: "Success",
-                data: savedProfile,
-            });
 
+            if (!currProfile)
+                return res
+                .status(401)
+                .json({ error: "Unable to get user details from database" });
+
+            const { languages, proficiencies } = req.body;
+            currProfile.languages = languages;
+            currProfile.proficiencies = proficiencies;
+            if (languages.length != proficiencies.length) {
+                return res.status(401)
+                .json({ error: "Languages and Proficiencies array should be of same size" });
+            }
+            const savedProfile = await currProfile.save();
+                res.json({
+                    message: "Success",
+                    data: savedProfile,
+                });
         } catch (err) {
             console.log(err);
             res.status(400).json({
