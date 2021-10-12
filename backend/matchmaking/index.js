@@ -24,12 +24,6 @@ const server = http.listen(port, () => {
 	console.log(`Server up and running on port ${port}!`);
 });
 
-DatabaseManager.put({
-	username: "passwordis123", 
-	language: "Korean",
-	rating: 1069,
-});
-
 const startGame = async (player, socket, rounds, result, questions) => {
 	if (rounds == 0) {
 		let score = player.score
