@@ -11,7 +11,7 @@ var ProfileController = require("../controller/profileController");
 
 router
   .route("/")
-  .post(ProfileController.authTokenMW, ProfileController.create)
+  .post(ProfileController.create)
   .put(ProfileController.authTokenMW, ProfileController.update)
   .get(ProfileController.authTokenMW, ProfileController.get);
 
