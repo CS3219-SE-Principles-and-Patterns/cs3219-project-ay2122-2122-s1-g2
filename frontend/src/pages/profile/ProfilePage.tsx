@@ -12,11 +12,12 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import LanguageLearnersLogo from "./LanguageLearnersLogo.png";
-import { CssTextField } from "../common/Components";
+import { CssButton, CssTextField } from "../common/Components";
 
 import { ProfileController } from "../../controller/ProfileController";
 import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCard } from "../../domain/flashcard";
+import "./ProfilePage.scss";
 
 const ProfileDetails = () => {
   const [hasProfile, setHasProfile] = useState(false);
@@ -44,15 +45,15 @@ const ProfileDetails = () => {
     <>
       {langs.map((lang, idx) => (
         <Grid container key={lang} sx={{ marginBottom: "2vh" }}>
-          <Grid item sm={6} textAlign="left">
+          <Grid item xs={6} textAlign="left">
             <Typography variant={"h6"} sx={{ marginBottom: "2%" }}>
               {lang}
             </Typography>
           </Grid>
-          <Grid item sm={6} textAlign="right">
+          <Grid item xs={6} textAlign="right">
             <Typography
               variant={"h6"}
-              sx={{ marginBottom: "2%", marginRight: "30%" }}
+              sx={{ marginBottom: "2%", marginRight: { sm: "30%" } }}
             >
               {proficiencies[idx]}
             </Typography>
@@ -73,12 +74,12 @@ const ProfileDetails = () => {
   );
 
   return (
-    <Grid item textAlign="left">
+    <Grid item textAlign="left" sx={{ margin: "10px" }}>
       <Box sx={{ width: { sm: "30%" } }}>
         <img
           src={LanguageLearnersLogo}
           alt="LanguageLearnerIcon"
-          style={{ width: "100%" }}
+          className="profile-image"
         />
       </Box>
       <Typography
@@ -87,13 +88,13 @@ const ProfileDetails = () => {
       >
         {username}
       </Typography>
-      <Button
+      <CssButton
         href="/profile/edit"
-        variant="contained"
+        variant="outlined"
         sx={{ marginBottom: "10%" }}
       >
         Edit Profile
-      </Button>
+      </CssButton>
       <Divider
         light
         sx={{
