@@ -36,7 +36,7 @@ const App = () => {
 
             <ProtectedRoute
               children={<CreateFlashCardPage />}
-              path="/flashcard"
+              path="/flashcard/create"
               exact
             />
             <ProtectedRoute

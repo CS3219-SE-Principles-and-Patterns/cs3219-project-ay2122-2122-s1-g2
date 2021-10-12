@@ -1,11 +1,22 @@
 import { useState, useEffect } from "react";
 
 import { Box } from "@mui/system";
-import { Grid, Stack, Divider, LinearProgress, Button } from '@mui/material';
-import LanguageLearnersLogo from './LanguageLearnersLogo.png'
+import {
+  Grid,
+  Divider,
+  LinearProgress,
+  Button,
+  Typography,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
+import LanguageLearnersLogo from "./LanguageLearnersLogo.png";
+import { CssTextField } from "../common/Components";
 
-import { ProfileInfra } from "../../infra/profile";
 import { ProfileController } from "../../controller/ProfileController";
+import { FlashCardController } from "../../controller/FlashCardController";
+import { FlashCard } from "../../domain/flashcard";
 
 const ProfileDetails = () => {
   const [hasProfile, setHasProfile] = useState(false);
@@ -16,87 +27,153 @@ const ProfileDetails = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await ProfileInfra.getProfile();
-        const profile = res.data.data;
+        const profile = await ProfileController.getProfile();
+        console.log(profile);
         setUsername(profile.username);
         setLangs(profile.languages);
         setProficiencies(profile.proficiencies);
         setHasProfile(true);
       } catch (e) {
-        // do nothing
         console.log(e);
       }
     };
     if (!hasProfile) fetchProfile();
-  }, [hasProfile])
+  }, [hasProfile]);
 
   const GetProficiencies = () => (
-    <div>
-      {langs.map((lang,idx)=>(
-        <Grid container key={lang}>
-          <Grid item xs={6} textAlign="left">
-            <h5 style={{marginBottom: "2%"}}>{lang}</h5>
+    <>
+      {langs.map((lang, idx) => (
+        <Grid container key={lang} sx={{ marginBottom: "2vh" }}>
+          <Grid item sm={6} textAlign="left">
+            <Typography variant={"h6"} sx={{ marginBottom: "2%" }}>
+              {lang}
+            </Typography>
           </Grid>
-          <Grid item xs={6} textAlign="right">
-            <h5 style={{marginBottom: "2%", marginRight: "30%"}}>{proficiencies[idx]}</h5>
+          <Grid item sm={6} textAlign="right">
+            <Typography
+              variant={"h6"}
+              sx={{ marginBottom: "2%", marginRight: "30%" }}
+            >
+              {proficiencies[idx]}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
-          <LinearProgress 
-            variant="determinate" 
-            value={proficiencies[idx]*20}
-            color='inherit'
-            sx={{
-              marginRight: "15%",
-            }}/>
+            <LinearProgress
+              variant="determinate"
+              value={proficiencies[idx] * 20}
+              color="inherit"
+              sx={{
+                marginRight: { sm: "15%" },
+              }}
+            />
           </Grid>
         </Grid>
       ))}
-    </div>
-  )
+    </>
+  );
 
   return (
-      <Grid item textAlign="left">
-        <Box>
-          <img src={LanguageLearnersLogo} alt="LanguageLearnerIcon" style={{ width: '60%' }}/>
-        </Box>
-        <h4 style={{marginTop: "3%", marginBottom: "5%"}}>{username}</h4>
-        <Button href="/profile/edit" variant="contained" style={{marginBottom: "10%"}}>
-          Edit Profile
-        </Button>
-        <Divider light sx={{
+    <Grid item textAlign="left">
+      <Box sx={{ width: { sm: "30%" } }}>
+        <img
+          src={LanguageLearnersLogo}
+          alt="LanguageLearnerIcon"
+          style={{ width: "100%" }}
+        />
+      </Box>
+      <Typography
+        variant={"h5"}
+        sx={{ marginTop: "3%", marginBottom: "5%", fontWeight: "bold" }}
+      >
+        {username}
+      </Typography>
+      <Button
+        href="/profile/edit"
+        variant="contained"
+        sx={{ marginBottom: "10%" }}
+      >
+        Edit Profile
+      </Button>
+      <Divider
+        light
+        sx={{
           borderColor: "darkblue",
-          marginRight: "15%"
-        }}/>
-        <h4 style={{marginTop: "3%", marginBottom: "5%"}}>Proficiency</h4>
-        <GetProficiencies/>
-      </Grid>
-  )
-}
+          marginRight: { sm: "15%" },
+        }}
+      />
+      <Typography variant={"h5"} sx={{ marginTop: "3%", marginBottom: "5%" }}>
+        Proficiency
+      </Typography>
+      <GetProficiencies />
+    </Grid>
+  );
+};
 
 const FlashCardDetails = () => {
-  return (
-    <div>
-      <Grid item textAlign="left">
-      <h2>What is Lorem Ipsum?</h2>
-      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+  const [sort, setSort] = useState("Date added");
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setSort(event.target.value);
+  };
+  const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        const cards = await FlashCardController.getAllFlashCards();
+        setFlashcards(cards);
+      } catch {}
+    };
+    fetchFlashcards();
+    setLoading(false);
+  }, []);
+  if (loading) return <p>Loading...</p>;
+  const flashcardsList = flashcards.map((flashcard) => {
+    return (
+      <Grid item sm={4}>
+        <Box sx={{ backgroundColor: "#313584", height: "20vh" }}></Box>
+        <Typography>{flashcard.title}</Typography>
+        <Typography>{flashcard.language}</Typography>
       </Grid>
-    </div>
-  )
-}
+    );
+  });
+  return (
+    <>
+      <Box sx={{ marginBottom: "2vh" }}>
+        <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
+          My Flashcards
+        </Typography>
+      </Box>
+      <Grid container justifyContent={"space-between"}>
+        <Grid item>
+          <Select value={sort} onChange={handleChange}>
+            <MenuItem value={"Date added"}>Date added</MenuItem>
+            <MenuItem value={"Alphabetical"}>Alphabetical</MenuItem>
+          </Select>
+        </Grid>
+        <Grid item>
+          <CssTextField label="Search"></CssTextField>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} sx={{ marginTop: "2vh" }}>
+        {flashcardsList}
+      </Grid>
+    </>
+  );
+};
 
 const ProfilePage = () => {
   return (
-    <Box sx={{ flexGrow: 1 }} textAlign="center" style={{
-      marginLeft: '5%'
-    }}>
-      <h1>Language Learners</h1>
-      <br/>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <ProfileDetails/>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid
+        container
+        spacing={6}
+        sx={{ padding: { xs: "0 4vw", sm: "4vh 2vw 0 2vw" } }}
+      >
+        <Grid item xs={12} sm={4}>
+          <ProfileDetails />
         </Grid>
-        <Grid item xs={8}>
-          <FlashCardDetails/>
+        <Grid item xs={12} sm={8}>
+          <FlashCardDetails />
         </Grid>
       </Grid>
     </Box>

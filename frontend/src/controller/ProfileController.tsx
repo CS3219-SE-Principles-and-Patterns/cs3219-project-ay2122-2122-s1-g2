@@ -14,10 +14,11 @@ export class ProfileController {
 
   public static getProfile = async (): Promise<Profile> => {
     const res = await ProfileInfra.getProfile();
+    const data = res.data.data;
     return Profile.create({
-      languages: res.data.data.languages,
-      proficiencies: res.data.data.proficiencies,
-      username: res.data.data.username
+      username: data.username,
+      languages: data.languages,
+      proficiencies: data.proficiencies,
     });
   };
 }

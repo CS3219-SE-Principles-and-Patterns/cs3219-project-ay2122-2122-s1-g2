@@ -20,7 +20,10 @@ const NavBar = () => {
       <Grid
         display="flex"
         justifyContent="center"
-        sx={{ marginBottom: "25vh", marginTop: "5vh" }}
+        sx={{
+          marginBottom: { xs: "2vh", sm: "25vh" },
+          marginTop: "5vh",
+        }}
       >
         <Grid item sx={{ backgroundColor: "#ffd8bdff" }}>
           <IconButton>
@@ -69,7 +72,7 @@ const NavBar = () => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            edge="end"
+            edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
