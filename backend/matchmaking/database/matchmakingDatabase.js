@@ -52,13 +52,14 @@ const DatabaseManager = {
 	},
     getUserRecord: async (req, res) => {
 		try {
-			const currUser = await Game.findOne({ username: req.params.username })
+			// req.user obtained from authTokenMW
+			const currUser = await Game.findOne({ username: req.user.username })
 			var newUser = new Game({
 				username: req.params.username, 
 				ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}, {language: "Chinese", rating: 1000}], 
 				history:[]
 			});
-			if (!oldUser || oldUser.ratings.length == 0) {
+			if (!currUser || currUser.ratings.length == 0) {
 				currUser = await newUser.save();
 			}
 
@@ -131,17 +132,15 @@ const DatabaseManager = {
 			const currUser = await Game.findOne({ username: player.username });
 			if (!currUser) throw "Sorry! User does not exist.";
 			if (currUser.ratings.length == 0) throw "Sorry! User does not have any languages assigned.";
-			console.log(currUser);
 			const userRatings = currUser.ratings;
 			for (let i = 0; i < userRatings.length; i++) {
 				if (player.language == userRatings[i].language) 
 					currUser.ratings[i].rating = player.rating;
 			}
 			const savedUser = await currUser.save();
-			console.log(savedUser);
-			console.log("Game User Updated Successfully!");
+			return savedUser;
 		} catch(err) {
-			console.log(err);
+			return err;
 		}
 	},
 }

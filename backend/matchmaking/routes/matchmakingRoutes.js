@@ -8,9 +8,9 @@ const io = new Server(server);
 const DatabaseManager = require("../database/matchmakingDatabase.js"); 
 
 // For now, assume no authTokenMW
-router.get("/:username", DatabaseManager.getUserRecord);
-router.get("/", DatabaseManager.getAll);
-router.post("/insert", DatabaseManager.insert);
+router.get("/", DatabaseManager.authTokenMW, DatabaseManager.getUserRecord);
+router.get("/getall", DatabaseManager.getAll);
+router.post("/", DatabaseManager.insert);
 router.delete("/:username", DatabaseManager.delete);
 
 let players = [];
