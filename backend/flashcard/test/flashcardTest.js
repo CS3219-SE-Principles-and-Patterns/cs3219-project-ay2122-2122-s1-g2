@@ -6,7 +6,7 @@ const request = require('supertest');
 let should = chai.should();
 
 const app = require("../index")
-const ACCESS_SECRET = process.env.ACCESS_SECRET;
+const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e"
 const generateToken = (username) => {
     return jwt.sign({
         username: username
