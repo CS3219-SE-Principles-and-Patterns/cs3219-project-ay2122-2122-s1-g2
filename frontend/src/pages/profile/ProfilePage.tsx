@@ -5,14 +5,13 @@ import {
   Grid,
   Divider,
   LinearProgress,
-  Button,
   Typography,
   Select,
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
 import LanguageLearnersLogo from "./LanguageLearnersLogo.png";
-import { CssButton, CssTextField } from "../common/Components";
+import { CssButton, CssTextField, BoldTypography } from "../common/Components";
 
 import { ProfileController } from "../../controller/ProfileController";
 import { FlashCardController } from "../../controller/FlashCardController";
@@ -29,7 +28,6 @@ const ProfileDetails = () => {
     const fetchProfile = async () => {
       try {
         const profile = await ProfileController.getProfile();
-        console.log(profile);
         setUsername(profile.username);
         setLangs(profile.languages);
         setProficiencies(profile.proficiencies);
@@ -82,12 +80,12 @@ const ProfileDetails = () => {
           className="profile-image"
         />
       </Box>
-      <Typography
+      <BoldTypography
         variant={"h5"}
-        sx={{ marginTop: "3%", marginBottom: "5%", fontWeight: "bold" }}
+        sx={{ marginTop: "3%", marginBottom: "5%" }}
       >
         {username}
-      </Typography>
+      </BoldTypography>
       <CssButton
         href="/profile/edit"
         variant="outlined"
@@ -115,24 +113,40 @@ const FlashCardDetails = () => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
   };
-  const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
+  const dummyFlashcard = FlashCard.create({
+    username: "",
+    title: "",
+    language: "",
+    body: "",
+    altText: "",
+    difficulty: 0,
+  });
+  const [flashcards, setFlashcards] = useState<FlashCard[]>([dummyFlashcard]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
         const cards = await FlashCardController.getAllFlashCards();
-        setFlashcards(cards);
+        setFlashcards([...flashcards, ...cards]);
       } catch {}
     };
     fetchFlashcards();
     setLoading(false);
   }, []);
-  if (loading) return <p>Loading...</p>;
-  const flashcardsList = flashcards.map((flashcard) => {
+  if (loading) return <Typography>Loading...</Typography>;
+  const flashcardsList = flashcards.map((flashcard, index) => {
     return (
-      <Grid item sm={4}>
-        <Box sx={{ backgroundColor: "#313584", height: "20vh" }}></Box>
-        <Typography>{flashcard.title}</Typography>
+      <Grid item xs={12} sm={4}>
+        <Box
+          sx={{
+            height: "20vh",
+            border: "2px solid #313584",
+            backgroundColor: `${index === 0 ? "#ffd8bdff" : "#313584"}`,
+          }}
+        ></Box>
+        <BoldTypography variant="h6" sx={{ margin: "0.8vh 0" }}>
+          {flashcard.title}
+        </BoldTypography>
         <Typography>{flashcard.language}</Typography>
       </Grid>
     );
@@ -140,9 +154,7 @@ const FlashCardDetails = () => {
   return (
     <>
       <Box sx={{ marginBottom: "2vh" }}>
-        <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
-          My Flashcards
-        </Typography>
+        <BoldTypography variant={"h5"}>My Flashcards</BoldTypography>
       </Box>
       <Grid container justifyContent={"space-between"}>
         <Grid item>
@@ -155,7 +167,15 @@ const FlashCardDetails = () => {
           <CssTextField label="Search"></CssTextField>
         </Grid>
       </Grid>
-      <Grid container spacing={2} sx={{ marginTop: "2vh" }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          marginTop: "2vh",
+          height: "80vh",
+          overflow: "auto",
+        }}
+      >
         {flashcardsList}
       </Grid>
     </>
