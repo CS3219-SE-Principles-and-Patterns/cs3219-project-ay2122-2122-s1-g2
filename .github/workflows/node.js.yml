@@ -30,3 +30,6 @@ jobs:
     - name: Test Profile microservice
       working-directory: ./backend/profile  
       run: npm install; npm test
+    - name: Test Matchmaking microservice
+      working-directory: ./backend/matchmaking  
+      run: npm install; npm test
