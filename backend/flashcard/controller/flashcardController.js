@@ -2,21 +2,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const Flashcard = require("../models/flashcard.js");
-/*
-Sample post request
-{
-    "flashcards": [
-        {
-            "body": "Hi",
-            "title": "ML",
-            "language": "tagalog",
-            "altText": "yolo",
-            "difficulty": 5 ,
-            "notes": "this is for me to learn!!"
-        }
-    ]
-}
-*/
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
 const FlashcardController = {
@@ -35,7 +20,7 @@ const FlashcardController = {
       next();
     });
   },
-  get: async (req, res) => {
+  getAll: async (req, res) => {
     const user = req.user;
     if (!user)
       return res
@@ -85,7 +70,7 @@ const FlashcardController = {
         });
       }
       oldUserCard.flashcards.push(newFlashcard);
-      console.log("saving updated flashcard", oldUserCard);
+      console.log("saving updated flashcard", oldUserCard, newFlashcard);
       await oldUserCard.save();
       return res.status(200).json({
         message: "Flashcards updated",

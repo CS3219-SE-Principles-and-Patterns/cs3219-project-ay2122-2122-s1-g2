@@ -4,20 +4,20 @@ const Schema = mongoose.Schema;
 // Blueprint of what an item would look like in our DB.
 
 const FlashcardSchema = new Schema({
-    username: {
-		type: String,
-		required: true
-	}, 
-	flashcards: [
-		{
-			title: {type: String, default: ""},
-			difficulty: {type: Number, default: 1},
-			body: {type: String, default: ""},
-			altBody: {type: String, default: ""},
-			language: String,
-			notes: {type: String, default: ""}
-		} 
-	]
+  username: {
+    type: String,
+    required: true,
+  },
+  flashcards: [
+    {
+      title: { type: String, default: "" },
+      difficulty: { type: Number, default: 1 },
+      body: { type: String, default: "" },
+      altText: { type: String, default: "" },
+      language: String,
+      notes: { type: String, default: "" },
+    },
+  ],
 });
 
 // Makes a model of the above schema.
