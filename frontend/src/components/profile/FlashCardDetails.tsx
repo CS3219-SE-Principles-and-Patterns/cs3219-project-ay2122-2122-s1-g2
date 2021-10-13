@@ -10,8 +10,10 @@ import { Box } from "@mui/system";
 import { CssTextField, BoldTypography } from "../common/Components";
 import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCard } from "../../domain/flashcard";
+import { useHistory } from "react-router-dom";
 
 const FlashCardDetails = () => {
+  const history = useHistory();
   const [sort, setSort] = useState("Date added");
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
@@ -39,6 +41,10 @@ const FlashCardDetails = () => {
     setLoading(false);
   }, []);
   if (loading) return <Typography>Loading...</Typography>;
+  const handleClick = (id: string) => {
+    if (id === "") history.push("/flashcard/create");
+    else history.push(`/flashcard/${id}`);
+  };
   const flashcardsList = flashcards.map((flashcard, index) => {
     return (
       <Grid item xs={12} sm={4}>
@@ -47,7 +53,9 @@ const FlashCardDetails = () => {
             height: "20vh",
             border: "2px solid #313584",
             backgroundColor: `${index === 0 ? "#ffd8bdff" : "#313584"}`,
+            cursor: "pointer",
           }}
+          onClick={() => handleClick(flashcard._id)}
         ></Box>
         <BoldTypography variant="h6" sx={{ margin: "0.8vh 0" }}>
           {flashcard.title}
