@@ -7,25 +7,16 @@ import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCard } from "../../domain/flashcard";
 import "./FlashCardDetailPage.scss";
 
-const FlashCardDetailPage = (props: any) => {
+const FlashCardDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [flashcard, setFlashcard] = useState<FlashCard>();
 
   useEffect(() => {
-    const getFlashCard = async () =>
-      setFlashcard(await FlashCardController.getFlashCard(id));
+    const getFlashCard = async () => {
+      const flashcard = await FlashCardController.getFlashCard(id);
+      setFlashcard(flashcard);
+    };
     getFlashCard();
-    setFlashcard(
-      FlashCard.create({
-        title: "Hello Flashcard",
-        difficulty: 2,
-        altText: "안녕하세요",
-        body: "Hello",
-        language: "Korean",
-        notes: "Ernest",
-        _id: "",
-      })
-    );
   }, [id]);
 
   return (
@@ -46,10 +37,7 @@ const FlashCardDetailPage = (props: any) => {
               <Box className="notes-box">
                 <Typography className="header">Notes: </Typography>
                 <Typography sx={{ fontSize: "15px" }}>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cum
-                  similique neque voluptates obcaecati nesciunt ad doloribus
-                  tempora ipsa adipisci temporibus, aliquid accusantium, at rem
-                  nam, quasi vel alias vitae iure.
+                  {flashcard.notes}
                 </Typography>
               </Box>
             </Grid>

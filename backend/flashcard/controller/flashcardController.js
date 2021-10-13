@@ -20,6 +20,27 @@ const FlashcardController = {
       next();
     });
   },
+  get: async (req, res) => {
+    const user = req.user;
+    if (!user)
+      return res
+        .status(401)
+        .json({ error: "Unable to get user details from middleware" });
+    try {
+      const userCard = await Flashcard.findOne({ username: user.username });
+      const flashcard = userCard.flashcards.find((x) => {
+        return x._id.equals(req.params.id);
+      });
+      return res.status(200).json({
+        message: "Success",
+        data: flashcard,
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err.toString(),
+      });
+    }
+  },
   getAll: async (req, res) => {
     const user = req.user;
     if (!user)
@@ -62,7 +83,6 @@ const FlashcardController = {
       if (!oldUserCard) {
         // no such profile exists so we just put it in
         flashcard.flashcards = [newFlashcard];
-        console.log("saving one new flashcard", flashcard);
         await flashcard.save();
         return res.status(200).json({
           message: "Success",
@@ -70,7 +90,6 @@ const FlashcardController = {
         });
       }
       oldUserCard.flashcards.push(newFlashcard);
-      console.log("saving updated flashcard", oldUserCard, newFlashcard);
       await oldUserCard.save();
       return res.status(200).json({
         message: "Flashcards updated",

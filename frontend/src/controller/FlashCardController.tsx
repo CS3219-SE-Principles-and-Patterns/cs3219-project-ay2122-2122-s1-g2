@@ -8,7 +8,8 @@ export class FlashCardController {
   };
 
   public static getFlashCard = async (id: string): Promise<FlashCard> => {
-    return FlashCard.create(await FlashCardInfra.getFlashCard(id));
+    const res = await FlashCardInfra.getFlashCard(id);
+    return FlashCard.create(res.data.data);
   };
   public static getAllFlashCards = async (): Promise<FlashCard[]> => {
     const res = await FlashCardInfra.getAllFlashCards();
