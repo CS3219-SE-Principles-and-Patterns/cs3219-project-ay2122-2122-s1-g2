@@ -19,7 +19,11 @@ import { useEffect, useState } from "react";
 import { ProfileController } from "../../controller/ProfileController";
 import { Profile } from "../../domain/profile";
 import { languages } from "../../utils/constants/languages";
-import { CssButton, CssSelect, CssSlider } from "../common/Components";
+import {
+  CssButton,
+  CssSelect,
+  CssSlider,
+} from "../../components/common/Components";
 import { landingEnum } from "../../utils/constants/enums";
 
 const CreateProfilePage = (props: any) => {
@@ -138,14 +142,17 @@ const CreateProfilePage = (props: any) => {
                   />
                 </FormControl>
               ))}
-              {success ? <Redirect to="/profile" /> : <CssButton
-                onClick={onSubmit}
-                sx={{ marginTop: "5vh" }}
-                variant="outlined"
-              >
-                {profileMsg}
-              </CssButton>
-              }
+              {success ? (
+                <Redirect to="/profile" />
+              ) : (
+                <CssButton
+                  onClick={onSubmit}
+                  sx={{ marginTop: "5vh" }}
+                  variant="outlined"
+                >
+                  {profileMsg}
+                </CssButton>
+              )}
 
               {success !== "" && (
                 <>

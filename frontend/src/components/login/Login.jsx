@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 import { getNewAccessToken } from "../../infra/auth";
 import { setTokens } from "../../utils/auth/auth";
 import { FormControl, Grid, Typography } from "@mui/material";
-import { CssButton, CssTextField } from "../../pages/common/Components";
+import { CssButton, CssTextField } from "../common/Components";
 import { Box } from "@mui/system";
 
 const Login = ({ setLandingStatus }) => {
