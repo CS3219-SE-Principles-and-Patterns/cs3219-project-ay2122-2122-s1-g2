@@ -7,8 +7,11 @@ const io = new Server(server);
 
 const DatabaseManager = require("../database/matchmakingDatabase.js"); 
 
-router.get("/:username", DatabaseManager.getUserRecord); // should have authentication but currently i never add the authTokenMW thingy
-router.get("/", DatabaseManager.getAll);
+// For now, assume no authTokenMW
+router.get("/", DatabaseManager.authTokenMW, DatabaseManager.getUserRecord);
+router.get("/getall", DatabaseManager.getAll);
+router.post("/", DatabaseManager.insert);
+router.delete("/:username", DatabaseManager.delete);
 
 let players = [];
 

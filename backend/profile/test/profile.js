@@ -1,4 +1,5 @@
 const { assert } = require("chai");
+require('dotenv').config()
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
@@ -6,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const app = require("../index");
 
-const ACCESS_SECRET = "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const generateToken = (username) => {
     return jwt.sign({
         username: username
@@ -17,6 +18,7 @@ describe('Testing Profile Routes', () => {
 	const testUsername = "passwordis123";
 	const accessToken = generateToken(testUsername);
 	const profileDetails = {
+		username: testUsername,
 		languages: ["Japanese", "Korean"],
 		proficiencies: [3, 4]
 	}
@@ -25,8 +27,7 @@ describe('Testing Profile Routes', () => {
 		it('Able to create profile without error', async () => {
 			const res = await chai.request(app)
 				.post(`/api/profile`)
-				.send(profileDetails)
-				.set("Authorization", `Bearer ${accessToken}`);
+				.send(profileDetails);
 			assert.ifError(res.error);
 		});
 	});

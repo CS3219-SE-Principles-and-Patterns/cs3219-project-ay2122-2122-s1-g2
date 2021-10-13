@@ -6,6 +6,7 @@ const Game = require('../models/game');
 const db = process.env.MONGO_URI;
 // const db = "mongodb://127.0.0.1:27017" 
 // Connect to MongoDB
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
 mongoose.connect(db, {
         useNewUrlParser: true,
@@ -50,31 +51,22 @@ const DatabaseManager = {
         }
 	},
     getUserRecord: async (req, res) => {
-		var user = new Game({username:req.params.username, 
-			ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}, {language: "Chinese", rating: 1000}], 
-			history:[]});
 		try {
-			const oldUser = await Game.findOne({ username: req.params.username })
-			if (!oldUser || oldUser.ratings.length == 0) {
-				user.save((err) => {
-					if (err) {
-						res.status(400).json({
-							message: "Error",
-							error: err.toString()
-						})
-					} else {
-						res.status(200).json({
-							data: user
-						})
-					}
-				})
-			} else {
-				res.status(200).json({
-					message: "Success",
-					data: oldUser
-				})
+			// req.user obtained from authTokenMW
+			const currUser = await Game.findOne({ username: req.user.username })
+			var newUser = new Game({
+				username: req.params.username, 
+				ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}, {language: "Chinese", rating: 1000}], 
+				history:[]
+			});
+			if (!currUser || currUser.ratings.length == 0) {
+				currUser = await newUser.save();
 			}
-			
+
+			res.status(200).json({
+				message: "Success",
+				data: currUser
+			})
 		} catch(err) {
 			res.status(400).json({
 				message: "No games played yet",
@@ -82,70 +74,75 @@ const DatabaseManager = {
 			})
 		}
 	},
+	insert: async (req, res) => {
+        try {
+            const data = req.body;
+            const user = await Game.findOne({ username: data.username });
+            if (user) throw "Sorry! User already exist.";
+            // Update User's Game profile
+            const newUser = new Game({
+                username: data.username,
+                ratings: data.ratings,
+				history: data.history
+                // Rating has a default value of 1000
+            });
+            const savedUser = await newUser.save();
+            res.status(200).json({
+                message: "Success",
+                data: savedUser,
+            });
+        } catch (err) {
+            res.status(400).json({
+                error: err.toString()
+            });
+        }
+    },
+	delete: async (req, res) => {
+        try {
+            const user = await Game.deleteOne({username: req.params.username});
+            res.status(200).json({
+                message: "Success",
+                data: user
+            });
+        } catch (err) {
+            res.status(400).json({
+                error: err.toString()
+            });
+        }
+	},
 	getRating: async (player) => {
 		try {
 			const user = await Game.findOne({ username: player.username })
 			if (!user) return 1000;
 			for (let i = 0; i < user[ratings].length; i++){
-				if (user[ratings][i]['language'] == player.language) {
-					return user[ratings][i][rating];
+				if (user.ratings[i].language == player.language) {
+					return user.ratings[i].rating;
 				}
 			}
 			// just return default rating if can't find a specified language rating for user
 			return 1000;
-		} catch(err) {
+		} catch (err) {
 			// if can't even find user also return default rating
 			return 1000;
 		}
 	}, 
 	put: async (player) => {
 		// frontend cannot update the game database only get from it
-		var user = new Game({username:player.username, 
-			ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}, {language: "Chinese", rating: 1000}], 
-			history:[]});
-		for (let i = 0; i < user[ratings].length; i++){
-			user[ratings][i][rating] = user[ratings][i][language] == player.language ? player.rating : 1000  
-		}
 		try {
-			const oldUser = await Game.findOne({ username: player.username });
-			if (!oldUser || oldUser.ratings.length == 0) {
-				user.save((err) => {
-					if (err) {
-						res.status(400).json({
-							message: "Error",
-							error: err.toString()
-						})
-					} else {
-						res.status(200).json({
-							data: user
-						})
-					}
-				})
-			} else {
-				oldUser[history].push({language: player.language, result: player.result});
-				for (let i = 0; i < oldUser[ratings].length; i++){
-					oldUser[ratings][i][rating] = oldUser[ratings][i][language] == player.language ? player.rating : oldUser[ratings][i][rating];  
-				}
-				oldUser.save((err) => {
-					if (err) {
-						res.status(400).json({
-							message: "Error",
-							error: err.toString()
-						})
-					} else {
-						res.status(200).json({
-							data: oldUser
-						})
-					}
-				})
+			const currUser = await Game.findOne({ username: player.username });
+			if (!currUser) throw "Sorry! User does not exist.";
+			if (currUser.ratings.length == 0) throw "Sorry! User does not have any languages assigned.";
+			const userRatings = currUser.ratings;
+			for (let i = 0; i < userRatings.length; i++) {
+				if (player.language == userRatings[i].language) 
+					currUser.ratings[i].rating = player.rating;
 			}
+			const savedUser = await currUser.save();
+			return savedUser;
 		} catch(err) {
-			res.status(400).json({
-				message: "Error",
-				error: err.toString()
-			})
+			return err;
 		}
-	}
+	},
 }
 
 module.exports = DatabaseManager;
