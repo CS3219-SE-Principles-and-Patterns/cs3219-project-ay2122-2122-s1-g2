@@ -77,7 +77,6 @@ const FlashcardController = {
       if (!oldUserCard) {
         // no such profile exists so we just put it in
         flashcard.flashcards = [newFlashcard];
-        console.log("saving one new flashcard", flashcard);
         await flashcard.save();
         return res.status(200).json({
           message: "Success",
@@ -85,7 +84,6 @@ const FlashcardController = {
         });
       }
       oldUserCard.flashcards.push(newFlashcard);
-      console.log("saving updated flashcard", oldUserCard);
       await oldUserCard.save();
       return res.status(200).json({
         message: "Flashcards updated",
