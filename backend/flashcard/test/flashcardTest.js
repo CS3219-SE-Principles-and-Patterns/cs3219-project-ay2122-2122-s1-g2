@@ -1,7 +1,9 @@
 const chai = require("chai");
+const { assert } = require("chai");
 const chaiHttp = require("chai-http");
 const jwt = require('jsonwebtoken');
 chai.use(chaiHttp);
+// const request = require('supertest');
 let should = chai.should();
 
 const app = require("../index")
@@ -37,62 +39,101 @@ const flashcards =
     ]
 }
 
-describe("POST :api/flashcard", () => {
-    it ("Posts a flashcard into user's database", done => {
-        chai.request(app)
-            .post(`/api/flashcard`)
-            .set({'Authorization': `Bearer ${generateToken("Ambrose")}`})
-            .send(flashcards)
-            .end((err, res) => {
-                res.body.should.be.a('object');
-                // console.log(res.body)
-                done();
-            })
-    })
-})
+const testUsername = "mastatesta123";
+const accessToken = generateToken(testUsername);
+
+describe('Testing Flashcard Routes', () => {
+    context('POST: /api/flashcard', () => {
+		it('Able to create flashcard without error', async () => {
+			const res = await chai.request(app)
+				.post(`/api/flashcard`)
+                .set("Authorization", `Bearer ${accessToken}`)
+				.send(flashcards);
+			assert.ifError(res.error);
+		});
+	});
+
+    context('PUT: /api/flashcard', () => {
+		it('Able to update flashcard without error', async () => {
+			const res = await chai.request(app)
+				.put(`/api/flashcard`)
+                .set("Authorization", `Bearer ${accessToken}`)
+				.send(flashcards);
+
+            res.body.data.flashcards.should.be.a("array");
+			assert.ifError(res.error);
+		});
+	});
+
+    context('GET: /api/flashcard', () => {
+		it('Able to get flashcard without error', async () => {
+			const res = await chai.request(app)
+				.get(`/api/flashcard`)
+                .set("Authorization", `Bearer ${accessToken}`);
+
+            res.body.data.should.be.a("array");
+			assert.ifError(res.error);
+		});
+	});
+});
+
+// describe("POST :api/flashcard", () => {
+//     it ("Posts a flashcard into user's database", done => {
+//         chai.request(app)
+//             .post(`/api/flashcard`)
+//             .set({'Authorization': `Bearer ${generateToken("Ambrose")}`})
+//             .send(flashcards)
+//             .end((err, res) => {
+//                 res.body.should.be.a('object');
+//                 // console.log(res.body)
+//                 done();
+//             })
+//     })
+// })
 
 
-describe('PUT: /api/flashcard', () => {
-    beforeEach((done) => {
-        // just one element in database
-        chai.request(app)
-            .post('/api/flashcard')
-            .set({'Authorization': `Bearer ${generateToken("Anikesh")}`})
-            .send(flashcards)
-            .end((err, res) => {
-                done();
-            });
-    });
-    it("Puts a flashcard into user's database", done => {
-        chai.request(app)
-            .put(`/api/flashcard`)
-            .set({'Authorization': `Bearer ${generateToken("Anikesh")}`})
-            .send(flashcard)
-            .end((err, res) => {
-                res.body.data.flashcards.should.be.a("array")
-                done();
-            })
-    })
-})
+// describe('PUT: /api/flashcard', () => {
+//     beforeEach((done) => {
+//         // just one element in database
+//         chai.request(app)
+//             .post('/api/flashcard/')
+//             .set({'Authorization': `Bearer ${generateToken("Anikesh")}`})
+//             .send(flashcards)
+//             .end((err, res) => {
+//                 done();
+//             });
+//     });
+//     it("Puts a flashcard into user's database", done => {
+//         chai.request(app)
+//             .put(`/api/flashcard`)
+//             .set({'Authorization': `Bearer ${generateToken("Anikesh")}`})
+//             .send(flashcard)
+//             .end((err, res) => {
+//                 res.body.data.flashcards.should.be.a("array")
+//                 done();
+//             })
+//     })
+// })
 
-describe('GET: /api/flashcard', () => {
-    beforeEach((done) => {
-        chai.request(app)
-            .post('/api/flashcard')
-            .set({'Authorization': `Bearer ${generateToken("Kendrew")}`})
-            .send(flashcards)
-            .end((err, res) => {
-                done();
-            });
-    });
+// describe('GET: /api/flashcard', () => {
+//     beforeEach((done) => {
+//         chai.request(app)
+//             .post('/api/flashcard/')
+//             .set({'Authorization': `Bearer ${generateToken("Kendrew")}`})
+//             .send(flashcards)
+//             .end((err, res) => {
+//                 done();
+//             });
+//     });
 
-    it("should get the application in the database", (done) => {
-        chai.request(app)
-            .get('/api/flashcard')
-            .set({'Authorization': `Bearer ${generateToken("Kendrew")}`})
-            .end((err, res) => {
-                res.body.data.should.be.a('array');
-                done();
-            })
-    })
-})
+//     it("should get the application in the database", (done) => {
+//         chai.request(app)
+//             .get('/api/flashcard/')
+//             .set({'Authorization': `Bearer ${generateToken("Kendrew")}`})
+//             .end((err, res) => {
+//                 console.log(res.body.data);
+//                 res.body.data.should.be.a('array');
+//                 done();
+//             })
+//     })
+// })
