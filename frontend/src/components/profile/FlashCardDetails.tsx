@@ -11,6 +11,7 @@ import { CssTextField, BoldTypography } from "../common/Components";
 import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCard } from "../../domain/flashcard";
 import { useHistory } from "react-router-dom";
+import CreateFlashCard from "./CreateFlashCard";
 
 const FlashCardDetails = () => {
   const history = useHistory();
@@ -18,23 +19,13 @@ const FlashCardDetails = () => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
   };
-  const dummyFlashcard = FlashCard.create({
-    notes: "",
-    title: "",
-    language: "",
-    body: "",
-    altText: "",
-    difficulty: 0,
-    _id: "",
-  });
-  const [flashcards, setFlashcards] = useState<FlashCard[]>([dummyFlashcard]);
+  const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
         const cards = await FlashCardController.getAllFlashCards();
-        console.log(cards);
-        setFlashcards([...flashcards, ...cards]);
+        setFlashcards(cards);
       } catch {}
     };
     fetchFlashcards();
@@ -42,17 +33,15 @@ const FlashCardDetails = () => {
   }, []);
   if (loading) return <Typography>Loading...</Typography>;
   const handleClick = (id: string) => {
-    if (id === "") history.push("/flashcard/create");
-    else history.push(`/flashcard/${id}`);
+    history.push(`/flashcard/${id}`);
   };
-  const flashcardsList = flashcards.map((flashcard, index) => {
+  const flashcardsList = flashcards.map((flashcard) => {
     return (
       <Grid item xs={12} sm={4}>
         <Box
           sx={{
             height: "20vh",
-            border: "2px solid #313584",
-            backgroundColor: `${index === 0 ? "#ffd8bdff" : "#313584"}`,
+            backgroundColor: "#313584",
             cursor: "pointer",
           }}
           onClick={() => handleClick(flashcard._id)}
@@ -89,6 +78,7 @@ const FlashCardDetails = () => {
           overflow: "auto",
         }}
       >
+        <CreateFlashCard />
         {flashcardsList}
       </Grid>
     </>

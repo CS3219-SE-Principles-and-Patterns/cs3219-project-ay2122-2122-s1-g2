@@ -10,4 +10,6 @@ router
   .get(flashcardController.authTokenMW, flashcardController.getAll)
   .put(flashcardController.authTokenMW, flashcardController.put);
 
+router.get("/:id", flashcardController.authTokenMW, flashcardController.get);
+
 module.exports = router;
