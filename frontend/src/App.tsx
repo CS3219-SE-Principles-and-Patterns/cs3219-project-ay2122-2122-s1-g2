@@ -5,7 +5,7 @@ import LandingPage from "./pages/common/LandingPage";
 import CreateProfilePage from "./pages/profile/CreateProfilePage";
 import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import { Box } from "@mui/system";
-import NavBar from "./components/common/NavBar";
+import Navbar from "./components/common/NavBar";
 import ProfilePage from "./pages/profile/ProfilePage";
 import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
