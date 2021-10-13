@@ -17,12 +17,13 @@ const FlashCardDetails = () => {
     setSort(event.target.value);
   };
   const dummyFlashcard = FlashCard.create({
-    username: "",
+    notes: "",
     title: "",
     language: "",
     body: "",
     altText: "",
     difficulty: 0,
+    _id: "",
   });
   const [flashcards, setFlashcards] = useState<FlashCard[]>([dummyFlashcard]);
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,7 @@ const FlashCardDetails = () => {
     const fetchFlashcards = async () => {
       try {
         const cards = await FlashCardController.getAllFlashCards();
+        console.log(cards);
         setFlashcards([...flashcards, ...cards]);
       } catch {}
     };

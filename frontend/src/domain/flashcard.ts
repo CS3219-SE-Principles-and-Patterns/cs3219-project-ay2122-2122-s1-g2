@@ -4,8 +4,8 @@ export interface FlashCardProps {
   difficulty: number;
   language: string;
   altText: string;
-  // or user id
-  username: string;
+  notes: string;
+  _id: string;
 }
 
 export class FlashCard implements FlashCardProps {
@@ -14,7 +14,8 @@ export class FlashCard implements FlashCardProps {
   difficulty: number;
   language: string;
   altText: string;
-  username: string;
+  notes: string;
+  _id: string;
 
   private constructor(props: FlashCardProps) {
     this.title = props.title;
@@ -22,7 +23,8 @@ export class FlashCard implements FlashCardProps {
     this.difficulty = props.difficulty;
     this.language = props.language;
     this.altText = props.altText;
-    this.username = props.username;
+    this.notes = props.notes;
+    this._id = props._id;
   }
   public static create(props: FlashCardProps): FlashCard {
     // no validation for flashcard

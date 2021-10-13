@@ -22,7 +22,8 @@ const FlashCardDetailPage = (props: any) => {
         altText: "안녕하세요",
         body: "Hello",
         language: "Korean",
-        username: "Ernest",
+        notes: "Ernest",
+        _id: "",
       })
     );
   }, [id]);
