@@ -12,6 +12,7 @@ router
 router
   .route("/:id")
   .get(flashcardController.authTokenMW, flashcardController.get)
-  .put(flashcardController.authTokenMW, flashcardController.put);
+  .put(flashcardController.authTokenMW, flashcardController.put)
+  .delete(flashcardController.authTokenMW, flashcardController.delete);
 
 module.exports = router;

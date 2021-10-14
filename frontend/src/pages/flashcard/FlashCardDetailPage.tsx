@@ -1,6 +1,6 @@
 import { Grid, Typography, LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
@@ -11,6 +11,8 @@ import { CssButton } from "../../components/common/Components";
 const FlashCardDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [flashcard, setFlashcard] = useState<FlashCard>();
+  const [hasDelete, setDelete] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const getFlashCard = async () => {
@@ -20,10 +22,18 @@ const FlashCardDetailPage = () => {
     getFlashCard();
   }, [id]);
 
-  const deleteFlashcard = () => {
-    console.log("delte");
+  const deleteFlashcard = async () => {
+    try {
+      await FlashCardController.deleteFlashCard(id);
+      setDelete(true);
+    } catch (e: any) {
+      // double check
+      setError(e.message);
+    }
   };
-  return (
+  return hasDelete ? (
+    <Redirect to="/profile" />
+  ) : (
     <Grid container>
       {flashcard ? (
         <>
@@ -65,6 +75,7 @@ const FlashCardDetailPage = () => {
                 <CssButton variant="outlined" onClick={deleteFlashcard}>
                   Delete
                 </CssButton>
+                {error && <Typography>{error}</Typography>}
               </Box>
               <Box className="notes-box">
                 <Typography className="header">Notes: </Typography>
