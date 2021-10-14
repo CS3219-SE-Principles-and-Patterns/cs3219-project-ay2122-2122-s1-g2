@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Switch } from "@mui/material";
 import { Box } from "@mui/system";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -10,6 +10,7 @@ import "./FlashCardDetailPage.scss";
 const FlashCardDetailPage = (props: any) => {
   const { id } = useParams<{ id: string }>();
   const [flashcard, setFlashcard] = useState<FlashCard>();
+  const [isEnglish, setIsEnglish] = useState(false);
 
   useEffect(() => {
     const getFlashCard = async () =>
@@ -26,6 +27,10 @@ const FlashCardDetailPage = (props: any) => {
       })
     );
   }, [id]);
+
+  const handleLangChange = () => {
+    setIsEnglish(!isEnglish);
+  }
 
   return (
     <Grid container>
@@ -56,19 +61,12 @@ const FlashCardDetailPage = (props: any) => {
           <Grid item sm={8} id="detail-grid">
             <Box className="text-div">
               <Typography className="header">
-                Text in {flashcard.language}
+                Text in {isEnglish ? "English" : flashcard.language} 
+                <Switch checked={isEnglish} onChange={handleLangChange} defaultChecked />
               </Typography>
               <Box className="text-box">
                 <Typography className="flashcard-text">
-                  {flashcard.altText}
-                </Typography>
-              </Box>
-            </Box>
-            <Box className="text-div">
-              <Typography className="header">Text in English</Typography>
-              <Box className="text-box">
-                <Typography className="flashcard-text">
-                  {flashcard.body}
+                  {isEnglish ? flashcard.body : flashcard.altText}
                 </Typography>
               </Box>
             </Box>

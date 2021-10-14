@@ -6,14 +6,14 @@ import ForgetPassword from "../../components/login/ForgetPassword";
 import Register from "../../components/login/Register";
 import Login from "../../components/login/Login";
 
-const LandingPage = () => {
+const LandingPage = ({ setIsAuthenticated }: any) => {
   const [landingStatus, setLandingStatus] = useState(landingEnum.LOGIN);
 
   return (
     <div className="main">
       <div className="container">
         {landingStatus === landingEnum.LOGIN ? (
-          <Login setLandingStatus={setLandingStatus} />
+          <Login setLandingStatus={setLandingStatus} setIsAuthenticated={setIsAuthenticated}/>
         ) : landingStatus === landingEnum.REGISTER ? (
           <Register setLandingStatus={setLandingStatus} />
         ) : (

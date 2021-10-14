@@ -10,7 +10,7 @@ import { FormControl, Grid, Typography } from "@mui/material";
 import { CssButton, CssTextField } from "../../pages/common/Components";
 import { Box } from "@mui/system";
 
-const Login = ({ setLandingStatus }) => {
+const Login = ({ setLandingStatus, setIsAuthenticated }) => {
   const {
     register,
     handleSubmit,
@@ -44,6 +44,7 @@ const Login = ({ setLandingStatus }) => {
       const { accessToken, refreshToken, expiresIn } = response.data;
       setTokens(accessToken, refreshToken);
       silentRefresh(expiresIn, refreshToken);
+      setIsAuthenticated(true);
       setSuccess(true);
     }
   };
