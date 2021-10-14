@@ -104,15 +104,20 @@ const FlashcardController = {
   },
   put: async (req, res) => {
     const user = req.user;
+    const id = req.params.id;
     if (!user)
       return res
         .status(401)
         .json({ error: "Unable to get user details from middleware" });
-    var flashCard = req.body.flashcard;
 
     try {
       const userCard = await Flashcard.findOne({ username: user.username });
-      userCard.flashcards.push(flashCard);
+      const newFlashcard = req.body;
+
+      userCard.flashcards = userCard.flashcards.map((flashcard) =>
+        flashcard._id.equals(id) ? newFlashcard : flashcard
+      );
+
       await userCard.save();
       return res.json({
         message: "Update successful",
@@ -121,6 +126,32 @@ const FlashcardController = {
     } catch (err) {
       res.status(400).json({
         message: "Error in putting new flashcard in",
+        error: err.toString(),
+      });
+    }
+  },
+  delete: async (req, res) => {
+    const user = req.user;
+    const id = req.params.id;
+    if (!user)
+      return res
+        .status(401)
+        .json({ error: "Unable to get user details from middleware" });
+
+    try {
+      const userCard = await Flashcard.findOne({ username: user.username });
+
+      userCard.flashcards = userCard.flashcards.filter(
+        (flashcard) => !flashcard._id.equals(id)
+      );
+
+      await userCard.save();
+      return res.json({
+        message: "Delete successful",
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: "Error in deleting flashcard",
         error: err.toString(),
       });
     }

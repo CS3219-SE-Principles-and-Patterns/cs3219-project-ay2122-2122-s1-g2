@@ -5,7 +5,7 @@ import LandingPage from "./pages/common/LandingPage";
 import CreateProfilePage from "./pages/profile/CreateProfilePage";
 import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import { Box } from "@mui/system";
-import Navbar from "./components/common/NavBar";
+import Navbar from "./components/common/Navbar";
 import ProfilePage from "./pages/profile/ProfilePage";
 import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -15,7 +15,7 @@ const App = () => {
     <Router>
       <div className="app">
         <Box sx={{ display: "flex" }}>
-          <NavBar />
+          <Navbar />
           <Switch>
             <Route path="/" exact>
               <LandingPage />
@@ -37,6 +37,11 @@ const App = () => {
             <ProtectedRoute
               children={<CreateFlashCardPage />}
               path="/flashcard/create"
+              exact
+            />
+            <ProtectedRoute
+              children={<CreateFlashCardPage isEdit="true" />}
+              path="/flashcard/edit/:id"
               exact
             />
             <ProtectedRoute

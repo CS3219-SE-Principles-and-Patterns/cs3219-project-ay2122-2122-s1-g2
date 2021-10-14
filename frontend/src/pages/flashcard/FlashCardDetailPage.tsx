@@ -1,15 +1,18 @@
 import { Grid, Typography, LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import { useParams } from "react-router-dom";
+import { Link, useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCard } from "../../domain/flashcard";
 import "./FlashCardDetailPage.scss";
+import { CssButton } from "../../components/common/Components";
 
 const FlashCardDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [flashcard, setFlashcard] = useState<FlashCard>();
+  const [hasDelete, setDelete] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const getFlashCard = async () => {
@@ -19,7 +22,18 @@ const FlashCardDetailPage = () => {
     getFlashCard();
   }, [id]);
 
-  return (
+  const deleteFlashcard = async () => {
+    try {
+      await FlashCardController.deleteFlashCard(id);
+      setDelete(true);
+    } catch (e: any) {
+      // double check
+      setError(e.message);
+    }
+  };
+  return hasDelete ? (
+    <Redirect to="/profile" />
+  ) : (
     <Grid container>
       {flashcard ? (
         <>
@@ -50,7 +64,19 @@ const FlashCardDetailPage = () => {
                 color="inherit"
                 sx={{ width: { xs: "100%", sm: "60%" } }}
               />
+              <Box
+                className="buttons-box"
+                sx={{ width: { xs: "50%", sm: "60%" } }}
+              >
+                <CssButton variant="outlined" href={`/flashcard/edit/${id}`}>
+                  Edit
+                </CssButton>
 
+                <CssButton variant="outlined" onClick={deleteFlashcard}>
+                  Delete
+                </CssButton>
+                {error && <Typography>{error}</Typography>}
+              </Box>
               <Box className="notes-box">
                 <Typography className="header">Notes: </Typography>
                 <Typography

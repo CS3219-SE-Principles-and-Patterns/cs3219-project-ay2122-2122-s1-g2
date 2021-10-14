@@ -21,4 +21,8 @@ export class FlashCardController {
     const flashCard: FlashCard = FlashCard.create(props);
     return await FlashCardInfra.editFlashCard(flashCard, id);
   };
+
+  public static deleteFlashCard = async (id: string): Promise<FlashCard> => {
+    return await FlashCardInfra.deleteFlashCard(id);
+  };
 }
