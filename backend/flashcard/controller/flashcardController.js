@@ -104,15 +104,22 @@ const FlashcardController = {
   },
   put: async (req, res) => {
     const user = req.user;
+    const id = req.params.id;
     if (!user)
       return res
         .status(401)
         .json({ error: "Unable to get user details from middleware" });
-    var flashCard = req.body.flashcard;
 
     try {
       const userCard = await Flashcard.findOne({ username: user.username });
-      userCard.flashcards.push(flashCard);
+      const newFlashcard = req.body;
+      console.log(id);
+      console.log(newFlashcard);
+      userCard.flashcards = userCard.flashcards.map((flashcard) =>
+        flashcard._id.equals(id) ? newFlashcard : flashcard
+      );
+      console.log("post ");
+      console.log(userCard);
       await userCard.save();
       return res.json({
         message: "Update successful",

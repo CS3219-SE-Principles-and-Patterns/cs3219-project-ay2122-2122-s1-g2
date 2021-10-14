@@ -1,11 +1,12 @@
 import { Grid, Typography, LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCard } from "../../domain/flashcard";
 import "./FlashCardDetailPage.scss";
+import { CssButton } from "../../components/common/Components";
 
 const FlashCardDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,9 @@ const FlashCardDetailPage = () => {
     getFlashCard();
   }, [id]);
 
+  const deleteFlashcard = () => {
+    console.log("delte");
+  };
   return (
     <Grid container>
       {flashcard ? (
@@ -50,7 +54,18 @@ const FlashCardDetailPage = () => {
                 color="inherit"
                 sx={{ width: { xs: "100%", sm: "60%" } }}
               />
+              <Box
+                className="buttons-box"
+                sx={{ width: { xs: "50%", sm: "60%" } }}
+              >
+                <CssButton variant="outlined" href={`/flashcard/edit/${id}`}>
+                  Edit
+                </CssButton>
 
+                <CssButton variant="outlined" onClick={deleteFlashcard}>
+                  Delete
+                </CssButton>
+              </Box>
               <Box className="notes-box">
                 <Typography className="header">Notes: </Typography>
                 <Typography

@@ -32,6 +32,14 @@ div > .header {
 .notes-box {
   margin-top: 15vh;
 }
+.buttons-box {
+  margin-top: 3vh;
+  display: flex;
+  justify-content: space-around;
+  button {
+    min-width: 6vw;
+  }
+}
 
 div > .flashcard-text {
   text-align: center;
