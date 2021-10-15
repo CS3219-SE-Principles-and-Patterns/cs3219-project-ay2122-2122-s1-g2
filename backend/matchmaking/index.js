@@ -44,7 +44,7 @@ const startGame = async (player, socket, rounds, result, questions) => {
 		// need to commuincate this with the other guy somehow => ping socket room
 		return {finalScore, finalResult};
 	})
-	await delay(60) // 1 minute rounds
+	await delay(10) // 1 minute rounds
 	return startGame(player, socket, rounds - 1, result, questions);
 }
 
@@ -71,7 +71,9 @@ io.on('connection', (socket) => {
 			let {score, result} = await startGame(player, socket, 5, 0, questions); // this is the actual game 
 			player.rating += score;	
 			player.result = result;
-			//await DatabaseManager.put(player);
+			console.log("Game ended")
+			socket.emit("End game", {result: result, score: score});
+			await DatabaseManager.put(player);
 		} else {
 			socket.emit("no match found");
 			deletePlayer(player.username);
@@ -85,20 +87,3 @@ io.on('connection', (socket) => {
 
 
 module.exports = server;
-// const socket = require("socket.io");
-// // NOTE: For some reason socket.io only works if "node server.js" is used when running the app
-// // Starting a socket on the specified server
-// let io = socket(server);
-
-// io.on("connection", (socket) => {
-//     // In joining a room, you also create it
-//     socket.on("joinRoom", (joinData) => {
-//         socket.join(joinData.roomID);
-//         io.to(joinData.roomID).emit("joined", joinData);
-//     });
-
-//     // Need to emit with the roomID
-//     socket.on("new-message", (msg) => {
-//         io.to(msg.roomID).emit("new-message", msg.data);
-//     });
-// });

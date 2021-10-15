@@ -1,6 +1,14 @@
 import {GameUser, GameUserProps} from "../domain/gameUser";
 import { GameInfra } from "../infra/gameUser";
 
+export interface GameResultProps {
+    language: string,
+    result: boolean
+}
+export interface RatingProps {
+    languages: string[],
+    ratings: number[]
+}
 export class GameController {
     public static getUserHistory = async (username: string) => {
         const res = await GameInfra.getUserHistory(username);

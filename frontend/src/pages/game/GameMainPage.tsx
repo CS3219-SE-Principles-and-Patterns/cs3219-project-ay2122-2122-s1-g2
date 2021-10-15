@@ -34,12 +34,20 @@ const GameMainPage = (props: any) => {
     socket.on("no match found", () => {
       setStatus(gameState.DEFAULT);
     });
+    socket.on("End game", (data: any) => {
+      setStatus(gameState.FINISH);
+      setScore(data.score);
+      setResult(data.result);
+      console.log(data);
+    })
   };
   const [languages, setLanguages] = useState<string[]>([]);
   const [hasProfile, setHasProfile] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>("");
   const [status, setStatus] = useState<gameState>(gameState.DEFAULT);
   const [username, setUsername] = useState<string>("");
+  const [result, setResult] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -64,34 +72,36 @@ const GameMainPage = (props: any) => {
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
       <Typography variant="h2">Game</Typography>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">
-          Choose your battle language
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={language}
-          label="Language"
-          onChange={handleChange}
-        >
-          {languages.map((lang: string) => (
-            <MenuItem value={lang}>{lang}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
       {status === gameState.DEFAULT ? (
+        <div>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              Choose your battle language
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={language}
+              label="Language"
+              onChange={handleChange}
+            >
+              {languages.map((lang: string) => (
+                <MenuItem value={lang}>{lang}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         <GameDefaultPage
           findOpponent={findOpponent}
           username={username}
           language={language}
         />
+        </div>
       ) : status === gameState.FINDING_OPPPONENT ? (
         <MatchmakingPage />
       ) : status === gameState.IN_PROGRESS ? (
         <GamePage socket={socket} />
       ) : status === gameState.FINISH ? (
-        <GameEndPage />
+        <GameEndPage result={result} score={score}/>
       ) : (
         <p>Error</p>
       )}
