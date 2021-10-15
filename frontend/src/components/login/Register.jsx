@@ -4,7 +4,7 @@ import { registerUser } from "../../infra/auth";
 import { landingEnum } from "../../utils/constants/enums";
 import CreateProfilePage from "../../pages/profile/CreateProfilePage";
 import { FormControl, Grid, Typography } from "@mui/material";
-import { CssButton, CssTextField } from "../../pages/common/Components";
+import { CssButton, CssTextField } from "../common/Components";
 import { Box } from "@mui/system";
 
 const Register = ({ setLandingStatus }) => {

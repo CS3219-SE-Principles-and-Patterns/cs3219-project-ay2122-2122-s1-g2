@@ -64,6 +64,11 @@ const App = () => {
               exact
             />
             <ProtectedRoute
+              children={<CreateFlashCardPage isEdit="true" />}
+              path="/flashcard/edit/:id"
+              exact
+            />
+            <ProtectedRoute
               path="/flashcard/:id"
               children={<FlashCardDetailPage />}
             />

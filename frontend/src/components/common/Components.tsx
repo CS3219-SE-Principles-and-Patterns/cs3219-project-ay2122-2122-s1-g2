@@ -1,4 +1,4 @@
-import { Button, Select, Slider, TextField } from "@mui/material";
+import { Button, Select, Slider, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
 export const CssTextField = styled(TextField)({
@@ -49,4 +49,8 @@ export const CssButton = styled(Button)({
   fontFamily: "Open Sans",
   fontWeight: "bold",
   padding: "10px",
+});
+
+export const BoldTypography = styled(Typography)({
+  fontWeight: "bold",
 });

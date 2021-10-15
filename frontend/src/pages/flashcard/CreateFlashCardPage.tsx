@@ -22,9 +22,10 @@ import {
   CssSelect,
   CssSlider,
   CssButton,
-} from "../common/Components";
+} from "../../components/common/Components";
 import { useParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FlashCard } from "../../domain/flashcard";
 
 const CreateFlashCardPage = (props: any) => {
   const {
@@ -39,6 +40,9 @@ const CreateFlashCardPage = (props: any) => {
   const isEdit = props.isEdit;
   const flashcardMsg = isEdit ? "Edit Flashcard" : "Create Flashcard";
   const { id } = useParams<{ id: string }>();
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [isSuccess, setSuccess] = useState<boolean>(false);
+  const successMsg = isEdit ? "Edited Flashcard!" : "Created Flashcard!";
   //   "flashcard": {
   //     "body": "Hi",
   //     "altText: "Anneyong",
@@ -48,38 +52,40 @@ const CreateFlashCardPage = (props: any) => {
   // }
 
   const onSubmit = async (data: any) => {
+    setSuccess(false);
     try {
       if (isEdit) {
+        console.log(data);
         await FlashCardController.editFlashCard(data, id);
       } else {
         await FlashCardController.createFlashCard(data);
       }
-    } catch (e) {
-      console.log(e);
+      setSuccess(true);
+    } catch (e: any) {
+      // to test
+      setError("notes", { message: e.response.data });
     }
   };
 
   useEffect(() => {
     const fetchFlashcard = async () => {
       try {
-        // const flashcard: Flashcard = await FlashCardController.getFlashcard();
-
-        const flashcard = {
-          body: "Hi",
-          altText: "Anneyong",
-          difficulty: 3,
-          language: "Japanese",
-          title: "Hello world!",
-        };
+        const flashcard: FlashCard = await FlashCardController.getFlashCard(id);
+        // const flashcard = {
+        //   body: "Hi",
+        //   altText: "Anneyong",
+        //   difficulty: 3,
+        //   language: "Japanese",
+        //   title: "Hello world!",
+        // };
+        console.log("flashcard");
         setValue("body", flashcard.body);
         setValue("altText", flashcard.altText);
         setValue("difficulty", flashcard.difficulty);
-
-        setValue("language", {
-          key: flashcard.language,
-          value: flashcard.language,
-        });
+        setValue("language", flashcard.language);
         setValue("title", flashcard.title);
+        setValue("notes", flashcard.notes);
+        setLoading(false);
       } catch (e) {
         // do nothing
         console.log(e);
@@ -88,7 +94,7 @@ const CreateFlashCardPage = (props: any) => {
     if (isEdit) fetchFlashcard();
   }, [isEdit]);
 
-  return (
+  return !isEdit || !isLoading ? (
     <Container>
       <Box sx={{ flexGrow: 1, m: 2 }} textAlign="center">
         <h1>{flashcardMsg}</h1>
@@ -114,8 +120,8 @@ const CreateFlashCardPage = (props: any) => {
                 render={({ field: { onChange, value } }) => (
                   <CssSelect
                     required
-                    onChange={onChange}
                     defaultValue={"Korean"}
+                    {...register("language", { required: true })}
                     input={<OutlinedInput label="Language" />}
                   >
                     {languages.map((language) => (
@@ -179,10 +185,15 @@ const CreateFlashCardPage = (props: any) => {
             >
               {flashcardMsg}
             </CssButton>
+            {isSuccess && (
+              <Typography sx={{ color: "green" }}>{successMsg}</Typography>
+            )}
           </Stack>
         </Box>
       </Box>
     </Container>
+  ) : (
+    <Typography> Loading...</Typography>
   );
 };
 

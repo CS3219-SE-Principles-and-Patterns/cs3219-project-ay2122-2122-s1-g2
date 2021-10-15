@@ -1,32 +1,26 @@
 @use "../../variables" as v;
 .title-grid {
-  height: 35vh;
-  padding: 1.5em;
+}
+.text-div {
+  margin: 10vh 0 3vh 0;
 }
 
 .img-box {
-  height: 12vh;
-  width: 25vh;
+  height: 20vh;
+  width: 60%;
   background-color: v.$primary;
-  margin-top: 10vh;
-  margin-bottom: 2vh;
 }
 
 #detail-grid {
   display: flex;
-  height: 100vh;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.text-div {
+  align-items: flex-start;
 }
 
 .text-box {
   border: 1.7px solid v.$primary;
   height: 30vh;
-  width: 40vw;
+  width: 96vw;
   display: flex;
 }
 
@@ -38,6 +32,14 @@ div > .header {
 .notes-box {
   margin-top: 15vh;
 }
+.buttons-box {
+  margin-top: 3vh;
+  display: flex;
+  justify-content: space-around;
+  button {
+    min-width: 6vw;
+  }
+}
 
 div > .flashcard-text {
   text-align: center;
@@ -45,4 +47,21 @@ div > .flashcard-text {
   align-self: center;
   font-weight: bold;
   font-size: 30px;
+}
+
+@media (min-width: 600px) {
+  .title-grid {
+    height: 35vh;
+    padding: 1.5em;
+  }
+  .img-box {
+    margin-top: 10vh;
+    margin-bottom: 2vh;
+  }
+  #detail-grid {
+    align-items: center;
+  }
+  .text-box {
+    width: 40vw;
+  }
 }
