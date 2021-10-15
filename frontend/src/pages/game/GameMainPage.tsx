@@ -18,6 +18,7 @@ import GameEndPage from "./GameEndPage";
 import { ProfileController } from "../../controller/ProfileController";
 import GamePage from "./GamePage";
 import socketClient from "socket.io-client";
+import OpponentFoundPage from "./OpponentFoundPage";
 
 const SERVER: string = "http://localhost:4000/";
 
@@ -29,7 +30,7 @@ const GameMainPage = (props: any) => {
     setStatus(gameState.FINDING_OPPPONENT);
     socket.emit("Match Player", { username: username, language: language }); // i apologize for this will fix later
     socket.on("match found", () => {
-      setStatus(gameState.IN_PROGRESS);
+      setStatus(gameState.OPPONENT_FOUND);
     });
     socket.on("no match found", () => {
       setStatus(gameState.DEFAULT);
@@ -41,6 +42,7 @@ const GameMainPage = (props: any) => {
   const [status, setStatus] = useState<gameState>(gameState.DEFAULT);
   const [username, setUsername] = useState<string>("");
 
+  const startGame = () => setStatus(gameState.IN_PROGRESS);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -64,30 +66,34 @@ const GameMainPage = (props: any) => {
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
       <Typography variant="h2">Game</Typography>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">
-          Choose your battle language
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={language}
-          label="Language"
-          onChange={handleChange}
-        >
-          {languages.map((lang: string) => (
-            <MenuItem value={lang}>{lang}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
       {status === gameState.DEFAULT ? (
-        <GameDefaultPage
-          findOpponent={findOpponent}
-          username={username}
-          language={language}
-        />
+        <>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              Choose your battle language
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={language}
+              label="Language"
+              onChange={handleChange}
+            >
+              {languages.map((lang: string) => (
+                <MenuItem value={lang}>{lang}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <GameDefaultPage
+            findOpponent={findOpponent}
+            username={username}
+            language={language}
+          />
+        </>
       ) : status === gameState.FINDING_OPPPONENT ? (
         <MatchmakingPage />
+      ) : status === gameState.OPPONENT_FOUND ? (
+        <OpponentFoundPage startGame={startGame} />
       ) : status === gameState.IN_PROGRESS ? (
         <GamePage socket={socket} />
       ) : status === gameState.FINISH ? (

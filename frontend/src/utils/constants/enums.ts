@@ -6,6 +6,7 @@ export enum landingEnum {
 export enum gameState {
   DEFAULT = 0,
   FINDING_OPPPONENT = 1,
-  IN_PROGRESS = 2,
-  FINISH = 3,
+  OPPONENT_FOUND = 2,
+  IN_PROGRESS = 3,
+  FINISH = 4,
 }
