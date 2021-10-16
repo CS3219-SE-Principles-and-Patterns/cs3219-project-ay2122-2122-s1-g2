@@ -1,6 +1,22 @@
 let players = [];
 
-const delay = (ms) => new Promise(res => setTimeout(res, ms * 1000)); // 100 ms timeout?
+const delay = (ms) => new Promise(res => {
+    setTimeout(res, ms * 1000)
+}); 
+
+const gameDelay = async (socket, time) => {
+    await delay(25); // choose a timeout of 60 means must choose diff of like 59000
+    if (new Date() - time > 20000) {
+        rounds++;
+        if (rounds != 5) {
+            socket.emit("flashcard", questions[rounds]);
+            gameDelay();
+        } else {
+            socket.emit("End game", {result: result, score: score});
+            DatabaseManager.put(Player);
+        }
+    }
+};
 	
 const playerMatcher = async (socket, player, time) => {
     if (player.matchFound) {
@@ -28,6 +44,7 @@ const playerMatcher = async (socket, player, time) => {
             socket.join(player.room) 
             // remove both players from the array of players in the waiting queue
             deletePlayer(player.username);
+            await delay(5);
 			//deletePlayer(otherPlayerName);
             return true;
 		}
