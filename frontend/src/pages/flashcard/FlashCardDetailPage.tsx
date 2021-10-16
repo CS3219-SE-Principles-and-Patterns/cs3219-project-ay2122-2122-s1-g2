@@ -43,17 +43,15 @@ const FlashCardDetailPage = () => {
     if (cardIdx > 0) setCardIdx(cardIdx-1);
   }
 
-  // const deleteFlashcard = async () => {
-  //   try {
-  //     await FlashCardController.deleteFlashCard(id);
-  //     setDelete(true);
-  //   } catch (e: any) {
-  //     // double check
-  //     setError(e.message);
-  //   }
-  // };
-
-  // return <div></div>
+  const deleteFlashcard = async () => {
+    try {
+      await FlashCardController.deleteFlashCard(id);
+      setDelete(true);
+    } catch (e: any) {
+      // double check
+      setError(e.message);
+    }
+  };
 
   return hasDelete ? (
     <Redirect to="/profile" />
@@ -96,9 +94,9 @@ const FlashCardDetailPage = () => {
                   Edit
                 </CssButton>
 
-                {/* <CssButton variant="outlined" onClick={deleteFlashcard}>
+                <CssButton variant="outlined" onClick={deleteFlashcard}>
                   Delete
-                </CssButton> */}
+                </CssButton>
                 {error && <Typography>{error}</Typography>}
               </Box>
               <Box className="notes-box">

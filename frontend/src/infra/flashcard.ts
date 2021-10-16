@@ -35,7 +35,7 @@ export class FlashCardInfra {
     return axios().post(`${FLASHCARD_PATH}test/test`, data);
   };
 
-  public static editFlashCard2 = (data: any, id: string): Promise<any> => {
+  public static editFlashCard2 = (data: any): Promise<any> => {
     return axios().put(`${FLASHCARD_PATH}test/test`, data);
   };
 }

@@ -136,20 +136,14 @@ const FlashcardController = {
   },
   delete: async (req, res) => {
     const user = req.user;
-    const id = req.params.id;
     if (!user)
       return res
         .status(401)
         .json({ error: "Unable to get user details from middleware" });
 
     try {
-      const userCard = await Flashcard.findOne({ username: user.username });
+      await Flashcard.deleteOne({ _id: new ObjectId(req.params.id) });
 
-      userCard.flashcards = userCard.flashcards.filter(
-        (flashcard) => !flashcard._id.equals(id)
-      );
-
-      await userCard.save();
       return res.json({
         message: "Delete successful",
       });
@@ -207,6 +201,7 @@ const FlashcardController = {
       userCard.description = optionalChange(data.description, userCard.description);
       userCard.flashcards = optionalChange(data.flashcards, userCard.flashcards);
       const savedCard = await userCard.save();
+      // console.log(savedCard);
       return res.json({
         message: "Update successful",
         data: savedCard,

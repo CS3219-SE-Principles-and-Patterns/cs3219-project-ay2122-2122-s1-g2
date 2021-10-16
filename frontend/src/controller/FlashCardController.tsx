@@ -36,9 +36,9 @@ export class FlashCardController {
     return await FlashCardInfra.createFlashCard2(flashCard);
   };
 
-  public static editFlashCard2 = async (props: FlashCardSetProps, id: string) => {
+  public static editFlashCard2 = async (props: FlashCardSetProps) => {
     const flashCard: FlashCardSet = FlashCardSet.create(props);
-    return await FlashCardInfra.editFlashCard2(flashCard, id);
+    return await FlashCardInfra.editFlashCard2(flashCard);
   };
 
   public static getAllFlashCards2 = async (): Promise<FlashCardSet[]> => {
