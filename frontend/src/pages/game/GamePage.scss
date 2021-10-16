@@ -1,0 +1,14 @@
+@use "../../variables" as v;
+div .option-box {
+  border: 2px solid v.$primary;
+  margin: auto;
+  margin-top: 3vh;
+  height: 10vh;
+  margin-bottom: 1vh;
+  display: flex;
+  align-items: center;
+  p {
+    width: 100%;
+    font-weight: bold;
+  }
+}

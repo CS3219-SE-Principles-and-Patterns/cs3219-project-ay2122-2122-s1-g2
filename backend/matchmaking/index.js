@@ -35,7 +35,8 @@ const startGame = async (player, socket, rounds, result, questions) => {
 		var increment = 0
 		if (data.gameRes) increment = 1
 		player.score += (increment / 1200) * (60000 - data.timing); // the max a player can increase in a game is 50 in 1 round
-		result += increment
+		result += increment;
+		// return startGame(player, socket, rounds - 1, result, questions); // causes some memory leak
 	})
 	socket.on("disconnect", () => {
 		// if they disconnect during game instant loss
@@ -44,7 +45,7 @@ const startGame = async (player, socket, rounds, result, questions) => {
 		// need to commuincate this with the other guy somehow => ping socket room
 		return {finalScore, finalResult};
 	})
-	await delay(10) // 1 minute rounds
+	await delay(60) // 1 minute rounds
 	return startGame(player, socket, rounds - 1, result, questions);
 }
 

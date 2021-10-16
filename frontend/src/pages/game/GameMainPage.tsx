@@ -18,6 +18,7 @@ import GameEndPage from "./GameEndPage";
 import { ProfileController } from "../../controller/ProfileController";
 import GamePage from "./GamePage";
 import socketClient from "socket.io-client";
+import OpponentFoundPage from "./OpponentFoundPage";
 
 const SERVER: string = "http://localhost:4000/";
 
@@ -29,7 +30,7 @@ const GameMainPage = (props: any) => {
     setStatus(gameState.FINDING_OPPPONENT);
     socket.emit("Match Player", { username: username, language: language }); // i apologize for this will fix later
     socket.on("match found", () => {
-      setStatus(gameState.IN_PROGRESS);
+      setStatus(gameState.OPPONENT_FOUND);
     });
     socket.on("no match found", () => {
       setStatus(gameState.DEFAULT);
@@ -49,6 +50,7 @@ const GameMainPage = (props: any) => {
   const [result, setResult] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
 
+  const startGame = () => setStatus(gameState.IN_PROGRESS);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -73,7 +75,7 @@ const GameMainPage = (props: any) => {
     <Box sx={{ flexGrow: 1 }} textAlign="center">
       <Typography variant="h2">Game</Typography>
       {status === gameState.DEFAULT ? (
-        <div>
+        <>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
               Choose your battle language
@@ -90,14 +92,16 @@ const GameMainPage = (props: any) => {
               ))}
             </Select>
           </FormControl>
-        <GameDefaultPage
-          findOpponent={findOpponent}
-          username={username}
-          language={language}
-        />
-        </div>
+          <GameDefaultPage
+            findOpponent={findOpponent}
+            username={username}
+            language={language}
+          />
+        </>
       ) : status === gameState.FINDING_OPPPONENT ? (
         <MatchmakingPage />
+      ) : status === gameState.OPPONENT_FOUND ? (
+        <OpponentFoundPage startGame={startGame} />
       ) : status === gameState.IN_PROGRESS ? (
         <GamePage socket={socket} />
       ) : status === gameState.FINISH ? (
