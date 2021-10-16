@@ -9,7 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { CssTextField, BoldTypography } from "../common/Components";
 import { FlashCardController } from "../../controller/FlashCardController";
-import { FlashCard } from "../../domain/flashcard";
+import { FlashCard, FlashCardSet } from "../../domain/flashcard";
 import { useHistory } from "react-router-dom";
 import CreateFlashCard from "./CreateFlashCard";
 
@@ -19,12 +19,12 @@ const FlashCardDetails = () => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
   };
-  const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
+  const [flashcards, setFlashcards] = useState<FlashCardSet[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        const cards = await FlashCardController.getAllFlashCards();
+        const cards = await FlashCardController.getAllFlashCards2();
         setFlashcards(cards);
       } catch {}
     };

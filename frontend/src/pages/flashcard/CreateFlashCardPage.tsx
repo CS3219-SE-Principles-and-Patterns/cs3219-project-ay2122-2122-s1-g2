@@ -3,15 +3,17 @@ import {
   Button,
   Container,
   FormControl,
-  Input,
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Select,
-  Slider,
   Stack,
   Typography,
+  Grid,
+  Switch,
+  IconButton
 } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { useForm, Controller } from "react-hook-form";
 import { FlashCardController } from "../../controller/FlashCardController";
@@ -25,7 +27,7 @@ import {
 } from "../../components/common/Components";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { FlashCard } from "../../domain/flashcard";
+import { FlashCardSet, Card } from "../../domain/flashcard";
 
 const CreateFlashCardPage = (props: any) => {
   const {
@@ -34,6 +36,7 @@ const CreateFlashCardPage = (props: any) => {
     setError,
     control,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({});
 
@@ -42,6 +45,9 @@ const CreateFlashCardPage = (props: any) => {
   const { id } = useParams<{ id: string }>();
   const [isLoading, setLoading] = useState<boolean>(true);
   const [isSuccess, setSuccess] = useState<boolean>(false);
+  const [currCards, setCurrCards] = useState<Array<Card>>([]);
+  const [cardIdx, setCardIdx] = useState<number>(-1);
+  const [isEnglish, setIsEnglish] = useState(false);
   const successMsg = isEdit ? "Edited Flashcard!" : "Created Flashcard!";
   //   "flashcard": {
   //     "body": "Hi",
@@ -55,10 +61,13 @@ const CreateFlashCardPage = (props: any) => {
     setSuccess(false);
     try {
       if (isEdit) {
-        console.log(data);
         await FlashCardController.editFlashCard(data, id);
+        // Updated code for edit below: (not tested if works)
+        // data.flashcards = currCards;
+        // await FlashCardController.editFlashCard2(data, id);
       } else {
-        await FlashCardController.createFlashCard(data);
+        data.flashcards = currCards;
+        await FlashCardController.createFlashCard2(data);
       }
       setSuccess(true);
     } catch (e: any) {
@@ -70,7 +79,7 @@ const CreateFlashCardPage = (props: any) => {
   useEffect(() => {
     const fetchFlashcard = async () => {
       try {
-        const flashcard: FlashCard = await FlashCardController.getFlashCard(id);
+        const flashcard: FlashCardSet = await FlashCardController.getFlashCard2(id);
         // const flashcard = {
         //   body: "Hi",
         //   altText: "Anneyong",
@@ -78,13 +87,11 @@ const CreateFlashCardPage = (props: any) => {
         //   language: "Japanese",
         //   title: "Hello world!",
         // };
-        console.log("flashcard");
-        setValue("body", flashcard.body);
-        setValue("altText", flashcard.altText);
         setValue("difficulty", flashcard.difficulty);
         setValue("language", flashcard.language);
         setValue("title", flashcard.title);
-        setValue("notes", flashcard.notes);
+        setValue("description", flashcard.description);
+        setValue("flashcards", flashcard.flashcards);
         setLoading(false);
       } catch (e) {
         // do nothing
@@ -93,6 +100,26 @@ const CreateFlashCardPage = (props: any) => {
     };
     if (isEdit) fetchFlashcard();
   }, [isEdit]);
+
+  const handleLangChange = () => {
+    setIsEnglish(!isEnglish);
+  }
+
+  const increaseCardIdx = () => {
+    const size = currCards.length;
+    if (cardIdx < size-1) setCardIdx(cardIdx+1);
+  }
+
+  const decreaseCardIdx = () => {
+    if (cardIdx > 0) setCardIdx(cardIdx-1);
+  }
+
+  const deleteCardAtIdx = () => {
+    const res = currCards.filter((elem,idx) => idx !== cardIdx);
+    setCurrCards(res);
+    setCardIdx(res.length > 0 ? 0 : -1); 
+    // can't use currCards.length in this case, since it's not updated immediately
+  }
 
   return !isEdit || !isLoading ? (
     <Container>
@@ -135,22 +162,8 @@ const CreateFlashCardPage = (props: any) => {
             </FormControl>
             <FormControl>
               <CssTextField
-                required
-                label="Text in Language"
-                {...register("altText", { required: true })}
-              />
-            </FormControl>
-            <FormControl>
-              <CssTextField
-                required
-                label="Text in English"
-                {...register("body", { required: true })}
-              />
-            </FormControl>
-            <FormControl>
-              <CssTextField
-                label="Notes"
-                {...register("notes")}
+                label="Description"
+                {...register(`description`)}
                 multiline
                 rows={2}
                 maxRows={4}
@@ -177,7 +190,52 @@ const CreateFlashCardPage = (props: any) => {
                 )}
               />
             </FormControl>
-
+            <h2> Add Card to Set </h2>
+            <FormControl>
+              <CssTextField
+                required
+                label="Text in Language"
+                {...register(`flashcards.${cardIdx}.altText`, { required: true })}
+              />
+            </FormControl>
+            <FormControl>
+              <CssTextField
+                required
+                label="Text in English"
+                {...register(`flashcards.${cardIdx}.body`, { required: true })}
+              />
+            </FormControl>
+            <FormControl>
+              <CssTextField
+                label="Notes"
+                {...register(`flashcards.${cardIdx}.notes`)}
+                multiline
+                rows={2}
+                maxRows={4}
+              />
+            </FormControl>
+            <CssButton
+              sx={{ marginTop: "5vh" }}
+              variant="outlined"
+              onClick={() => {
+                setCurrCards([...currCards, getValues(`flashcards.${cardIdx}`)])
+                setCardIdx(cardIdx+1);
+              }}
+            >
+              Add Flashcard
+            </CssButton>
+            {console.log(currCards)}
+            {/* <ul>
+              {fields.map((item:any, index:number) => {
+                console.log(item);
+                return (
+                  <div>
+                    {item.body} : {item.altText} : {item.notes}
+                  </div>
+                );
+              })}
+            </ul> */}
+            
             <CssButton
               type="submit"
               sx={{ marginTop: "5vh" }}
@@ -191,6 +249,48 @@ const CreateFlashCardPage = (props: any) => {
           </Stack>
         </Box>
       </Box>
+      {cardIdx < 0 ? <></>: (
+            <Grid item xs={12} id="detail-grid">
+            <Box className="text-div">
+              <Typography className="header">
+                <Grid container>
+                  <Grid item xs={6} textAlign="left">
+                    Text in {isEnglish ? "English" : getValues(`language`)} 
+                    <Switch checked={isEnglish} onChange={handleLangChange} />
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Button variant="outlined" color="error" onClick={deleteCardAtIdx}>
+                      Delete
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Typography>
+              <Box className="text-box">
+                <Typography className="flashcard-text">
+                  {isEnglish ? currCards[cardIdx].body : currCards[cardIdx].altText }
+                </Typography>
+              </Box>
+              <Grid container>
+                <Grid item xs={6} textAlign="left">
+                  <IconButton color="primary" aria-label="Back" onClick={decreaseCardIdx}>
+                    <ArrowBackIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={6} textAlign="right">
+                  <IconButton color="primary" aria-label="Forward" onClick={increaseCardIdx}>
+                    <ArrowForwardIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+              <Typography className="header">Notes: </Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontSize: { xs: "3.8vw", sm: "15px" } }}
+              >
+                {currCards[cardIdx].notes}
+              </Typography>
+            </Box>        
+          </Grid>)}
     </Container>
   ) : (
     <Typography> Loading...</Typography>

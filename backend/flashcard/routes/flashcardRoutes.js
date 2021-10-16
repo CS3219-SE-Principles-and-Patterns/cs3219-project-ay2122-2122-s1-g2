@@ -15,4 +15,15 @@ router
   .put(flashcardController.authTokenMW, flashcardController.put)
   .delete(flashcardController.authTokenMW, flashcardController.delete);
 
+router
+  .route("/test/test")
+  .get(flashcardController.authTokenMW, flashcardController.getAll2)
+  .post(flashcardController.authTokenMW, flashcardController.create2)
+  .put(flashcardController.authTokenMW, flashcardController.updateDetails);
+
+router
+  .route("/test/test/:id")
+  .get(flashcardController.authTokenMW, flashcardController.get2);
+
+
 module.exports = router;
