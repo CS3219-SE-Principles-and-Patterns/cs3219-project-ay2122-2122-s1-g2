@@ -9,7 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { CssTextField, BoldTypography } from "../common/Components";
 import { FlashCardController } from "../../controller/FlashCardController";
-import { FlashCard, FlashCardSet } from "../../domain/flashcard";
+import { FlashCardSet } from "../../domain/flashcard";
 import { useHistory } from "react-router-dom";
 import CreateFlashCard from "./CreateFlashCard";
 
@@ -24,7 +24,9 @@ const FlashCardDetails = () => {
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        const cards = await FlashCardController.getAllFlashCards2();
+        console.log("hey");
+        const cards = await FlashCardController.getAllFlashCards();
+        console.log(cards);
         setFlashcards(cards);
       } catch {}
     };
@@ -37,7 +39,16 @@ const FlashCardDetails = () => {
   };
   const flashcardsList = flashcards.map((flashcard) => {
     return (
-      <Grid item xs={12} sm={4}>
+      <Grid
+        item
+        xs={12}
+        sm={4}
+        sx={{
+          marginBottom: {
+            xs: "4vh",
+          },
+        }}
+      >
         <Box
           sx={{
             height: "20vh",
@@ -74,7 +85,7 @@ const FlashCardDetails = () => {
         spacing={2}
         sx={{
           marginTop: "2vh",
-          height: "80vh",
+          height: "65vh",
           overflow: "auto",
         }}
       >

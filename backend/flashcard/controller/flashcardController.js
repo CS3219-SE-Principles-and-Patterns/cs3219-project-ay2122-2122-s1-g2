@@ -31,14 +31,12 @@ const FlashcardController = {
       return res
         .status(401)
         .json({ error: "Unable to get user details from middleware" });
+
     try {
-      const userCard = await Flashcard.findOne({ username: user.username });
-      const flashcard = userCard.flashcards.find((x) => {
-        return x._id.equals(req.params.id);
-      });
+      const userCard = await Flashcard.findOne({ _id: new ObjectId(req.params.id) });
       return res.status(200).json({
         message: "Success",
-        data: flashcard,
+        data: userCard,
       });
     } catch (err) {
       res.status(400).json({
@@ -53,83 +51,14 @@ const FlashcardController = {
         .status(401)
         .json({ error: "Unable to get user details from middleware" });
     try {
-      const flashcard = await Flashcard.findOne({ username: user.username });
+      const userSets = await Flashcard.find({ username: user.username });
+      // Get all sets by the user
       res.json({
         message: "Success",
-        data: flashcard.flashcards,
+        data: userSets,
       });
     } catch (err) {
       res.status(400).json({
-        message: "Error in getting user credentials",
-        error: err.toString(),
-      });
-    }
-  },
-  create: async (req, res) => {
-    const user = req.user;
-    const newFlashcard = req.body;
-    if (!user)
-      return res
-        .status(401)
-        .json({ error: "Unable to get user details from middleware" });
-    var flashcard = Flashcard();
-    flashcard.username = user.username;
-    var oldUserCard;
-    try {
-      oldUserCard = await Flashcard.findOne({ username: user.username });
-    } catch (err) {
-      res.status(400).json({
-        message: "Error in creating mongodb database",
-        error: err.toString(),
-      });
-    }
-    try {
-      if (!oldUserCard) {
-        // no such profile exists so we just put it in
-        flashcard.flashcards = [newFlashcard];
-        await flashcard.save();
-        return res.status(200).json({
-          message: "Success",
-          data: flashcard,
-        });
-      }
-      oldUserCard.flashcards.push(newFlashcard);
-      await oldUserCard.save();
-      return res.status(200).json({
-        message: "Flashcards updated",
-        data: oldUserCard,
-      });
-    } catch (err) {
-      res.status(400).json({
-        message: "Error in saving new flashcard",
-        error: err.toString(),
-      });
-    }
-  },
-  put: async (req, res) => {
-    const user = req.user;
-    const id = req.params.id;
-    if (!user)
-      return res
-        .status(401)
-        .json({ error: "Unable to get user details from middleware" });
-
-    try {
-      const userCard = await Flashcard.findOne({ username: user.username });
-      const newFlashcard = req.body;
-
-      userCard.flashcards = userCard.flashcards.map((flashcard) =>
-        flashcard._id.equals(id) ? newFlashcard : flashcard
-      );
-
-      await userCard.save();
-      return res.json({
-        message: "Update successful",
-        data: userCard,
-      });
-    } catch (err) {
-      res.status(400).json({
-        message: "Error in putting new flashcard in",
         error: err.toString(),
       });
     }
@@ -154,7 +83,7 @@ const FlashcardController = {
       });
     }
   },
-  create2: async (req, res) => {
+  create: async (req, res) => {
     const user = req.user;
     if (!user)
         return res
@@ -167,6 +96,7 @@ const FlashcardController = {
       const flashcard = Flashcard({
         username: user.username, // Maybe change this to use data username instead?
         title: data.title,
+        language: data.language,
         difficulty: data.difficulty,
         description: data.description,
         flashcards: data.flashcards
@@ -212,44 +142,6 @@ const FlashcardController = {
         error: err.toString(),
       });
     }
-  },
-  get2: async (req, res) => {
-    const user = req.user;
-    if (!user)
-      return res
-        .status(401)
-        .json({ error: "Unable to get user details from middleware" });
-
-    try {
-      const userCard = await Flashcard.findOne({ _id: new ObjectId(req.params.id) });
-      return res.status(200).json({
-        message: "Success",
-        data: userCard,
-      });
-    } catch (err) {
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
-  },
-  getAll2: async (req, res) => {
-    const user = req.user;
-    if (!user)
-      return res
-        .status(401)
-        .json({ error: "Unable to get user details from middleware" });
-    try {
-      const userSets = await Flashcard.find({ username: user.username });
-      // Get all sets by the user
-      res.json({
-        message: "Success",
-        data: userSets,
-      });
-    } catch (err) {
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
-  },
+  }
 };
 module.exports = FlashcardController;

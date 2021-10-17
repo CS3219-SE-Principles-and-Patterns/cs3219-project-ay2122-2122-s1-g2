@@ -6,7 +6,7 @@ import { Link, useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
-import { FlashCard, FlashCardSet, Card } from "../../domain/flashcard";
+import { FlashCardSet, Card } from "../../domain/flashcard";
 import "./FlashCardDetailPage.scss";
 import { CssButton } from "../../components/common/Components";
 
@@ -22,7 +22,7 @@ const FlashCardDetailPage = () => {
 
   useEffect(() => {
     const getFlashCard = async () => {
-      const flashCardSet = await FlashCardController.getFlashCard2(id);
+      const flashCardSet = await FlashCardController.getFlashCard(id);
       setFlashcard(flashCardSet);
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
