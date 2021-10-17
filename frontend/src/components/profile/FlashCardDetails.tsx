@@ -37,7 +37,16 @@ const FlashCardDetails = () => {
   };
   const flashcardsList = flashcards.map((flashcard) => {
     return (
-      <Grid item xs={12} sm={4}>
+      <Grid
+        item
+        xs={12}
+        sm={4}
+        sx={{
+          marginBottom: {
+            xs: "4vh",
+          },
+        }}
+      >
         <Box
           sx={{
             height: "20vh",
@@ -74,7 +83,7 @@ const FlashCardDetails = () => {
         spacing={2}
         sx={{
           marginTop: "2vh",
-          height: "80vh",
+          height: "65vh",
           overflow: "auto",
         }}
       >
