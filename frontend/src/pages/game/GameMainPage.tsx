@@ -35,12 +35,20 @@ const GameMainPage = (props: any) => {
     socket.on("no match found", () => {
       setStatus(gameState.DEFAULT);
     });
+    socket.on("End game", (data: any) => {
+      setStatus(gameState.FINISH);
+      setScore(data.score);
+      setResult(data.result);
+      console.log(data);
+    })
   };
   const [languages, setLanguages] = useState<string[]>([]);
   const [hasProfile, setHasProfile] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>("");
   const [status, setStatus] = useState<gameState>(gameState.DEFAULT);
   const [username, setUsername] = useState<string>("");
+  const [result, setResult] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
 
   const startGame = () => setStatus(gameState.IN_PROGRESS);
   useEffect(() => {
@@ -97,7 +105,7 @@ const GameMainPage = (props: any) => {
       ) : status === gameState.IN_PROGRESS ? (
         <GamePage socket={socket} />
       ) : status === gameState.FINISH ? (
-        <GameEndPage />
+        <GameEndPage result={result} score={score}/>
       ) : (
         <p>Error</p>
       )}
