@@ -40,7 +40,7 @@ const GameMainPage = (props: any) => {
       setScore(data.score);
       setResult(data.result);
       console.log(data);
-    })
+    });
   };
   const [languages, setLanguages] = useState<string[]>([]);
   const [hasProfile, setHasProfile] = useState<boolean>(false);
@@ -72,11 +72,11 @@ const GameMainPage = (props: any) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }} textAlign="center">
+    <Box sx={{ flexGrow: 1, margin: 4 }} textAlign="center">
       <Typography variant="h2">Game</Typography>
       {status === gameState.DEFAULT ? (
         <>
-          <FormControl fullWidth>
+          <FormControl sx={{ width: "50vw", mb: 3, mt: 3 }}>
             <InputLabel id="demo-simple-select-label">
               Choose your battle language
             </InputLabel>
@@ -105,7 +105,7 @@ const GameMainPage = (props: any) => {
       ) : status === gameState.IN_PROGRESS ? (
         <GamePage socket={socket} />
       ) : status === gameState.FINISH ? (
-        <GameEndPage result={result} score={score}/>
+        <GameEndPage result={result} score={score} />
       ) : (
         <p>Error</p>
       )}

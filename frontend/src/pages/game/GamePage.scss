@@ -12,3 +12,13 @@ div .option-box {
     font-weight: bold;
   }
 }
+
+.game-button {
+  width: 100%;
+  color: v.$primary !important;
+  font-weight: bold;
+  font-size: 16px;
+}
+.game-button:hover {
+  background-color: green;
+}

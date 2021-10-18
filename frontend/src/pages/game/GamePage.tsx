@@ -1,6 +1,12 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { FormControl, InputLabel, Select, MenuItem, CircularProgress } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import "./GamePage.scss";
 import { CssButton } from "../../components/common/Components";
@@ -46,7 +52,13 @@ const GamePage = (props: any) => {
           <Grid container>
             {answers.map((answer: string) => (
               <Grid item xs={5} className="option-box">
-                <Button variant="text" onClick={handleSubmit}>{answer}</Button>
+                <Button
+                  variant="text"
+                  className="game-button"
+                  onClick={handleSubmit}
+                >
+                  {answer}
+                </Button>
               </Grid>
             ))}
           </Grid>
@@ -58,10 +70,8 @@ const GamePage = (props: any) => {
       <Box sx={{ flexGrow: 1 }} textAlign="center">
         <CircularProgress />
       </Box>
-    )
+    );
   }
-  
-  
 };
 
 export default GamePage;

@@ -73,7 +73,9 @@ const CreateFlashCardPage = (props: any) => {
   useEffect(() => {
     const fetchFlashcard = async () => {
       try {
-        const flashcard: FlashCardSet = await FlashCardController.getFlashCard(id);
+        const flashcard: FlashCardSet = await FlashCardController.getFlashCard(
+          id
+        );
         setValue("difficulty", flashcard.difficulty);
         setValue("language", flashcard.language);
         setValue("title", flashcard.title);
@@ -180,19 +182,19 @@ const CreateFlashCardPage = (props: any) => {
               />
             </FormControl>
             <CssButton
-                type="submit"
-                sx={{ marginTop: "5vh" }}
-                variant="outlined"
-              >
-                {flashcardMsg}
-              </CssButton>
-              {isSuccess && (
-                <Typography sx={{ color: "green" }}>{successMsg}</Typography>
-              )}
+              type="submit"
+              sx={{ marginTop: "5vh" }}
+              variant="outlined"
+            >
+              {flashcardMsg}
+            </CssButton>
+            {isSuccess && (
+              <Typography sx={{ color: "green" }}>{successMsg}</Typography>
+            )}
           </Stack>
         </Box>
         <Divider />
-        <Grid container alignItems="center">
+        <Grid container alignItems="center" justifyContent="center">
           <Grid item sm={4}>
             <Stack className="stack" spacing={2}>
               <h2> Add Card to Set </h2>

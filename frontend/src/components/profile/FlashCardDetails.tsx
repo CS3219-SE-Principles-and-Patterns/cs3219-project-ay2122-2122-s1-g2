@@ -16,18 +16,33 @@ import CreateFlashCard from "./CreateFlashCard";
 const FlashCardDetails = () => {
   const history = useHistory();
   const [sort, setSort] = useState("Date added");
+  const [search, setSearch] = useState("");
+
+  const searchFlashcard = (e: any) => {
+    setSearch(e.target.value);
+    setShownFlashcards(
+      flashcards.filter((flashcard) =>
+        flashcard.title.toLowerCase().startsWith(e.target.value.toLowerCase())
+      )
+    );
+  };
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
+    setShownFlashcards(
+      shownFlashcards.sort((a, b) =>
+        a.title.toLowerCase() <= b.title.toLowerCase() ? -1 : 1
+      )
+    );
   };
+  const [shownFlashcards, setShownFlashcards] = useState<FlashCardSet[]>([]);
   const [flashcards, setFlashcards] = useState<FlashCardSet[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        console.log("hey");
         const cards = await FlashCardController.getAllFlashCards();
-        console.log(cards);
         setFlashcards(cards);
+        setShownFlashcards(cards);
       } catch {}
     };
     fetchFlashcards();
@@ -37,7 +52,7 @@ const FlashCardDetails = () => {
   const handleClick = (id: string) => {
     history.push(`/flashcard/${id}`);
   };
-  const flashcardsList = flashcards.map((flashcard) => {
+  const flashcardsList = shownFlashcards.map((flashcard) => {
     return (
       <Grid
         item
@@ -77,7 +92,11 @@ const FlashCardDetails = () => {
           </Select>
         </Grid>
         <Grid item>
-          <CssTextField label="Search"></CssTextField>
+          <CssTextField
+            label="Search"
+            value={search}
+            onChange={searchFlashcard}
+          ></CssTextField>
         </Grid>
       </Grid>
       <Grid
