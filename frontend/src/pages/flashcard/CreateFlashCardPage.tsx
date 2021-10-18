@@ -50,25 +50,18 @@ const CreateFlashCardPage = (props: any) => {
   const [cardIdx, setCardIdx] = useState<number>(-1);
   const [isEnglish, setIsEnglish] = useState(false);
   const successMsg = isEdit ? "Edited Flashcard!" : "Created Flashcard!";
-  //   "flashcard": {
-  //     "body": "Hi",
-  //     "altText: "Anneyong",
-  //     "difficulty": 3,
-  //     "language": "Korean",
-  //     "title": "Hello world!"
-  // }
 
   const onSubmit = async (data: any) => {
     setSuccess(false);
     try {
       if (isEdit) {
-        await FlashCardController.editFlashCard(data, id);
         // Updated code for edit below: (not tested if works)
-        // data.flashcards = currCards;
-        // await FlashCardController.editFlashCard2(data, id);
+        data.flashcards = currCards;
+        data._id = id;
+        await FlashCardController.editFlashCard(data);
       } else {
         data.flashcards = currCards;
-        await FlashCardController.createFlashCard2(data);
+        await FlashCardController.createFlashCard(data);
       }
       setSuccess(true);
     } catch (e: any) {
@@ -80,21 +73,13 @@ const CreateFlashCardPage = (props: any) => {
   useEffect(() => {
     const fetchFlashcard = async () => {
       try {
-        const flashcard: FlashCardSet = await FlashCardController.getFlashCard2(
-          id
-        );
-        // const flashcard = {
-        //   body: "Hi",
-        //   altText: "Anneyong",
-        //   difficulty: 3,
-        //   language: "Japanese",
-        //   title: "Hello world!",
-        // };
+        const flashcard: FlashCardSet = await FlashCardController.getFlashCard(id);
         setValue("difficulty", flashcard.difficulty);
         setValue("language", flashcard.language);
         setValue("title", flashcard.title);
         setValue("description", flashcard.description);
-        setValue("flashcards", flashcard.flashcards);
+        setCurrCards(flashcard.flashcards);
+        setCardIdx(flashcard.flashcards ? 0 : -1);
         setLoading(false);
       } catch (e) {
         // do nothing
@@ -194,6 +179,16 @@ const CreateFlashCardPage = (props: any) => {
                 )}
               />
             </FormControl>
+            <CssButton
+                type="submit"
+                sx={{ marginTop: "5vh" }}
+                variant="outlined"
+              >
+                {flashcardMsg}
+              </CssButton>
+              {isSuccess && (
+                <Typography sx={{ color: "green" }}>{successMsg}</Typography>
+              )}
           </Stack>
         </Box>
         <Divider />
@@ -241,28 +236,6 @@ const CreateFlashCardPage = (props: any) => {
               >
                 Add Flashcard
               </CssButton>
-              {console.log(currCards)}
-              {/* <ul>
-              {fields.map((item:any, index:number) => {
-                console.log(item);
-                return (
-                  <div>
-                    {item.body} : {item.altText} : {item.notes}
-                  </div>
-                );
-              })}
-            </ul> */}
-
-              <CssButton
-                type="submit"
-                sx={{ marginTop: "5vh" }}
-                variant="outlined"
-              >
-                {flashcardMsg}
-              </CssButton>
-              {isSuccess && (
-                <Typography sx={{ color: "green" }}>{successMsg}</Typography>
-              )}
             </Stack>
           </Grid>
           <Grid item sm={3} />

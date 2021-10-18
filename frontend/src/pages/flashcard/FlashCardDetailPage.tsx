@@ -6,7 +6,7 @@ import { Link, useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
-import { FlashCard, FlashCardSet, Card } from "../../domain/flashcard";
+import { FlashCardSet, Card } from "../../domain/flashcard";
 import "./FlashCardDetailPage.scss";
 import { CssButton } from "../../components/common/Components";
 
@@ -22,7 +22,7 @@ const FlashCardDetailPage = () => {
 
   useEffect(() => {
     const getFlashCard = async () => {
-      const flashCardSet = await FlashCardController.getFlashCard2(id);
+      const flashCardSet = await FlashCardController.getFlashCard(id);
       setFlashcard(flashCardSet);
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
@@ -43,17 +43,15 @@ const FlashCardDetailPage = () => {
     if (cardIdx > 0) setCardIdx(cardIdx-1);
   }
 
-  // const deleteFlashcard = async () => {
-  //   try {
-  //     await FlashCardController.deleteFlashCard(id);
-  //     setDelete(true);
-  //   } catch (e: any) {
-  //     // double check
-  //     setError(e.message);
-  //   }
-  // };
-
-  // return <div></div>
+  const deleteFlashcard = async () => {
+    try {
+      await FlashCardController.deleteFlashCard(id);
+      setDelete(true);
+    } catch (e: any) {
+      // double check
+      setError(e.message);
+    }
+  };
 
   return hasDelete ? (
     <Redirect to="/profile" />
@@ -96,9 +94,9 @@ const FlashCardDetailPage = () => {
                   Edit
                 </CssButton>
 
-                {/* <CssButton variant="outlined" onClick={deleteFlashcard}>
+                <CssButton variant="outlined" onClick={deleteFlashcard}>
                   Delete
-                </CssButton> */}
+                </CssButton>
                 {error && <Typography>{error}</Typography>}
               </Box>
               <Box className="notes-box">

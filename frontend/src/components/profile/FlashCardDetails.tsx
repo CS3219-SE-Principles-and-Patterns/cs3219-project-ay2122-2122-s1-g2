@@ -9,7 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { CssTextField, BoldTypography } from "../common/Components";
 import { FlashCardController } from "../../controller/FlashCardController";
-import { FlashCard, FlashCardSet } from "../../domain/flashcard";
+import { FlashCardSet } from "../../domain/flashcard";
 import { useHistory } from "react-router-dom";
 import CreateFlashCard from "./CreateFlashCard";
 
@@ -24,7 +24,9 @@ const FlashCardDetails = () => {
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        const cards = await FlashCardController.getAllFlashCards2();
+        console.log("hey");
+        const cards = await FlashCardController.getAllFlashCards();
+        console.log(cards);
         setFlashcards(cards);
       } catch {}
     };
