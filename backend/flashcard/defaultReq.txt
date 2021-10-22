@@ -1,0 +1,218 @@
+# To add default flashcards
+# 1. Go to flashcardTest.js and `console.log(generateToken("defaultJapanese"))` to get an accessToken
+# 2. Go to insomnia or postman and paste the following as request body to create the default flashcards
+
+# Vocab 1
+{
+	"title": "Vocabulary 1",
+	"difficulty": 1,
+	"language": "Japanese",
+	"description": "Japanese vocabulary words for lesson 1",
+	"flashcards": [
+		{
+			"body": "わたし",
+			"altText": "I",
+			"Notes": ""
+		},
+		{
+			"body": "わたしたち",
+			"altText": "We",
+			"Notes": ""
+		},
+		{
+			"body": "あなた",
+			"altText": "You",
+			"Notes": ""
+		},
+		{
+			"body": "あのかた",
+			"altText": "that person, he / she",
+			"Notes": ""
+		},
+		{
+			"body": "まなさん",
+			"altText": "Ladies and gentleman, all of you",
+			"Notes": ""
+		},
+		{
+			"body": "〜さん",
+			"altText": "You",
+			"Notes": ""
+		},
+		{
+			"body": "〜ちゃん",
+			"altText": "Child's suffix",
+			"Notes": "Often added to a child's name instead of 〜さん"
+		},
+		{
+			"body": "せんせい",
+			"altText": "Teacher, instructor",
+			"Notes": "Not used when referring to one's job"
+		},
+		{
+			"body": "きょうし",
+			"altText": "Teacher, instructor",
+			"Notes": "Used when referring to one's job"
+		},
+		{
+			"body": "がくせい",
+			"altText": "Student",
+			"Notes": ""
+		},
+		{
+			"body": "かいしゃいん",
+			"altText": "Company employee",
+			"Notes": ""
+		},
+		{
+			"body": "しゃいん",
+			"altText": "Employee of ~ Company",
+			"Notes": "Used with a company's name"
+		},
+		{
+			"body": "ぎんこういん",
+			"altText": "Bank employee",
+			"Notes": ""
+		},
+		{
+			"body": "いしゃ",
+			"altText": "Medical doctor",
+			"Notes": ""
+		},
+		{
+			"body": "けんきゅうしゃ",
+			"altText": "Researcher, scholar",
+			"Notes": ""
+		},
+		{
+			"body": "エンジニア",
+			"altText": "Engineer",
+			"Notes": ""
+		},
+		{
+			"body": "だいがく",
+			"altText": "University",
+			"Notes": ""
+		},
+		{
+			"body": "びょういん",
+			"altText": "Hospital",
+			"Notes": ""
+		},
+		{
+			"body": "でんき",
+			"altText": "Electicity, light",
+			"Notes": ""
+		},
+		{
+			"body": "ーさい",
+			"altText": "- years old",
+			"Notes": ""
+		}
+	]
+}
+
+# Vocab 2
+{
+	"title": "Vocabulary 2",
+	"difficulty": 1,
+	"language": "Japanese",
+	"description": "Japanese vocabulary words for lesson 2",
+	"flashcards": [
+		{
+			"body": "これ",
+			"altText": "This",
+			"Notes": "this thing here"
+		},
+		{
+			"body": "それ",
+			"altText": "That",
+			"Notes": "That thing near you"
+		},
+		{
+			"body": "あれ",
+			"altText": "That",
+			"Notes": "That thing over there"
+		},
+		{
+			"body": "この〜",
+			"altText": "this ~ here",
+			"Notes": ""
+		},
+		{
+			"body": "その〜",
+			"altText": "that ~ near you",
+			"Notes": ""
+		},
+		{
+			"body": "あの〜",
+			"altText": "that ~ over there",
+			"Notes": ""
+		},
+		{
+			"body": "ほん",
+			"altText": "Book",
+			"Notes": ""
+		},
+		{
+			"body": "じしょ",
+			"altText": "Dictionary",
+			"Notes": ""
+		},
+		{
+			"body": "ざっし",
+			"altText": "Magazine",
+			"Notes": ""
+		},
+		{
+			"body": "しんぶん",
+			"altText": "Newspaper",
+			"Notes": ""
+		},
+		{
+			"body": "ノート",
+			"altText": "Notebook",
+			"Notes": ""
+		},
+		{
+			"body": "てちょう",
+			"altText": "Pocket notebook",
+			"Notes": ""
+		},
+		{
+			"body": "めいし",
+			"altText": "Business Card",
+			"Notes": ""
+		},
+		{
+			"body": "カード",
+			"altText": "Card",
+			"Notes": ""
+		},
+		{
+			"body": "テレホンカード",
+			"altText": "Telephone card",
+			"Notes": ""
+		},
+		{
+			"body": "かぎ",
+			"altText": "Key",
+			"Notes": ""
+		},
+		{
+			"body": "とけい",
+			"altText": "Watch, Clock",
+			"Notes": ""
+		},
+		{
+			"body": "かさ",
+			"altText": "Umbrella",
+			"Notes": ""
+		},
+		{
+			"body": "かばん",
+			"altText": "Bag, briefcase",
+			"Notes": ""
+		}
+	]
+}
