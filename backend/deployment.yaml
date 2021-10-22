@@ -1,24 +1,3 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: flashcard
-# spec:
-#   selector:
-#     matchLabels:
-#       run: flashcard
-#   replicas: 2
-#   template:
-#     metadata:
-#       labels:
-#         run: flashcard
-#     spec:
-#       containers:
-#         - name: flashcard
-#           image: flashcard
-#           imagePullPolicy: Never
-#           ports:
-#             - containerPort: 6000
-# ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
