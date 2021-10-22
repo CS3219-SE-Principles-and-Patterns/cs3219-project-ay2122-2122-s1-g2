@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login
+spec:
+  selector:
+    matchLabels:
+      run: login
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: login
+    spec:
+      containers:
+        - name: login
+          image: login
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-service
+  labels:
+    run: login
+spec:
+  ports:
+    - port: 90
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    run: login
+---
+
