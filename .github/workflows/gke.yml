@@ -34,5 +34,6 @@ jobs:
       - name: Deploy
         run: |-
           kubectl apply -f ./backend/deploy-login.yaml
+          kubectl patch deployment.v1.apps/login -p '{"spec":{"progressDeadlineSeconds":400}}'
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
