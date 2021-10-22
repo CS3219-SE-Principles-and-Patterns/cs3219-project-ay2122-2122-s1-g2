@@ -1,6 +1,6 @@
 import { getAxiosInstance as axios } from "../utils/auth/auth";
 
-const FLASHCARD_PATH = "http://localhost:1000/api/flashcard";
+const FLASHCARD_PATH = "http://localhost:6000/api/flashcard";
 
 export class FlashCardInfra {
   public static getFlashCard = (id: string): Promise<any> => {
