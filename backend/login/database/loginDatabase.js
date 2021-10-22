@@ -100,17 +100,18 @@ const DatabaseManager = {
     });
   },
   getAll: async (req, res) => {
-    try {
-      const profiles = await Profile.find();
-      res.json({
-        message: "Success",
-        data: profiles,
-      });
-    } catch (err) {
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
+    res.send("success");
+    // try {
+    //   const profiles = await Profile.find();
+    //   res.json({
+    //     message: "Success",
+    //     data: profiles,
+    //   });
+    // } catch (err) {
+    //   res.status(400).json({
+    //     error: err.toString(),
+    //   });
+    // }
   },
   get: async (req, res) => {
     try {

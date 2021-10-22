@@ -18,7 +18,7 @@ const flashcardRoutes = require("./routes/flashcardRoutes.js");
 
 app.use("/api/flashcard", flashcardRoutes);
 
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 6000;
 app.listen(port, () => {
   console.log(`Server up and running on port ${port}!`);
 });
