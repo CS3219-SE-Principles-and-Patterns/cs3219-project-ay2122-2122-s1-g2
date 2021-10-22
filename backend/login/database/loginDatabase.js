@@ -77,8 +77,11 @@ const DatabaseManager = {
       return res.status(401).json({ error: "Could not find refreshToken" });
     const token = await Token.findOne({ token: refreshToken });
     if (!token) return res.status(403);
+
     jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
-      if (err) return res.sendStatus(403);
+      if (err) return res.status(403).json({
+        error: err.toString(),
+      });
       const newAccessToken = getJwtAccessToken({
         username: user.username,
         password: user.password,
@@ -91,12 +94,12 @@ const DatabaseManager = {
         token: newRefreshToken,
       });
       newTokenDB.save();
-      res.json({
+      Token.deleteOne({ token: refreshToken });
+      res.status(400).json({
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
         expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
       });
-      Token.deleteOne({ token: refreshToken });
     });
   },
   getAll: async (req, res) => {

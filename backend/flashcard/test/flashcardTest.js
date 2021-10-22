@@ -14,59 +14,85 @@ const generateToken = (username) => {
     }, ACCESS_SECRET);  
 }
 
-const flashcard = {
-    flashcard: {
-        body: "Hi",
-        altText: "Anneyong",
-        difficulty: 3,
-        language: "Korean",
-        title: "Hello world!",
-        notes: "I am anneyong howseyong your day"
-    }
-}
+const testUsername = "mastatesta123";
+const accessToken = generateToken(testUsername);
 
-const flashcards = 
-{
+const flashcard = {
+    username: testUsername,
+    title: "randomtitle",
+    difficulty: 1,
+    language: "Japanese",
+    description: "what in the world",
     flashcards: [
         {
-            body: "Hi",
-            title: "ML",
-            language: "tagalog",
-            altText: "yolo",
-            difficulty: 5,
-            notes: "Hi there I am playing ML" 
+            body: "card1",
+            alt: "altText1",
+            notes: "notes1"
+        },
+        {
+            body: "card2",
+            alt: "altText2",
+            notes: "notes2"
         }
     ]
 }
 
-const testUsername = "mastatesta123";
-const accessToken = generateToken(testUsername);
-
 describe('Testing Flashcard Routes', () => {
+    var id;
     context('POST: /api/flashcard', () => {
 		it('Able to create flashcard without error', async () => {
 			const res = await chai.request(app)
 				.post(`/api/flashcard`)
                 .set("Authorization", `Bearer ${accessToken}`)
-				.send(flashcards);
+				.send(flashcard);
+
+            id = res.body.data._id;
 			assert.ifError(res.error);
 		});
 	});
 
     context('PUT: /api/flashcard', () => {
 		it('Able to update flashcard without error', async () => {
+            const updatedCard = {
+                _id: id,
+                title: "newTitle",
+                flashcards: [
+                    {
+                        body: "card1",
+                        alt: "altText1",
+                        notes: "notes1"
+                    },
+                    {
+                        body: "card2",
+                        alt: "altText2",
+                        notes: "notes2"
+                    },
+                    {
+                        body: "card3",
+                        alt: "altText3",
+                        notes: "notes3"
+                    }
+                ]
+            }
 			const res = await chai.request(app)
 				.put(`/api/flashcard`)
                 .set("Authorization", `Bearer ${accessToken}`)
-				.send(flashcards);
+				.send(updatedCard);
+
+            if (res.body.data.title != "newTitle") {
+                res.error = new Error("Failed to update flashcard title");
+            }
 
             res.body.data.flashcards.should.be.a("array");
+            if (res.body.data.flashcards.length != 3) {
+                res.error = new Error("Failed to update flashcard cards");
+            }
 			assert.ifError(res.error);
 		});
 	});
 
     context('GET: /api/flashcard', () => {
-		it('Able to get flashcard without error', async () => {
+		it('Able to get all flashcards without error', async () => {
 			const res = await chai.request(app)
 				.get(`/api/flashcard`)
                 .set("Authorization", `Bearer ${accessToken}`);
@@ -75,65 +101,23 @@ describe('Testing Flashcard Routes', () => {
 			assert.ifError(res.error);
 		});
 	});
+
+    context('GET : /api/flashcard/:id', () => {
+        it('Able to get single flashcard without error', async () => {
+			const res = await chai.request(app)
+				.get(`/api/flashcard/${id}`)
+                .set("Authorization", `Bearer ${accessToken}`);
+			assert.ifError(res.error);
+		});
+    })
+
+    context('DELETE : /api/flashcard/:id', () => {
+        it('Able to delete single flashcard without error', async () => {
+			const res = await chai.request(app)
+				.delete(`/api/flashcard/${id}`)
+                .set("Authorization", `Bearer ${accessToken}`);
+
+			assert.ifError(res.error);
+		});
+    })
 });
-
-// describe("POST :api/flashcard", () => {
-//     it ("Posts a flashcard into user's database", done => {
-//         chai.request(app)
-//             .post(`/api/flashcard`)
-//             .set({'Authorization': `Bearer ${generateToken("Ambrose")}`})
-//             .send(flashcards)
-//             .end((err, res) => {
-//                 res.body.should.be.a('object');
-//                 // console.log(res.body)
-//                 done();
-//             })
-//     })
-// })
-
-
-// describe('PUT: /api/flashcard', () => {
-//     beforeEach((done) => {
-//         // just one element in database
-//         chai.request(app)
-//             .post('/api/flashcard/')
-//             .set({'Authorization': `Bearer ${generateToken("Anikesh")}`})
-//             .send(flashcards)
-//             .end((err, res) => {
-//                 done();
-//             });
-//     });
-//     it("Puts a flashcard into user's database", done => {
-//         chai.request(app)
-//             .put(`/api/flashcard`)
-//             .set({'Authorization': `Bearer ${generateToken("Anikesh")}`})
-//             .send(flashcard)
-//             .end((err, res) => {
-//                 res.body.data.flashcards.should.be.a("array")
-//                 done();
-//             })
-//     })
-// })
-
-// describe('GET: /api/flashcard', () => {
-//     beforeEach((done) => {
-//         chai.request(app)
-//             .post('/api/flashcard/')
-//             .set({'Authorization': `Bearer ${generateToken("Kendrew")}`})
-//             .send(flashcards)
-//             .end((err, res) => {
-//                 done();
-//             });
-//     });
-
-//     it("should get the application in the database", (done) => {
-//         chai.request(app)
-//             .get('/api/flashcard/')
-//             .set({'Authorization': `Bearer ${generateToken("Kendrew")}`})
-//             .end((err, res) => {
-//                 console.log(res.body.data);
-//                 res.body.data.should.be.a('array');
-//                 done();
-//             })
-//     })
-// })
