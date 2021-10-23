@@ -33,7 +33,8 @@ jobs:
       # Build image
       - name: Build
         run: |-
-          docker build ./backend/login
+          docker build -t login ./backend/login
+
       # Deploy sample image to the GKE cluster
       - name: Deploy
         run: |-
