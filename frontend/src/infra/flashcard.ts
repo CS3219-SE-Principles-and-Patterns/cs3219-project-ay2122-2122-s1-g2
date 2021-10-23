@@ -1,6 +1,6 @@
 import { getAxiosInstance as axios } from "../utils/auth/auth";
 
-const FLASHCARD_PATH = "http://localhost:6000/api/flashcard";
+const FLASHCARD_PATH = "http://localhost:3333/api/flashcard";
 
 export class FlashCardInfra {
   public static getFlashCard = (id: string): Promise<any> => {
@@ -10,6 +10,11 @@ export class FlashCardInfra {
   public static getAllFlashCards = (): Promise<any> => {
     return axios().get(`${FLASHCARD_PATH}`);
   };
+
+  public static getDefaultFlashcards = (language: string): Promise<any> => {
+    return axios().get(`${FLASHCARD_PATH}/default/${language}`);
+  };
+
   public static deleteFlashCard = (id: string): Promise<any> => {
     return axios().delete(`${FLASHCARD_PATH}/${id}`);
   };

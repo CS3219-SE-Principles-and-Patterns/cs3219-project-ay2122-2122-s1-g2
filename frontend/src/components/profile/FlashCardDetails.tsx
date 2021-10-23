@@ -9,6 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { CssTextField, BoldTypography } from "../common/Components";
 import { FlashCardController } from "../../controller/FlashCardController";
+import { ProfileController } from "../../controller/ProfileController";
 import { FlashCardSet } from "../../domain/flashcard";
 import { useHistory } from "react-router-dom";
 import CreateFlashCard from "./CreateFlashCard";
@@ -40,7 +41,18 @@ const FlashCardDetails = () => {
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        const cards = await FlashCardController.getAllFlashCards();
+        var userCards = await FlashCardController.getAllFlashCards();
+
+        var cards: FlashCardSet[] = [];
+        const profile = await ProfileController.getProfile();
+        const languages = profile.languages;
+        // Somehow foreach doesn't work here
+        for (var i = 0; i < languages.length; i++) {
+          const defaultCard = await FlashCardController.getDefaultFlashCards(languages[i]);
+          cards = cards.concat(defaultCard);
+        }
+        cards = cards.concat(userCards);
+
         setFlashcards(cards);
         setShownFlashcards(cards);
       } catch {}

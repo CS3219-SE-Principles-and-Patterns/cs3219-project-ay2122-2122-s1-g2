@@ -1,5 +1,5 @@
 # To add default flashcards
-# 1. Go to flashcardTest.js and `console.log(generateToken("defaultJapanese"))` to get an accessToken
+# 1. Go to flashcardTest.js and `console.log(generateToken("Japanese"))` to get an accessToken
 # 2. Go to insomnia or postman and paste the following as request body to create the default flashcards
 
 # Vocab 1
