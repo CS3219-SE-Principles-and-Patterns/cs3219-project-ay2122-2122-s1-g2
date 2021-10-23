@@ -11,7 +11,7 @@ env:
   GKE_CLUSTER: language-cluster # TODO: update to cluster name
   GKE_ZONE: asia-southeast1 # TODO: update to cluster zone
   DEPLOYMENT_NAME: login # TODO: update deployment name if changed in deployment.yaml
-
+  IMAGE: login
 jobs:
   setup-and-deploy:
     name: Setup and Deploy
