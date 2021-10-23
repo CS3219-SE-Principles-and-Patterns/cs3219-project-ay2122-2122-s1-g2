@@ -1,0 +1,5 @@
+apiVersion: kustomize.config.k9s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./backend/deploy-login.yaml

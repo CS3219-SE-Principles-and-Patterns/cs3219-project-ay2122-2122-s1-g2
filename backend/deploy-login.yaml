@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: login
-          image: login
-          imagePullPolicy: Never
+          image: gcr.io/$PROJECT_ID/login
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
 ---
