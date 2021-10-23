@@ -59,5 +59,6 @@ jobs:
           docker images
           kubectl apply -f ./backend/deploy-login.yaml
           docker images
+          kubectl logs deployments/login
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
