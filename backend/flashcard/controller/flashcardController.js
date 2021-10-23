@@ -63,6 +63,20 @@ const FlashcardController = {
       });
     }
   },
+  getDefault: async (req, res) => {
+    try {
+      const defaultSets = await Flashcard.find({ username: req.params.language });
+      // Get all sets by the user
+      res.json({
+        message: "Success",
+        data: defaultSets,
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err.toString(),
+      });
+    }
+  },
   delete: async (req, res) => {
     const user = req.user;
     if (!user)

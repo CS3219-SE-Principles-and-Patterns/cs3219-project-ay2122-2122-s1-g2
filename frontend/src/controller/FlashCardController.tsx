@@ -13,6 +13,12 @@ export class FlashCardController {
     return flashcards.map((flashcard) => FlashCardSet.create(flashcard));
   };
 
+  public static getDefaultFlashCards = async (language: string): Promise<FlashCardSet[]> => {
+    const res = await FlashCardInfra.getDefaultFlashcards(language);
+    const flashcards: [] = res.data.data;
+    return flashcards.map((flashcard) => FlashCardSet.create(flashcard));
+  };
+
   public static deleteFlashCard = async (id: string): Promise<FlashCardSet> => {
     return await FlashCardInfra.deleteFlashCard(id);
   };

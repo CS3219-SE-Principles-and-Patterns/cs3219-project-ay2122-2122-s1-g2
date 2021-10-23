@@ -13,6 +13,9 @@ router
 router
   .route("/:id")
   .get(flashcardController.authTokenMW, flashcardController.get)
-  .delete(flashcardController.authTokenMW, flashcardController.delete);
+  .delete(flashcardController.authTokenMW, flashcardController.delete)
+  .get(flashcardController.getDefault);
+
+router.route("/default/:language").get(flashcardController.getDefault);
 
 module.exports = router;
