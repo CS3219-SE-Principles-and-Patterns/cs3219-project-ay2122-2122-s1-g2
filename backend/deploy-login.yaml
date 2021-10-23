@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: login
-          image: login
+          image: login:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
