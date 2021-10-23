@@ -77,6 +77,6 @@ jobs:
       #     kubectl get services -o wide
       - name: Deploy
         run: |-
-          ./kustomize edit set image PROJECT/IMAGE=$IMAGE_WITH_TAG
+          ./kustomize edit set image PROJECT/IMAGE=$IMAGE:$GITHUB_SHA
           kubectl apply -k .
           kubectl rollout status deployment $IMAGE
