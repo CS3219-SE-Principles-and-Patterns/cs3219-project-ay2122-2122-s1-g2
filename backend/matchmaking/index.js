@@ -35,6 +35,8 @@ io.on('connection', (socket) => {
 	let score = 0 
 	let result = 0
 	let Player = {}
+	let finishedPlayers = 0
+	let room = ""
 	let time = new Date()
 	const gameDelay = async () => {
 		await delay(25); // choose a timeout of 60 means must choose diff of like 59000
@@ -50,14 +52,11 @@ io.on('connection', (socket) => {
 		}
 	};
 	socket.on('Match Player', async (player) => {
-		/* player from frontend will look like 
-        {
-            username: "Ambrose",
-            language: "Korean"
-        }
-        */
 	    player.rating = await DatabaseManager.getRating(player);
-		var isMatched = await playerMatcher(socket, player, 10)
+		var matchInfo = await playerMatcher(socket, player, 10)
+		var isMatched = matchInfo.matched;
+		room = matchInfo.room;
+		socket.join()
 		if (!isMatched) {
 			socket.emit("no match found");
 			deletePlayer(player.username);
@@ -65,7 +64,7 @@ io.on('connection', (socket) => {
 			socket.emit("match found")
 			await delay(10)
 			Player = player;
-			io.to(player.username).emit("flashcard", questions[0])
+			io.to(room).emit("flashcard", questions[0])
 			time = new Date()
 			gameDelay();
 		}
@@ -77,17 +76,26 @@ io.on('connection', (socket) => {
 		time = new Date();
 		var increment = 0
 		if (data.gameRes) increment = 1
-		score += (increment / 1200) * (60000 - data.timing); // the max a player can increase in a game is 50 in 1 round
+		score += (increment * (60000 - data.timing))/1200; // the max a player can increase in a game is 50 in 1 round
 		result += increment;
 		if (rounds == 5) {
-			socket.emit("End game", {result: result, score: score});
+			console.log(score, result)
+			socket.emit("Player finished", {result: result, score: score, room: room});
 			await DatabaseManager.put(Player);
 		} else {
 			socket.emit("flashcard", questions[rounds]);
 			gameDelay();
 		}
 	})
-
+	socket.on("Player finished", (data) => {
+		finishedPlayers++;
+		if (finishedPlayers == 3){
+			io.to(room).emit("End game")
+		} else {
+			if (data == null) io.to(room).emit("Player finished")
+		}
+	})
+	
 	socket.on("disconnect", () => {
 		console.log("Some player disconnected");
 	})

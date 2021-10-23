@@ -8,5 +8,6 @@ export enum gameState {
   FINDING_OPPPONENT = 1,
   OPPONENT_FOUND = 2,
   IN_PROGRESS = 3,
-  FINISH = 4,
+  WAITING_FOR_FINISH = 4,
+  FINISH = 5
 }
