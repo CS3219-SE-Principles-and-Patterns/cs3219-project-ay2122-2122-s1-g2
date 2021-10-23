@@ -45,8 +45,6 @@ jobs:
           cluster_name: language-cluster
           location: asia-southeast1
           credentials: ${{ secrets.GKE_SA_KEY }}
-        run: |-
-          gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
       # Build the Docker image
       - name: Build
