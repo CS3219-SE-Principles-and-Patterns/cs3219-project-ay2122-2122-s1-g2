@@ -15,8 +15,12 @@ import { useHistory } from "react-router-dom";
 import CreateFlashCard from "./CreateFlashCard";
 
 const FlashCardDetails = () => {
+  enum SortEnum {
+    DATE = "date",
+    ALPHABETICAL = "alphabetical",
+  }
   const history = useHistory();
-  const [sort, setSort] = useState("Date added");
+  const [sort, setSort] = useState<string>(SortEnum.DATE);
   const [search, setSearch] = useState("");
 
   const searchFlashcard = (e: any) => {
@@ -29,11 +33,18 @@ const FlashCardDetails = () => {
   };
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
-    setShownFlashcards(
-      shownFlashcards.sort((a, b) =>
-        a.title.toLowerCase() <= b.title.toLowerCase() ? -1 : 1
-      )
-    );
+    console.log(event.target.value);
+    if (event.target.value == SortEnum.ALPHABETICAL) {
+      setShownFlashcards(
+        shownFlashcards.sort((a, b) =>
+          a.title.toLowerCase() <= b.title.toLowerCase() ? -1 : 1
+        )
+      );
+    } else {
+      setShownFlashcards(
+        shownFlashcards.sort((a, b) => (a.dateCreated > b.dateCreated ? -1 : 1))
+      );
+    }
   };
   const [shownFlashcards, setShownFlashcards] = useState<FlashCardSet[]>([]);
   const [flashcards, setFlashcards] = useState<FlashCardSet[]>([]);
@@ -48,13 +59,18 @@ const FlashCardDetails = () => {
         const languages = profile.languages;
         // Somehow foreach doesn't work here
         for (var i = 0; i < languages.length; i++) {
-          const defaultCard = await FlashCardController.getDefaultFlashCards(languages[i]);
+          const defaultCard = await FlashCardController.getDefaultFlashCards(
+            languages[i]
+          );
           cards = cards.concat(defaultCard);
         }
         cards = cards.concat(userCards);
 
         setFlashcards(cards);
-        setShownFlashcards(cards);
+
+        setShownFlashcards(
+          cards.sort((a, b) => (a.dateCreated > b.dateCreated ? -1 : 1))
+        );
       } catch {}
     };
     fetchFlashcards();
@@ -99,8 +115,8 @@ const FlashCardDetails = () => {
       <Grid container justifyContent={"space-between"}>
         <Grid item>
           <Select value={sort} onChange={handleChange}>
-            <MenuItem value={"Date added"}>Date added</MenuItem>
-            <MenuItem value={"Alphabetical"}>Alphabetical</MenuItem>
+            <MenuItem value={SortEnum.DATE}>Date added</MenuItem>
+            <MenuItem value={SortEnum.ALPHABETICAL}>Alphabetical</MenuItem>
           </Select>
         </Grid>
         <Grid item>

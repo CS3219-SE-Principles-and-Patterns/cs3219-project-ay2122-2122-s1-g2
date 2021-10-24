@@ -1,7 +1,13 @@
-import { Grid, Typography, Switch, LinearProgress, IconButton } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Switch,
+  LinearProgress,
+  IconButton,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link, useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -33,15 +39,15 @@ const FlashCardDetailPage = () => {
 
   const handleLangChange = () => {
     setIsEnglish(!isEnglish);
-  }
+  };
 
   const increaseCardIdx = () => {
-    if (cardIdx < cardSize-1) setCardIdx(cardIdx+1);
-  }
+    if (cardIdx < cardSize - 1) setCardIdx(cardIdx + 1);
+  };
 
   const decreaseCardIdx = () => {
-    if (cardIdx > 0) setCardIdx(cardIdx-1);
-  }
+    if (cardIdx > 0) setCardIdx(cardIdx - 1);
+  };
 
   const deleteFlashcard = async () => {
     try {
@@ -113,41 +119,56 @@ const FlashCardDetailPage = () => {
           <Grid item xs={12} sm={8} id="detail-grid">
             <Box className="text-div">
               <Grid item xs={12}>
-              <Typography className="header">
-                Text in {isEnglish ? "English" : flashcard.language} 
-                <Switch checked={isEnglish} onChange={handleLangChange} defaultChecked />
-              </Typography>
+                <Typography className="header">
+                  Text in {isEnglish ? "English" : flashcard.language}
+                  <Switch
+                    checked={isEnglish}
+                    onChange={handleLangChange}
+                    defaultChecked
+                  />
+                </Typography>
               </Grid>
               <Grid item xs={12}>
-              <Box className="text-box">
-                <Typography className="flashcard-text">
-                  {isEnglish ? 
-                    (cards ? cards[cardIdx].altText : "") : 
-                    (cards ? cards[cardIdx].body : "")
-                    }
-                </Typography>
-              </Box>
+                <Box className="text-box">
+                  <Typography className="flashcard-text">
+                    {isEnglish
+                      ? cards
+                        ? cards[cardIdx].body
+                        : ""
+                      : cards
+                      ? cards[cardIdx].altText
+                      : ""}
+                  </Typography>
+                </Box>
               </Grid>
               <Grid container>
                 <Grid item xs={6} textAlign="left">
-                  <IconButton color="primary" aria-label="Back" onClick={decreaseCardIdx}>
+                  <IconButton
+                    color="primary"
+                    aria-label="Back"
+                    onClick={decreaseCardIdx}
+                  >
                     <ArrowBackIcon />
                   </IconButton>
                 </Grid>
                 <Grid item xs={6} textAlign="right">
-                  <IconButton color="primary" aria-label="Forward" onClick={increaseCardIdx}>
+                  <IconButton
+                    color="primary"
+                    aria-label="Forward"
+                    onClick={increaseCardIdx}
+                  >
                     <ArrowForwardIcon />
                   </IconButton>
                 </Grid>
-            </Grid>
+              </Grid>
 
-            <Typography className="header">Notes: </Typography>
-            <Typography
-              variant="body1"
-              sx={{ fontSize: { xs: "3.8vw", sm: "15px" } }}
-            >
-              {cards ? cards[cardIdx].notes : ""}
-            </Typography>
+              <Typography className="header">Notes: </Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontSize: { xs: "3.8vw", sm: "15px" } }}
+              >
+                {cards ? cards[cardIdx].notes : ""}
+              </Typography>
             </Box>
           </Grid>
         </>
