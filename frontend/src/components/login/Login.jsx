@@ -9,6 +9,7 @@ import { setTokens } from "../../utils/auth/auth";
 import { FormControl, Grid, Typography } from "@mui/material";
 import { CssButton, CssTextField } from "../common/Components";
 import { Box } from "@mui/system";
+import { LoginController } from "../../controller/LoginController";
 
 const Login = ({ setLandingStatus, setIsAuthenticated }) => {
   const {
@@ -37,7 +38,7 @@ const Login = ({ setLandingStatus, setIsAuthenticated }) => {
     }
   };
   const onSubmit = async (data) => {
-    let response = await loginUser(data).catch((e) => {
+    let response = await LoginController.loginUser(data).catch((e) => {
       setError("password", { message: e.response.data.error });
     });
     if (response) {
