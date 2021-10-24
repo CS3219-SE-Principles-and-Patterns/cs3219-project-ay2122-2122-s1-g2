@@ -78,7 +78,7 @@ jobs:
       #     kubectl get services -o wide
       - name: Deploy
         run: |-
-          ./kustomize edit set image gcr.io/$PROJECT_ID/$IMAGE
+          ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
           kubectl apply -k .
           kubectl logs deployment/$IMAGE
           kubectl rollout status deployment $IMAGE
