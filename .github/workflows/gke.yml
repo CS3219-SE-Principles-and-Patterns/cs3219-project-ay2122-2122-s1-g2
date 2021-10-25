@@ -77,5 +77,5 @@ jobs:
       - name: Deploy
         run: |-
           kubectl apply -k .
-          kubectl logs $IMAGE
-          kubectl rollout status deployment $IMAGE
+      #    kubectl logs $IMAGE
+      #    kubectl rollout status deployment $IMAGE
