@@ -15,7 +15,7 @@ spec:
       containers:
         - name: login
           image: gcr.io/${{ secrets.GKE_PROJECT }}/login
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
 ---
