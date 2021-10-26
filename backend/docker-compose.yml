@@ -3,7 +3,7 @@ services:
     build: flashcard/
     image: flashcard
     ports:
-      - "1000:1000"
+      - "3333:3333"
   game:
     build: game/
     image: game
