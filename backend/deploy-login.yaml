@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: login
-          image: gcr.io/metal-center-329613/login
+          image: login
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
