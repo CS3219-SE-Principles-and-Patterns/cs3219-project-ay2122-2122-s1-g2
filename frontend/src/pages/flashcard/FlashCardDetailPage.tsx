@@ -2,7 +2,7 @@ import { Grid, Typography, Switch, LinearProgress, IconButton } from "@mui/mater
 import { Box } from "@mui/system";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Link, useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
@@ -28,7 +28,6 @@ const FlashCardDetailPage = () => {
       setCardSize(flashCardSet.flashcards.length);
     };
     getFlashCard();
-    console.log(flashcard);
   }, [id]);
 
   const handleLangChange = () => {

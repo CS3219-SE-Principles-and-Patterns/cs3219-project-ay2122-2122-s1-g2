@@ -1,14 +1,5 @@
-import {GameUser, GameUserProps} from "../domain/gameUser";
+import { GameUser } from "../domain/gameUser";
 import { GameInfra } from "../infra/gameUser";
-
-// export interface GameResultProps {
-//     language: string,
-//     result: boolean
-// }
-// export interface RatingProps {
-//     languages: string[],
-//     ratings: number[]
-// }
 
 export class GameController {
     public static getUser = async () => {

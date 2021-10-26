@@ -1,18 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Box } from "@mui/system";
-import { Grid } from "@mui/material";
-
-
-
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 
 import { GameController } from "../../controller/GameController";
 import { GameUser } from "../../domain/gameUser";
@@ -25,6 +13,33 @@ const columns: any[] = [
 const LeaderBoardPage = () => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(25);
+	const [rating, setRating] = useState<any>(1000);
+	const [users, setUsers] = useState<GameUser[]>([]);
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const users = await GameController.getAllUsers();
+				users.sort((a: any, b:any) => (getUserMaxRating(b) - getUserMaxRating(a)));
+				const currUser = await GameController.getUser();
+
+				setUsers(users);
+				setRating(getUserMaxRating(currUser)); // Depends on which language also
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		fetchUser();
+	}, []);
+
+	const getUserMaxRating = (user: any) => {
+		const ratings = user.ratings;
+		var maxi = -1;
+		ratings.forEach((language: any) => {
+			maxi = Math.max(maxi, language.rating);
+		})
+		return maxi;
+	}
 
 	const handleChangePage = (event: any, newPage: any) => {
 		setPage(newPage);
@@ -34,26 +49,6 @@ const LeaderBoardPage = () => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
 	};
-
-	////////////////
-
-	const [rating, setRating] = useState<number>(1000);
-	const [users, setUsers] = useState<GameUser[]>([]);
-
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const users = await GameController.getAllUsers();
-				const currUser = await GameController.getUser();
-
-				setUsers(users);
-				setRating(currUser.ratings[0].rating[0]); // Depends on which language also
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		fetchUser();
-	});
 
 	const LeaderBoardTable = () => {
 		return (
@@ -66,7 +61,12 @@ const LeaderBoardPage = () => {
 						<TableCell
 						key={column.id}
 						align={column.align}
-						style={{ minWidth: column.minWidth }}
+						style={{ 
+							minWidth: column.minWidth,
+							color: "white",
+							backgroundColor: "orange",
+							fontWeight: "bold"
+						}}
 						>
 						{column.label}
 						</TableCell>
@@ -80,9 +80,12 @@ const LeaderBoardPage = () => {
 						return (
 						<TableRow hover role="checkbox" tabIndex={-1} key={row.username}>
 							{columns.map((column) => {
-							const value: any = column.id == "ratings" ? row.ratings[0].rating[0] : row.username;
+							const value: any = column.id === "ratings" ? getUserMaxRating(row) : row.username;
 							return (
-								<TableCell key={column.id} align={column.align}>
+								<TableCell 
+									key={column.id} 
+									align={column.align}
+								>
 								{value}
 								</TableCell>
 							);
@@ -109,8 +112,7 @@ const LeaderBoardPage = () => {
 	return (
 		<Grid container textAlign="center">
 			<Grid item xs={12}><h1>Leaderboards</h1></Grid>
-			<Grid item xs={12} textAlign="left"><h4>Rating: </h4></Grid>
-			<Grid item xs={12} textAlign="left"><h4>Rank: </h4></Grid>
+			<Grid item xs={12} textAlign="left"><h4>Rating: {rating}</h4></Grid>
 			<Grid item xs={12}>
 				<LeaderBoardTable />
 			</Grid>

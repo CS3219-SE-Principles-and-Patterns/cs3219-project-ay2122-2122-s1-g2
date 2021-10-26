@@ -4,15 +4,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Button,
   Typography,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { gameState } from "../../utils/constants/enums";
-import { CssButton } from "../../components/common/Components";
 import GameDefaultPage from "./GameDefaultPage";
 import MatchmakingPage from "./MatchmakingPage";
-import GameUserRecord from "./GameUserRecord";
 import { Profile } from "../../domain/profile";
 import GameEndPage from "./GameEndPage";
 import { ProfileController } from "../../controller/ProfileController";
@@ -43,7 +40,6 @@ const GameMainPage = (props: any) => {
     });
   };
   const [languages, setLanguages] = useState<string[]>([]);
-  const [hasProfile, setHasProfile] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>("");
   const [status, setStatus] = useState<gameState>(gameState.DEFAULT);
   const [username, setUsername] = useState<string>("");
@@ -56,7 +52,6 @@ const GameMainPage = (props: any) => {
       try {
         const profile: Profile = await ProfileController.getProfile();
         setLanguages(profile.languages);
-        setHasProfile(true);
         setLanguage(profile.languages[0]);
         setUsername(profile.username);
       } catch (e) {

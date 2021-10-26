@@ -38,7 +38,6 @@ const CreateFlashCardPage = (props: any) => {
     control,
     setValue,
     getValues,
-    formState: { errors },
   } = useForm({});
 
   const isEdit = props.isEdit;

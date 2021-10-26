@@ -1,4 +1,4 @@
-import { Card, CardProps, FlashCardSet, FlashCardSetProps } from "../domain/flashcard";
+import { FlashCardSet, FlashCardSetProps } from "../domain/flashcard";
 import { FlashCardInfra } from "../infra/flashcard";
 
 export class FlashCardController {

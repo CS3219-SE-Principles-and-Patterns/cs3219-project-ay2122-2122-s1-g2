@@ -38,7 +38,7 @@ const App = () => {
       removeTokens();
       setIsAuthenticated(false);
     }
-  });
+  }, []);
 
   return (
     <Router>
