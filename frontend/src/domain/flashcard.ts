@@ -27,6 +27,7 @@ export interface FlashCardSetProps {
   language: string;
   description: string;
   flashcards: Array<Card>;
+  dateCreated: Date;
 }
 
 export class FlashCardSet implements FlashCardSetProps {
@@ -36,6 +37,7 @@ export class FlashCardSet implements FlashCardSetProps {
   language: string;
   description: string;
   flashcards: Array<Card>;
+  dateCreated: Date;
 
   private constructor(props: FlashCardSetProps) {
     this._id = props._id;
@@ -44,6 +46,7 @@ export class FlashCardSet implements FlashCardSetProps {
     this.language = props.language;
     this.description = props.description;
     this.flashcards = props.flashcards;
+    this.dateCreated = props.dateCreated;
   }
   public static create(props: FlashCardSetProps): FlashCardSet {
     // no validation for flashcard
