@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - gke
+      - gke2
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
