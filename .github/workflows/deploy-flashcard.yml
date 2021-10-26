@@ -69,6 +69,7 @@ jobs:
 
       - name: Deploy
         run: |-
+          ls
           ./backend/$IMAGE/kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
           kubectl apply -k ./backend/$IMAGE
           kubectl logs deployment/$IMAGE
