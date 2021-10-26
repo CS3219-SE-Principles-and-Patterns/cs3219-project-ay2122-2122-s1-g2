@@ -65,11 +65,11 @@ jobs:
       - name: Set up Kustomize
         run: |-
           curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-          chmod u+x ./kustomize
+          chmod u+x ./backend/$IMAGE/kustomize
 
       - name: Deploy
         run: |-
-          ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
+          ./backend/$IMAGE/kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
           kubectl apply -k ./backend/$IMAGE
           kubectl logs deployment/$IMAGE
           kubectl rollout status deployment $IMAGE
