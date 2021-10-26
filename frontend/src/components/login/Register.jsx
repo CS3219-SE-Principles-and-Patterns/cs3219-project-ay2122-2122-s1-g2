@@ -6,6 +6,7 @@ import CreateProfilePage from "../../pages/profile/CreateProfilePage";
 import { FormControl, Grid, Typography } from "@mui/material";
 import { CssButton, CssTextField } from "../common/Components";
 import { Box } from "@mui/system";
+import { LoginController } from "../../controller/LoginController";
 
 const Register = ({ setLandingStatus }) => {
   const [registered, setRegistered] = useState(false);
@@ -22,7 +23,7 @@ const Register = ({ setLandingStatus }) => {
   const password = useRef({});
   password.current = watch("password", "");
   const onSubmit = async (data) => {
-    const response = await registerUser(data).catch((e) => {
+    const response = await LoginController.registerUser(data).catch((e) => {
       setError("username", { message: e.response.data.error });
     });
 
