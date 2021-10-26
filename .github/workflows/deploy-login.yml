@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build and Deploy to GKE
+name: Deploy Login Microservice
 
 on:
   push:
@@ -70,6 +70,6 @@ jobs:
       - name: Deploy
         run: |-
           ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
-          kubectl apply -k .
+          kubectl apply -k ./$IMAGE
           kubectl logs deployment/$IMAGE
           kubectl rollout status deployment $IMAGE

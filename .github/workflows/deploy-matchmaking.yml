@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build and Deploy to GKE
+name: Deploy Matchmaking Microservice
 
 on:
   push:
@@ -69,6 +69,5 @@ jobs:
       - name: Deploy
         run: |-
           ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
-          kubectl apply -k .
-          kubectl logs deployment/$IMAGE
+          kubectl apply -k ./$IMAGE
           kubectl rollout status deployment $IMAGE
