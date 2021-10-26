@@ -12,12 +12,13 @@ import GameDefaultPage from "./GameDefaultPage";
 import MatchmakingPage from "./MatchmakingPage";
 import { Profile } from "../../domain/profile";
 import GameEndPage from "./GameEndPage";
+import GameWaitingPage from "./GameWaitingPage";
 import { ProfileController } from "../../controller/ProfileController";
 import GamePage from "./GamePage";
 import socketClient from "socket.io-client";
 import OpponentFoundPage from "./OpponentFoundPage";
 
-const SERVER: string = "http://localhost:4000/";
+const SERVER: string = "http://localhost:4000";
 
 const socket: any = socketClient(SERVER);
 
@@ -25,18 +26,25 @@ const GameMainPage = (props: any) => {
   const findOpponent = (username: string, language: string) => {
     console.log("Finding opponent...");
     setStatus(gameState.FINDING_OPPPONENT);
-    socket.emit("Match Player", { username: username, language: language }); // i apologize for this will fix later
+    socket.emit("Match Player", { username: username, language: language }); 
     socket.on("match found", () => {
       setStatus(gameState.OPPONENT_FOUND);
     });
     socket.on("no match found", () => {
       setStatus(gameState.DEFAULT);
     });
+    socket.on("Player finished", (data: any) => {
+      if (data != null){
+        setScore(data.score);
+        setResult(data.result);
+        setStatus(gameState.WAITING_FOR_FINISH);
+        socket.emit("Player finished");
+      } else {
+        socket.emit("Player finished", {emit: false});
+      }
+    })
     socket.on("End game", (data: any) => {
       setStatus(gameState.FINISH);
-      setScore(data.score);
-      setResult(data.result);
-      console.log(data);
     });
   };
   const [languages, setLanguages] = useState<string[]>([]);
@@ -99,8 +107,10 @@ const GameMainPage = (props: any) => {
         <OpponentFoundPage startGame={startGame} />
       ) : status === gameState.IN_PROGRESS ? (
         <GamePage socket={socket} />
+      ) : status === gameState.WAITING_FOR_FINISH ? (
+        <GameWaitingPage />
       ) : status === gameState.FINISH ? (
-        <GameEndPage result={result} score={score} />
+        <GameEndPage result={result} score={score} setStatus={setStatus}/>
       ) : (
         <p>Error</p>
       )}
