@@ -64,16 +64,14 @@ jobs:
       # Set up kustomize
       - name: Set up Kustomize
         run: |-
+          cd ./backend/$IMAGE
           curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-          chmod u+x ./backend/$IMAGE/kustomize
+          chmod u+x ./kustomize
 
       - name: Deploy
         run: |-
-          ./backend/$IMAGE/kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
-          kubectl apply -k ./backend/$IMAGE
+          cd ./backend/$IMAGE
+          ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
+          kubectl apply -k .
           kubectl logs deployment/$IMAGE
           kubectl rollout status deployment $IMAGE
-      - name: Deploy ingress
-        run: |-
-          kubectl apply -f ../ingress.yaml
-          kubectl rollout status ingress $IMAGE
