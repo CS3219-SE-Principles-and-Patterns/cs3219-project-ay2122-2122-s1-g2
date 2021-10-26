@@ -16,8 +16,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: language-cluster # TODO: update to cluster name
   GKE_ZONE: asia-southeast1 # TODO: update to cluster zone
-  DEPLOYMENT_NAME: login # TODO: update deployment name if changed in deployment.yaml
-  IMAGE: login
+  DEPLOYMENT_NAME: profile # TODO: update deployment name if changed in deployment.yaml
+  IMAGE: profile
 
 jobs:
   setup-build-publish-deploy:
@@ -54,7 +54,7 @@ jobs:
             --tag "gcr.io/$PROJECT_ID/$IMAGE" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
-            ./backend/login
+            ./backend/profile
 
       # Push the Docker image to Google Container Registry
       - name: Publish

@@ -16,8 +16,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: language-cluster # TODO: update to cluster name
   GKE_ZONE: asia-southeast1 # TODO: update to cluster zone
-  DEPLOYMENT_NAME: login # TODO: update deployment name if changed in deployment.yaml
-  IMAGE: login
+  DEPLOYMENT_NAME: game # TODO: update deployment name if changed in deployment.yaml
+  IMAGE: game
 
 jobs:
   setup-build-publish-deploy:
@@ -54,7 +54,7 @@ jobs:
             --tag "gcr.io/$PROJECT_ID/$IMAGE" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
-            ./backend/login
+            ./backend/game
 
       # Push the Docker image to Google Container Registry
       - name: Publish
@@ -73,3 +73,7 @@ jobs:
           kubectl apply -k .
           kubectl logs deployment/$IMAGE
           kubectl rollout status deployment $IMAGE
+      - name: Deploy ingress
+        run: |-
+          kubectl apply -f ../ingress.yaml
+          kubectl rollout status ingress $IMAGE
