@@ -1,6 +1,5 @@
 import { Box } from "@mui/system";
 import {
-  Button,
   Chip,
   FormControl,
   Stack,
@@ -9,7 +8,6 @@ import {
   OutlinedInput,
   Select,
   SelectChangeEvent,
-  Slider,
   Container,
   Typography,
   Grid,
@@ -21,7 +19,6 @@ import { Profile } from "../../domain/profile";
 import { languages } from "../../utils/constants/languages";
 import {
   CssButton,
-  CssSelect,
   CssSlider,
 } from "../../components/common/Components";
 import { landingEnum } from "../../utils/constants/enums";

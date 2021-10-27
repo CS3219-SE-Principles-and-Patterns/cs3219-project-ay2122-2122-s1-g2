@@ -6,7 +6,6 @@ import { CssButton, BoldTypography } from "../common/Components";
 import LanguageLearnersLogo from "./LanguageLearnersLogo.png";
 
 const ProfileDetails = () => {
-  const [hasProfile, setHasProfile] = useState(false);
   const [username, setUsername] = useState("");
   const [langs, setLangs] = useState<string[]>([]);
   const [proficiencies, setProficiencies] = useState<number[]>([]);
@@ -18,13 +17,12 @@ const ProfileDetails = () => {
         setUsername(profile.username);
         setLangs(profile.languages);
         setProficiencies(profile.proficiencies);
-        setHasProfile(true);
       } catch (e) {
         console.log(e);
       }
     };
-    if (!hasProfile) fetchProfile();
-  }, [hasProfile]);
+    fetchProfile();
+  }, []);
 
   const GetProficiencies = () => (
     <>
