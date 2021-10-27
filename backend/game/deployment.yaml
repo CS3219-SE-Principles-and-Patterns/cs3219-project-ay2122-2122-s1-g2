@@ -26,6 +26,7 @@ metadata:
   labels:
     run: game
 spec:
+  type: NodePort
   ports:
     - port: 90
       targetPort: 2000

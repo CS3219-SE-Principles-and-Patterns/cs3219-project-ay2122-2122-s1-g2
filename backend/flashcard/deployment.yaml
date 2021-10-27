@@ -26,6 +26,7 @@ metadata:
   labels:
     run: flashcard
 spec:
+  type: NodePort
   ports:
     - port: 90
       targetPort: 6000

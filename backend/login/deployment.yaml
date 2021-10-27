@@ -26,6 +26,7 @@ metadata:
   labels:
     run: login
 spec:
+  type: NodePort
   ports:
     - port: 90
       targetPort: 3000

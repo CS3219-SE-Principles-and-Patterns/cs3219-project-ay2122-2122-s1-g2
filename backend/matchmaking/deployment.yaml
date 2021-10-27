@@ -26,6 +26,7 @@ metadata:
   labels:
     run: matchmaking
 spec:
+  type: NodePort
   ports:
     - port: 90
       targetPort: 5000
