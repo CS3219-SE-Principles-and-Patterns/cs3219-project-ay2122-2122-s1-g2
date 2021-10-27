@@ -1,9 +1,5 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography, FormControl, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import {
-  FormControl,
-  CircularProgress,
-} from "@mui/material";
 import { useState, useEffect } from "react";
 import "./GamePage.scss";
 
