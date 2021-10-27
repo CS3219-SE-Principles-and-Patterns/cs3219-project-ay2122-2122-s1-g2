@@ -34,7 +34,6 @@ const FlashCardDetailPage = () => {
       setCardSize(flashCardSet.flashcards.length);
     };
     getFlashCard();
-    console.log(flashcard);
   }, [id]);
 
   const handleLangChange = () => {

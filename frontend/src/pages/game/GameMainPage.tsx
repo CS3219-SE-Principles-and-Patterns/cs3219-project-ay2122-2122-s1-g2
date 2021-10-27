@@ -4,7 +4,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Button,
   Typography,
 } from "@mui/material";
 import { useState, useEffect } from "react";
@@ -49,7 +48,6 @@ const GameMainPage = (props: any) => {
     });
   };
   const [languages, setLanguages] = useState<string[]>([]);
-  const [hasProfile, setHasProfile] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>("");
   const [status, setStatus] = useState<gameState>(gameState.DEFAULT);
   const [username, setUsername] = useState<string>("");
@@ -62,7 +60,6 @@ const GameMainPage = (props: any) => {
       try {
         const profile: Profile = await ProfileController.getProfile();
         setLanguages(profile.languages);
-        setHasProfile(true);
         setLanguage(profile.languages[0]);
         setUsername(profile.username);
       } catch (e) {

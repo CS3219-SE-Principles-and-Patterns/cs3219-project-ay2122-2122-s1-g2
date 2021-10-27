@@ -1,23 +1,27 @@
+export interface GameResultProps {
+    language: string,
+    result: boolean
+}
+
+export interface RatingProps {
+    language: string[],
+    rating: number[]
+}
+
 export interface GameUserProps {
-    languages: string[];
-    ratings: number[];
-    resultHistory: boolean[];
-    languageHistory: string[];
     username: string;
+    ratings: RatingProps[];
+    history: string[];
 }
 
 export class GameUser implements GameUserProps {
-    languages: string[];
-    ratings: number[];
-    resultHistory: boolean[];
-    languageHistory: string[];
     username: string;
+    ratings: RatingProps[];
+    history: string[];
     private constructor(props: GameUserProps) {
-        this.languages = props.languages;
-        this.ratings = props.ratings;
-        this.resultHistory = props.resultHistory;
-        this.languageHistory = props.languageHistory;
         this.username = props.username;
+        this.ratings = props.ratings;
+        this.history = props.history;
     }
     public static create(props: GameUserProps): GameUser {
         return new GameUser(props);

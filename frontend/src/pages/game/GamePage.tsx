@@ -2,14 +2,10 @@ import { Button, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import {
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import "./GamePage.scss";
-import { CssButton } from "../../components/common/Components";
 
 const GamePage = (props: any) => {
   const [question, setQuestion] = useState<string>("Not yet");
@@ -37,8 +33,7 @@ const GamePage = (props: any) => {
   const handleSubmit = (answer: any) => {
     var currTime: any = new Date();
     var time = Math.abs(currTime - timing);
-    console.log(answer)
-    var result = answer == correctAnswer;
+    var result = answer === correctAnswer;
     socket.emit("answer", { gameRes: result, timing: time }); // idk how to get this timing yet
     handleQuestionChange();
   };
