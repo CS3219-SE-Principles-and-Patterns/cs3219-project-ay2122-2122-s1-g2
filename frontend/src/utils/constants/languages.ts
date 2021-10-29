@@ -1,1 +1,1 @@
-export const languages = ["Korean", "Japanese", "French", "Chinese"];
+export const languages = ["Korean", "Japanese"];
