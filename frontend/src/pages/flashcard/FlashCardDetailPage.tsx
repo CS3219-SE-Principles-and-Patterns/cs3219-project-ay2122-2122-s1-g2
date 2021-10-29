@@ -15,6 +15,7 @@ import { FlashCardController } from "../../controller/FlashCardController";
 import { FlashCardSet, Card } from "../../domain/flashcard";
 import "./FlashCardDetailPage.scss";
 import { CssButton } from "../../components/common/Components";
+import { languages } from "../../utils/constants/languages";
 
 const FlashCardDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,8 +36,7 @@ const FlashCardDetailPage = () => {
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
 
-      const defaultArr = ["Japanese", "Korean"];
-      if (defaultArr.includes(flashCardSet.username)) setDefault(true);
+      if (languages.includes(flashCardSet.username)) setDefault(true);
     };
     getFlashCard();
   }, [id]);
