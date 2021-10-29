@@ -25,13 +25,18 @@ const FlashCardDetailPage = () => {
   const [isEnglish, setIsEnglish] = useState(false);
   const [hasDelete, setDelete] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [isDefault, setDefault] = useState<boolean>(false);
 
   useEffect(() => {
     const getFlashCard = async () => {
       const flashCardSet = await FlashCardController.getFlashCard(id);
+    
       setFlashcard(flashCardSet);
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
+
+      const defaultArr = ["Japanese", "Korean"];
+      if (defaultArr.includes(flashCardSet.username)) setDefault(true);
     };
     getFlashCard();
   }, [id]);
@@ -91,6 +96,8 @@ const FlashCardDetailPage = () => {
                 color="inherit"
                 sx={{ width: { xs: "100%", sm: "60%" } }}
               />
+              {
+              isDefault ? <></> :
               <Box
                 className="buttons-box"
                 sx={{ width: { xs: "50%", sm: "60%" } }}
@@ -104,6 +111,7 @@ const FlashCardDetailPage = () => {
                 </CssButton>
                 {error && <Typography>{error}</Typography>}
               </Box>
+              }
               <Box className="notes-box">
                 <Typography className="header">Description: </Typography>
                 <Typography
