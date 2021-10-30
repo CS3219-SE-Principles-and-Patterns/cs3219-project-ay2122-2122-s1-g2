@@ -80,6 +80,10 @@ io.on('connection', (socket) => {
 		result += increment;
 		if (rounds == 5) {
 			console.log(score, result)
+			result = result >= 3
+			if (!result) score = -1*score
+			Player.rating += score
+			Player.result = result 
 			socket.emit("Player finished", {result: result, score: score, room: room});
 			await DatabaseManager.put(Player);
 		} else {
