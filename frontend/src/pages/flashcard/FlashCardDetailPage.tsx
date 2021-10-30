@@ -127,12 +127,12 @@ const FlashCardDetailPage = () => {
             <Box className="text-div">
               <Grid item xs={12}>
                 <Typography className="header">
-                  Text in {isEnglish ? "English" : flashcard.language}
                   <Switch
                     checked={isEnglish}
                     onChange={handleLangChange}
                     defaultChecked
                   />
+                  Text in {isEnglish ? "English" : flashcard.language}
                 </Typography>
               </Grid>
               <Grid item xs={12}>

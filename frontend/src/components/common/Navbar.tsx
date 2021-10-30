@@ -5,9 +5,9 @@ import ProfileIcon from "@mui/icons-material/AccountCircle";
 import GameIcon from "@mui/icons-material/SportsEsports";
 import FlashCardIcon from "@mui/icons-material/ViewCarousel";
 import MenuIcon from "@mui/icons-material/Menu";
-import AttributionIcon from '@mui/icons-material/Attribution';
+import AttributionIcon from "@mui/icons-material/Attribution";
 import Typography from "@mui/material/Typography";
-import "./Navbar.scss";
+import "./NavBar.scss";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 const NavBar = () => {
