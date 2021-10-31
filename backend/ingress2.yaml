@@ -7,7 +7,7 @@ spec:
     - http:
         paths:
           - path: /api/login
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: login-service
