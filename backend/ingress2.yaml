@@ -3,8 +3,13 @@ kind: Ingress
 metadata:
   name: language-ingress-2
 spec:
-  defaultBackend:
-    service:
-      name: login-service
-      port:
-        number: 80
+  rules:
+    - http:
+        paths:
+          - path: /api/login
+            pathType: Prefix
+            backend:
+              service:
+                name: login-service
+                port:
+                  number: 80
