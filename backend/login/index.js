@@ -10,6 +10,9 @@ const loginRoutes = require("./routes/loginRoutes.js");
 
 app.use("/", loginRoutes);
 
+app.get("/healthz", (req, res) => {
+  res.send("ok");
+});
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server up and running on port ${port}!`);
