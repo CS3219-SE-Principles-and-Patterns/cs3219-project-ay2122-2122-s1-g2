@@ -22,6 +22,7 @@ export class Card implements CardProps {
 
 export interface FlashCardSetProps {
   _id: string;
+  username: string;
   title: string;
   difficulty: number;
   language: string;
@@ -32,6 +33,7 @@ export interface FlashCardSetProps {
 
 export class FlashCardSet implements FlashCardSetProps {
   _id: string;
+  username: string;
   title: string;
   difficulty: number;
   language: string;
@@ -41,6 +43,7 @@ export class FlashCardSet implements FlashCardSetProps {
 
   private constructor(props: FlashCardSetProps) {
     this._id = props._id;
+    this.username = props.username;
     this.title = props.title;
     this.difficulty = props.difficulty;
     this.language = props.language;
