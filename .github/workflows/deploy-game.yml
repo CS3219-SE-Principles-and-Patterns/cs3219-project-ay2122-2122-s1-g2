@@ -70,7 +70,6 @@ jobs:
 
       - name: Deploy
         run: |-
-          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/cloud/deploy.yaml
           kubectl apply -f ./backend/ingress.yaml
           cd ./backend/$IMAGE
           ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
