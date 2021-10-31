@@ -1,0 +1,10 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: language-ingress-2
+spec:
+  defaultBackend:
+    service:
+      name: login-service
+      port:
+        number: 90
