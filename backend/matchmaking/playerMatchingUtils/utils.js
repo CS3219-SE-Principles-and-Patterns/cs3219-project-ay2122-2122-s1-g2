@@ -56,7 +56,8 @@ const playerMatcher = async (socket, player, time) => {
 
 const deletePlayer = (username) => {
 	const index = players.findIndex((p_user) => p_user.username === username);  
-	if (index !== -1) {
+	console.log(players.length)
+    if (index !== -1) {
 	  return players.splice(index, 1)[0];
 	}
 }

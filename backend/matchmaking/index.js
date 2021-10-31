@@ -95,12 +95,20 @@ io.on('connection', (socket) => {
 		finishedPlayers++;
 		if (finishedPlayers == 3){
 			io.to(room).emit("End game")
+			finishedPlayers = 0
+			rounds = 0
+			result = 0
+			room = ""
+			deletePlayer(Player.username);
+			socket.leave(Player.username);
+			console.log("Deleted")
 		} else {
 			if (data == null) io.to(room).emit("Player finished")
 		}
 	})
 	
 	socket.on("disconnect", () => {
+		deletePlayer(Player.username);
 		console.log("Some player disconnected");
 	})
 })
