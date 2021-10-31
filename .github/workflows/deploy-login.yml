@@ -73,6 +73,7 @@ jobs:
           cd ./backend/$IMAGE
           ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
           kubectl delete deployment login
+          kubectl delete service login
           kubectl apply -k .
           kubectl logs deployment/$IMAGE
           kubectl rollout status deployment $IMAGE
