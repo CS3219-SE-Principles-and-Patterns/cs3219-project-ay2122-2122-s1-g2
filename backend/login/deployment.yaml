@@ -5,12 +5,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      run: login
+      app: login
   replicas: 2
   template:
     metadata:
       labels:
-        run: login
+        app: login
     spec:
       containers:
         - name: login
@@ -24,10 +24,10 @@ kind: Service
 metadata:
   name: login-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
-    - port: 90
+    - port: 80
       targetPort: 3000
       protocol: TCP
   selector:
-    run: login
+    app: login
