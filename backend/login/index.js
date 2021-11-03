@@ -8,10 +8,11 @@ app.use(cors());
 
 const loginRoutes = require("./routes/loginRoutes.js");
 
-app.use("/", loginRoutes);
+app.use("/api/login", loginRoutes);
 
 app.get("/healthz", (req, res) => {
   res.send("ok");
+  console.log("ok outside");
 });
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
