@@ -23,7 +23,7 @@ spec:
             - name: LOCUST_MODE
               value: master
             - name: TARGET_HOST
-              value: http://35.247.179.81:90
+              value: http://35.240.188.57
           ports:
             - name: loc-master-web
               containerPort: 8089
@@ -62,7 +62,7 @@ spec:
             - name: LOCUST_MASTER
               value: locust-master
             - name: TARGET_HOST
-              value: http://35.247.179.81:90
+              value: http://35.240.188.57
 ---
 kind: Service
 apiVersion: v1

@@ -30,7 +30,7 @@ class MetricsTaskSet(TaskSet):
     @task(1)
     def login(self):
         self.client.post(
-            '/login', {"username": "passwordis123", "password": "123"})
+            '/api/login/login', {"username": "passwordis123", "password": "123"})
 
     # @task(999)
     # def post_metrics(self):
