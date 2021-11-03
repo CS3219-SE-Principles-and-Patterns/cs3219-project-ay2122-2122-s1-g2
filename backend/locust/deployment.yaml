@@ -18,12 +18,12 @@ spec:
     spec:
       containers:
         - name: locust
-          image: gcr.io/cloud-solutions-images/locust-tasks:latest
+          image: gcr.io/metal-center-329613/locust
           env:
             - name: LOCUST_MODE
               value: master
             - name: TARGET_HOST
-              value: http://app.ip.address
+              value: http://35.247.179.81:90
           ports:
             - name: loc-master-web
               containerPort: 8089
@@ -55,14 +55,14 @@ spec:
     spec:
       containers:
         - name: locust
-          image: gcr.io/cloud-solutions-images/locust-tasks:latest
+          image: gcr.io/metal-center-329613/locust
           env:
             - name: LOCUST_MODE
               value: worker
             - name: LOCUST_MASTER
               value: locust-master
             - name: TARGET_HOST
-              value: http://app.ip.address
+              value: http://35.247.179.81:90
 ---
 kind: Service
 apiVersion: v1
