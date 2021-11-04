@@ -8,7 +8,7 @@ import {
 import { Box } from "@mui/system";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Link, useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
@@ -31,7 +31,7 @@ const FlashCardDetailPage = () => {
   useEffect(() => {
     const getFlashCard = async () => {
       const flashCardSet = await FlashCardController.getFlashCard(id);
-    
+
       setFlashcard(flashCardSet);
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
@@ -96,22 +96,23 @@ const FlashCardDetailPage = () => {
                 color="inherit"
                 sx={{ width: { xs: "100%", sm: "60%" } }}
               />
-              {
-              isDefault ? <></> :
-              <Box
-                className="buttons-box"
-                sx={{ width: { xs: "50%", sm: "60%" } }}
-              >
-                <CssButton variant="outlined" href={`/flashcard/edit/${id}`}>
-                  Edit
-                </CssButton>
+              {isDefault ? (
+                <></>
+              ) : (
+                <Box
+                  className="buttons-box"
+                  sx={{ width: { xs: "50%", sm: "60%" } }}
+                >
+                  <CssButton variant="outlined" href={`/flashcard/edit/${id}`}>
+                    Edit
+                  </CssButton>
 
-                <CssButton variant="outlined" onClick={deleteFlashcard}>
-                  Delete
-                </CssButton>
-                {error && <Typography>{error}</Typography>}
-              </Box>
-              }
+                  <CssButton variant="outlined" onClick={deleteFlashcard}>
+                    Delete
+                  </CssButton>
+                  {error && <Typography>{error}</Typography>}
+                </Box>
+              )}
               <Box className="notes-box">
                 <Typography className="header">Description: </Typography>
                 <Typography
@@ -136,7 +137,7 @@ const FlashCardDetailPage = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <Box className="text-box">
+                <Box className="text-box" onClick={handleLangChange}>
                   <Typography className="flashcard-text">
                     {isEnglish
                       ? cards

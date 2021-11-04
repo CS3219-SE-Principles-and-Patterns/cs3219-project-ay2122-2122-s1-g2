@@ -14,7 +14,7 @@
 #detail-grid {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .text-box {
@@ -22,6 +22,7 @@
   height: 30vh;
   width: 80vw;
   display: flex;
+  cursor: pointer;
 }
 
 div > .header {

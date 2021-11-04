@@ -109,10 +109,12 @@ const CreateFlashCardPage = (props: any) => {
         <h1>{flashcardMsg}</h1>
         <Box
           component="form"
-          display="flex"
-          justifyContent="center"
+          sx={{
+            display: { xs: "flex" },
+            justifyContent: "center",
+            marginBottom: "5vh",
+          }}
           onSubmit={handleSubmit(onSubmit)}
-          marginBottom="5vh"
         >
           <Stack className="stack" spacing={2}>
             <FormControl>
