@@ -109,10 +109,12 @@ const CreateFlashCardPage = (props: any) => {
         <h1>{flashcardMsg}</h1>
         <Box
           component="form"
-          display="flex"
-          justifyContent="center"
+          sx={{
+            display: { xs: "flex" },
+            justifyContent: "center",
+            marginBottom: "5vh",
+          }}
           onSubmit={handleSubmit(onSubmit)}
-          marginBottom="5vh"
         >
           <Stack className="stack" spacing={2}>
             <FormControl>
@@ -233,7 +235,7 @@ const CreateFlashCardPage = (props: any) => {
             </Stack>
           </Grid>
 
-          {cardIdx < 0 ? (
+          {currCards.length === 0 ? (
             <></>
           ) : (
             <Grid item sm={6} id="detail-grid">
@@ -255,7 +257,7 @@ const CreateFlashCardPage = (props: any) => {
                     </Grid>
                   </Grid>
                 </Typography>
-                <Box className="text-box">
+                <Box className="text-box" onClick={handleLangChange}>
                   <Typography className="flashcard-text">
                     {isEnglish
                       ? currCards[cardIdx].body

@@ -7,7 +7,12 @@ let should = chai.should();
 const ROUTE = "/api/flashcard/";
 
 const app = require("../index");
+<<<<<<< HEAD
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
+=======
+const ACCESS_SECRET =
+  "67150a61ce9088f7cdddda574ef237e32acc7086c7b89cc831f3c6192aa3703abad10a241908127322e311f3528e8bc5d961aae4f9f9a14fc63736b5ffc6499e";
+>>>>>>> ambrose
 const generateToken = (username) => {
   return jwt.sign(
     {
@@ -42,6 +47,7 @@ const flashcard = {
 
 describe("Testing Flashcard Routes", () => {
   var id;
+<<<<<<< HEAD
   context("POST: /", () => {
     it("Able to create flashcard without error", async () => {
       const res = await chai
@@ -55,6 +61,22 @@ describe("Testing Flashcard Routes", () => {
   });
 
   context("PUT: /", () => {
+=======
+  context("POST: /api/flashcard", () => {
+    it("Able to create flashcard without error", async () => {
+      const res = await chai
+        .request(app)
+        .post(`/api/flashcard`)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .send(flashcard);
+
+      id = res.body.data._id;
+      assert.ifError(res.error);
+    });
+  });
+
+  context("PUT: /api/flashcard", () => {
+>>>>>>> ambrose
     it("Able to update flashcard without error", async () => {
       const updatedCard = {
         _id: id,
