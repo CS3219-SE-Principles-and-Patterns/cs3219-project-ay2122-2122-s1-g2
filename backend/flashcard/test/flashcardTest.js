@@ -1,5 +1,4 @@
 const chai = require("chai");
-const { assert } = require("chai");
 const chaiHttp = require("chai-http");
 const jwt = require("jsonwebtoken");
 chai.use(chaiHttp);
