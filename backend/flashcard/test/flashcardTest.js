@@ -43,7 +43,7 @@ const flashcard = {
 describe("Testing Flashcard Routes", () => {
   var id;
   context("POST: /", () => {
-    it("Able to create flashcard without error", async () => {
+    it("Able to create flashcard successfully", async () => {
       const res = await chai
         .request(app)
         .post(ROUTE)
@@ -52,10 +52,21 @@ describe("Testing Flashcard Routes", () => {
       res.should.have.status(200);
       id = res.body.data._id;
     });
+    it("Error: Create flashcard with same title", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .send(flashcard);
+      res.should.have.status(400);
+      res.body.should.have
+        .property("error")
+        .eql("Sorry! Similar card already exists");
+    });
   });
 
   context("PUT: /", () => {
-    it("Able to update flashcard without error", async () => {
+    it("Able to update flashcard successfully", async () => {
       const updatedCard = {
         _id: id,
         title: "newTitle",
@@ -87,6 +98,17 @@ describe("Testing Flashcard Routes", () => {
       res.body.data.flashcards.should.be.a("array");
       res.body.data.flashcards.should.have.lengthOf(3);
     });
+    it("Error: Update with empty body", async () => {
+      const res = await chai
+        .request(app)
+        .put(ROUTE)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .send("");
+      res.should.have.status(400);
+      res.body.should.have
+        .property("error")
+        .eql("Sorry! Such a card does not exist");
+    });
   });
 
   context("GET: /", () => {
@@ -117,6 +139,18 @@ describe("Testing Flashcard Routes", () => {
         .delete(ROUTE + id)
         .set("Authorization", `Bearer ${accessToken}`);
       res.should.have.status(200);
+    });
+    it("Error: Delete with invalid id", async () => {
+      const res = await chai
+        .request(app)
+        .delete(ROUTE + "123")
+        .set("Authorization", `Bearer ${accessToken}`);
+      res.should.have.status(400);
+      res.body.should.have
+        .property("error")
+        .eql(
+          "TypeError: Argument passed in must be a Buffer or string of 12 bytes or a string of 24 hex characters"
+        );
     });
   });
 });
