@@ -47,9 +47,15 @@ const App = () => {
           {isAuthenticated ? <NavBar /> : <div></div>}
           <Switch>
             <Route path="/" exact>
-              <LandingPage setIsAuthenticated={setIsAuthenticated} />
+              <LandingPage
+                setIsAuthenticated={setIsAuthenticated}
+                isAuthenticated={isAuthenticated}
+              />
             </Route>
-            <ProtectedRoute children={<Home />} path="/home" />
+            <ProtectedRoute
+              children={<Home setIsAuthenticated={setIsAuthenticated} />}
+              path="/home"
+            />
 
             <ProtectedRoute
               children={<CreateProfilePage isEdit={false} />}

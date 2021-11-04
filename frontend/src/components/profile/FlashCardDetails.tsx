@@ -33,8 +33,7 @@ const FlashCardDetails = () => {
   };
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSort(event.target.value);
-    console.log(event.target.value);
-    if (event.target.value == SortEnum.ALPHABETICAL) {
+    if (event.target.value === SortEnum.ALPHABETICAL) {
       setShownFlashcards(
         shownFlashcards.sort((a, b) =>
           a.title.toLowerCase() <= b.title.toLowerCase() ? -1 : 1
@@ -91,6 +90,7 @@ const FlashCardDetails = () => {
             xs: "4vh",
           },
         }}
+        key={flashcard._id}
       >
         <Box
           sx={{

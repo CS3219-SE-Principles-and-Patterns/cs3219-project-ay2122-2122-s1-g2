@@ -13,8 +13,7 @@ router
 router
   .route("/:id")
   .get(flashcardController.authTokenMW, flashcardController.get)
-  .delete(flashcardController.authTokenMW, flashcardController.delete)
-  .get(flashcardController.getDefault);
+  .delete(flashcardController.authTokenMW, flashcardController.delete);
 
 router.route("/default/:language").get(flashcardController.getDefault);
 

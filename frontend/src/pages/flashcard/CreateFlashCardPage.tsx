@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   FormControl,
   InputLabel,
   MenuItem,
@@ -31,14 +30,8 @@ import { useEffect, useState } from "react";
 import { FlashCardSet, Card } from "../../domain/flashcard";
 
 const CreateFlashCardPage = (props: any) => {
-  const {
-    register,
-    handleSubmit,
-    setError,
-    control,
-    setValue,
-    getValues,
-  } = useForm({});
+  const { register, handleSubmit, setError, control, setValue, getValues } =
+    useForm({});
 
   const isEdit = props.isEdit;
   const flashcardMsg = isEdit ? "Edit Flashcard Set" : "Create Flashcard Set";
@@ -111,7 +104,7 @@ const CreateFlashCardPage = (props: any) => {
   };
 
   return !isEdit || !isLoading ? (
-    <Container>
+    <Grid container>
       <Box sx={{ flexGrow: 1, m: 2 }} textAlign="center">
         <h1>{flashcardMsg}</h1>
         <Box
@@ -201,7 +194,7 @@ const CreateFlashCardPage = (props: any) => {
                 <CssTextField
                   required
                   label="Text in Language"
-                  {...register(`flashcards.${cardIdx}.altText`, {
+                  {...register(`flashcards.${currCards.length}.altText`, {
                     required: true,
                   })}
                 />
@@ -210,7 +203,7 @@ const CreateFlashCardPage = (props: any) => {
                 <CssTextField
                   required
                   label="Text in English"
-                  {...register(`flashcards.${cardIdx}.body`, {
+                  {...register(`flashcards.${currCards.length}.body`, {
                     required: true,
                   })}
                 />
@@ -218,7 +211,7 @@ const CreateFlashCardPage = (props: any) => {
               <FormControl>
                 <CssTextField
                   label="Notes"
-                  {...register(`flashcards.${cardIdx}.notes`)}
+                  {...register(`flashcards.${currCards.length}.notes`)}
                   multiline
                   rows={2}
                   maxRows={4}
@@ -230,27 +223,26 @@ const CreateFlashCardPage = (props: any) => {
                 onClick={() => {
                   setCurrCards([
                     ...currCards,
-                    getValues(`flashcards.${cardIdx}`),
+                    getValues(`flashcards.${currCards.length}`),
                   ]);
-                  setCardIdx(cardIdx + 1);
+                  setCardIdx(currCards.length);
                 }}
               >
                 Add Flashcard
               </CssButton>
             </Stack>
           </Grid>
-          <Grid item sm={3} />
 
           {cardIdx < 0 ? (
-            <Grid item sm={4}></Grid>
+            <></>
           ) : (
-            <Grid item sm={4} id="detail-grid" sx={{ marginTop: "10vh" }}>
+            <Grid item sm={6} id="detail-grid">
               <Box className="text-div">
                 <Typography className="header">
                   <Grid container>
                     <Grid item xs={6} textAlign="left">
-                      Text in {isEnglish ? "English" : getValues(`language`)}
                       <Switch checked={isEnglish} onChange={handleLangChange} />
+                      Text in {isEnglish ? "English" : getValues(`language`)}
                     </Grid>
                     <Grid item xs={6} textAlign="right">
                       <Button
@@ -302,7 +294,7 @@ const CreateFlashCardPage = (props: any) => {
           )}
         </Grid>
       </Box>
-    </Container>
+    </Grid>
   ) : (
     <Typography> Loading...</Typography>
   );
