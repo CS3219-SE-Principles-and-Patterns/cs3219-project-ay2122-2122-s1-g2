@@ -48,6 +48,7 @@ const ForgetPassword = ({ setLandingStatus }) => {
           <FormControl>
             <CssTextField
               label="Password"
+              type="password"
               {...register("password", { required: true })}
             />
             {errors.password?.type === "required" && (
