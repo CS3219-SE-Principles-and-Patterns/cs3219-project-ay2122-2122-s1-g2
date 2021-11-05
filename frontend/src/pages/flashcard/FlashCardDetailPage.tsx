@@ -8,7 +8,7 @@ import {
 import { Box } from "@mui/system";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Link, useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FlashCardController } from "../../controller/FlashCardController";
@@ -20,7 +20,7 @@ import { languages } from "../../utils/constants/languages";
 const FlashCardDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [flashcard, setFlashcard] = useState<FlashCardSet>();
-  const [cards, setCards] = useState<Array<Card>>();
+  const [cards, setCards] = useState<Array<Card>>([]);
   const [cardIdx, setCardIdx] = useState<number>(0);
   const [cardSize, setCardSize] = useState<number>(0);
   const [isEnglish, setIsEnglish] = useState(false);
@@ -31,7 +31,8 @@ const FlashCardDetailPage = () => {
   useEffect(() => {
     const getFlashCard = async () => {
       const flashCardSet = await FlashCardController.getFlashCard(id);
-    
+
+      console.log(flashCardSet);
       setFlashcard(flashCardSet);
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
@@ -96,22 +97,23 @@ const FlashCardDetailPage = () => {
                 color="inherit"
                 sx={{ width: { xs: "100%", sm: "60%" } }}
               />
-              {
-              isDefault ? <></> :
-              <Box
-                className="buttons-box"
-                sx={{ width: { xs: "50%", sm: "60%" } }}
-              >
-                <CssButton variant="outlined" href={`/flashcard/edit/${id}`}>
-                  Edit
-                </CssButton>
+              {isDefault ? (
+                <></>
+              ) : (
+                <Box
+                  className="buttons-box"
+                  sx={{ width: { xs: "50%", sm: "60%" } }}
+                >
+                  <CssButton variant="outlined" href={`/flashcard/edit/${id}`}>
+                    Edit
+                  </CssButton>
 
-                <CssButton variant="outlined" onClick={deleteFlashcard}>
-                  Delete
-                </CssButton>
-                {error && <Typography>{error}</Typography>}
-              </Box>
-              }
+                  <CssButton variant="outlined" onClick={deleteFlashcard}>
+                    Delete
+                  </CssButton>
+                  {error && <Typography>{error}</Typography>}
+                </Box>
+              )}
               <Box className="notes-box">
                 <Typography className="header">Description: </Typography>
                 <Typography
@@ -123,61 +125,59 @@ const FlashCardDetailPage = () => {
               </Box>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={8} id="detail-grid">
-            <Box className="text-div">
-              <Grid item xs={12}>
-                <Typography className="header">
-                  <Switch
-                    checked={isEnglish}
-                    onChange={handleLangChange}
-                    defaultChecked
-                  />
-                  Text in {isEnglish ? "English" : flashcard.language}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Box className="text-box">
-                  <Typography className="flashcard-text">
-                    {isEnglish
-                      ? cards
-                        ? cards[cardIdx].body
-                        : ""
-                      : cards
-                      ? cards[cardIdx].altText
-                      : ""}
+          {cards.length ? (
+            <Grid item xs={12} sm={8} id="detail-grid">
+              <Box className="text-div">
+                <Grid item xs={12}>
+                  <Typography className="header">
+                    <Switch
+                      checked={isEnglish}
+                      onChange={handleLangChange}
+                      defaultChecked
+                    />
+                    Text in {isEnglish ? "English" : flashcard.language}
                   </Typography>
-                </Box>
-              </Grid>
-              <Grid container>
-                <Grid item xs={6} textAlign="left">
-                  <IconButton
-                    color="primary"
-                    aria-label="Back"
-                    onClick={decreaseCardIdx}
-                  >
-                    <ArrowBackIcon />
-                  </IconButton>
                 </Grid>
-                <Grid item xs={6} textAlign="right">
-                  <IconButton
-                    color="primary"
-                    aria-label="Forward"
-                    onClick={increaseCardIdx}
-                  >
-                    <ArrowForwardIcon />
-                  </IconButton>
+                <Grid item xs={12}>
+                  <Box className="text-box" onClick={handleLangChange}>
+                    <Typography className="flashcard-text">
+                      {isEnglish ? cards[cardIdx].body : cards[cardIdx].altText}
+                    </Typography>
+                  </Box>
                 </Grid>
-              </Grid>
+                <Grid container>
+                  <Grid item xs={6} textAlign="left">
+                    <IconButton
+                      color="primary"
+                      aria-label="Back"
+                      onClick={decreaseCardIdx}
+                    >
+                      <ArrowBackIcon />
+                    </IconButton>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <IconButton
+                      color="primary"
+                      aria-label="Forward"
+                      onClick={increaseCardIdx}
+                    >
+                      <ArrowForwardIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
 
-              <Typography className="header">Notes: </Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontSize: { xs: "3.8vw", sm: "15px" } }}
-              >
-                {cards ? cards[cardIdx].notes : ""}
-              </Typography>
-            </Box>
-          </Grid>
+                <Typography className="header">Notes: </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontSize: { xs: "3.8vw", sm: "15px" } }}
+                >
+                  {cards[cardIdx].notes}
+                </Typography>
+              </Box>
+            </Grid>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <Typography>Loading....</Typography>

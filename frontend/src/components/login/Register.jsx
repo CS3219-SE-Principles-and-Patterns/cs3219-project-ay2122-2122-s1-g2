@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { registerUser } from "../../infra/auth";
 import { landingEnum } from "../../utils/constants/enums";
 import CreateProfilePage from "../../pages/profile/CreateProfilePage";
 import { FormControl, Grid, Typography } from "@mui/material";
@@ -61,6 +60,7 @@ const Register = ({ setLandingStatus }) => {
             <FormControl>
               <CssTextField
                 label="Password"
+                type="password"
                 {...register("password", { required: true })}
               />
               {errors.password?.type === "required" && (
@@ -70,6 +70,7 @@ const Register = ({ setLandingStatus }) => {
             <FormControl>
               <CssTextField
                 label="Re-enter Password"
+                type="password"
                 {...register("validatePassword", {
                   validate: (value) =>
                     value === password.current || "The passwords do not match.",

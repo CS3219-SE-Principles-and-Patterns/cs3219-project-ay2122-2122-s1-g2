@@ -2,130 +2,167 @@ const { assert } = require("chai");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
+let should = chai.should();
+const ROUTE = "/api/login/";
 
 const app = require("../index");
 
-describe('Testing Login Routes', () => {
-	const testUsername = "notjustatest";
-	const testPassword = "itsalifestyle";
-	const loginDetails = { 
-		username: testUsername,
-		password: testPassword
-	};
-	context('POST: /api/login/register', () => {
-		it('Inserts into database with correct details', async () => {
-			const res = await chai.request(app)
-				.post(`/api/login/register`)
-				.send(loginDetails);
-			assert.ifError(res.error);
-		});
+describe("Testing Login Routes", () => {
+  const testUsername = "notjustatest";
+  const testPassword = "itsalifestyle";
+  const loginDetails = {
+    username: testUsername,
+    password: testPassword,
+  };
+  context("POST: /register", () => {
+    it("Inserts into database with correct details", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "register")
+        .send(loginDetails);
+      res.should.have.status(200);
+    });
 
-		it('Throws error with already created username', async () => {
-			const res = await chai.request(app)
-				.post(`/api/login/register`)
-				.send(loginDetails);
-			assert.ifError(!res.error);
-		});
-	});
+    it("Error: Throws error with already created username", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "register")
+        .send(loginDetails);
+      res.should.have.status(400);
+    });
+  });
 
-	context('GET: /api/login/', () => {
-		it('Able to get all inserted data', async () => {
-			const res = await chai.request(app)
-				.get(`/api/login`);
-			if (!res.error && res.body.data.length == 0) {
-				res.error = new Error("Unable to get any data in request body...");
-			}
-			assert.ifError(res.error);
-		});
-	});
+  context("GET: /", () => {
+    it("Able to get all inserted data", async () => {
+      const res = await chai.request(app).get(ROUTE);
+      res.should.have.status(200);
+      res.body.data.should.have.lengthOf.above(0);
+    });
+  });
 
-	context('GET: /api/login/:username', () => {
-		it('Able to get specific inserted data', async () => {
-			const res = await chai.request(app)
-				.get(`/api/login/${testUsername}`);
-			if (!res.error && res.body.data.username != testUsername) {
-				res.error = new Error("Unable to get the inserted user");
-			}
-			assert.ifError(res.error);
-		});
-	});
+  context("GET: /:username", () => {
+    it("Able to get specific inserted data", async () => {
+      const res = await chai.request(app).get(ROUTE + testUsername);
+      res.body.data.should.have.property("username").eql(testUsername);
+      res.should.have.status(200);
+    });
+  });
 
-	context('POST: /api/login/login', () => {
-		it('Able to login with correct userdetails', async () => {
-			const res = await chai.request(app)
-				.post(`/api/login/login`)
-				.send(loginDetails);
-			assert.ifError(res.error);
-		});
+  context("POST: /login", () => {
+    it("Able to login with correct userdetails", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "login")
+        .send(loginDetails);
+      res.should.have.status(200);
+    });
 
-		it('Throw error upon incorrect username', async () => {
-			const res = await chai.request(app)
-				.post(`/api/login/login`)
-				.send({ 
-					username: "nottheusername",
-					password: testPassword
-				});
-			assert.ifError(!res.error);
-		});
+    it("Unauthenticated: Throw error upon incorrect username", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "login")
+        .send({
+          username: "nottheusername",
+          password: testPassword,
+        });
+      res.should.have.status(401);
+    });
 
-		it('Throw error upon incorrect password', async () => {
-			const res = await chai.request(app)
-				.post(`/api/login/login`)
-				.send({ 
-					username: testUsername,
-					password: "notthepassword"
-				});
-			assert.ifError(!res.error);
-		});
-	});
+    it("Unauthenticated: Throw error upon incorrect password", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "login")
+        .send({
+          username: testUsername,
+          password: "notthepassword",
+        });
+      res.should.have.status(401);
+    });
+  });
 
-	context('PUT: /api/login/update', () => {
-		it('Should update with accessToken', async () => {
-			const loginRes = await chai.request(app)
-				.post(`/api/login/login`)
-				.send(loginDetails);
-			const accessToken = loginRes.body.accessToken;
-			const res = await chai.request(app)
-				.put(`/api/login/update`)
-				.send(loginDetails)
-				.set("Authorization", `Bearer ${accessToken}`);
-			assert.ifError(res.error);
-		});
+  context("PUT: /update", () => {
+    it("Should update", async () => {
+      const res = await chai
+        .request(app)
+        .put(ROUTE + "update")
+        .send(loginDetails);
+      res.should.have.status(200);
+    });
+    it("Error: Update with empty body", async () => {
+      const res = await chai
+        .request(app)
+        .put(ROUTE + "update")
+        .send("");
+      res.should.have.status(400);
+    });
+  });
 
-		it('Should not update without accessToken', async () => {
-			const res = await chai.request(app)
-				.put(`/api/login/update`)
-				.send(loginDetails)
-			assert.ifError(!res.error);
-		});
-	});
+  context("POST: /token", () => {
+    it("Successful refresh token rotation", async () => {
+      const loginRes = await chai
+        .request(app)
+        .post(ROUTE + "login")
+        .send(loginDetails);
+      const refreshToken = loginRes.body.refreshToken;
 
-	context('POST: /api/login/token', () => {
-		it('Should get accessToken from refreshToken & be able to update', async () => {
-			const loginRes = await chai.request(app)
-				.post(`/api/login/login`)
-				.send(loginDetails);
-			const refreshToken = loginRes.body.refreshToken;
+      const updateRes = await chai
+        .request(app)
+        .post(ROUTE + "token")
+        .send({ refreshToken: refreshToken });
 
-			const tokenRes = await chai.request(app)
-				.post(`/api/login/token`)
-				.send({refreshToken: refreshToken});
-			const accessToken = tokenRes.body.accessToken;
+      updateRes.should.have.status(200);
+    });
+    it("Unauthenticated: Empty refresh token", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "token")
+        .send({ refreshToken: "" });
+      res.should.have.status(401);
+    });
+    it("Unauthorized: Invalid refresh token", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "token")
+        .send({ refreshToken: "Invalid" });
+      res.should.have.status(403);
+    });
+  });
 
-			const updateRes = await chai.request(app)
-				.put(`/api/login/update`)
-				.send(loginDetails)
-				.set("Authorization", `Bearer ${accessToken}`);
+  context("POST: /verify", () => {
+    it("Valid access token", async () => {
+      const loginRes = await chai
+        .request(app)
+        .post(ROUTE + "login")
+        .send(loginDetails);
+      const { accessToken } = loginRes.body;
 
-			assert.ifError(updateRes.error);
-		});
-	});
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "verify")
+        .set("Authorization", `Bearer ${accessToken}`);
+      res.should.have.status(200);
+    });
+    it("Unauthenticated: No access token", async () => {
+      const res = await chai.request(app).post(ROUTE + "verify");
+      res.should.have.status(401);
+    });
+    it("Unauthorized: Invalid access token", async () => {
+      const res = await chai
+        .request(app)
+        .post(ROUTE + "verify")
+        .set("Authorization", `Bearer invalid`);
+      res.should.have.status(403);
+    });
+  });
 
-	context('DELETE: /api/login/:username', () => {
-		it('Able to delete without error', async () => {
-			const res = await chai.request(app)
-				.delete(`/api/login/${testUsername}`);
-			assert.ifError(res.error);
-		});
-	});
+  context("DELETE: /:username", () => {
+    it("Able to delete without error", async () => {
+      const res = await chai.request(app).delete(ROUTE + testUsername);
+      res.should.have.status(200);
+    });
+    it("Error: Delete with invalid id", async () => {
+      const res = await chai.request(app).delete(ROUTE + "invalid");
+      res.should.have.status(400);
+    });
+  });
 });

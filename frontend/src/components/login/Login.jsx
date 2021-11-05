@@ -1,6 +1,5 @@
 import "./Login.css";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../../infra/auth";
 import { landingEnum } from "../../utils/constants/enums";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
@@ -78,6 +77,7 @@ const Login = ({ setLandingStatus, setIsAuthenticated }) => {
           <FormControl>
             <CssTextField
               label="Password"
+              type="password"
               {...register("password", { required: true })}
             />
             {errors.password?.type === "required" && (
