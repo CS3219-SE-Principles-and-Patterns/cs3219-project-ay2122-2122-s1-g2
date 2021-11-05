@@ -61,7 +61,7 @@ jobs:
         run: |-
           docker push "gcr.io/$PROJECT_ID/$IMAGE"
 
-      # Set up kustomizes
+      # Set up kustomize
       - name: Set up Kustomize
         run: |-
           cd ./backend/$IMAGE
