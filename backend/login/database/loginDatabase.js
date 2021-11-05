@@ -71,17 +71,19 @@ const DatabaseManager = {
   verify: async (req, res) => {
     res.status(200).send("Valid access token!");
   },
+
   getAccessToken: async (req, res) => {
     const { refreshToken } = req.body;
     if (!refreshToken)
       return res.status(401).json({ error: "Could not find refreshToken" });
     const token = await Token.findOne({ token: refreshToken });
-    if (!token) return res.status(403);
+    if (!token) return res.status(403).json({ error: "Invalid refreshToken" });
 
     jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
-      if (err) return res.status(403).json({
-        error: err.toString(),
-      });
+      if (err)
+        return res.status(403).json({
+          error: err.toString(),
+        });
       const newAccessToken = getJwtAccessToken({
         username: user.username,
         password: user.password,
@@ -95,7 +97,7 @@ const DatabaseManager = {
       });
       newTokenDB.save();
       Token.deleteOne({ token: refreshToken });
-      res.status(400).json({
+      res.status(200).json({
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
         expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
@@ -185,7 +187,7 @@ const DatabaseManager = {
         expiresIn: ACCESS_TOKEN_EXPIRY * 1000,
       });
     } catch (err) {
-      res.status(400).json({
+      res.status(401).json({
         error: err.toString(),
       });
     }
@@ -235,8 +237,9 @@ const DatabaseManager = {
       const refresh_token = await Token.deleteOne({
         username: req.params.username,
       });
-      if (!profile) throw "Profile not found";
-      if (!refresh_token) console.log("Refresh token not found when deleting");
+      if (!profile || profile.deletedCount === 0) throw "Profile not found";
+      if (!refresh_token || refresh_token.deletedCount === 0)
+        throw "Refresh token not found when deleting";
       res.status(200).json({
         message: "Success",
         data: profile,
