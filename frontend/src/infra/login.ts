@@ -15,4 +15,7 @@ export class LoginInfra {
   public static getNewAccessToken = async (data: any) => {
     return await axios().post(LOGIN_PATH + "/token", data);
   };
+  public static verifyToken = async (): Promise<any> => {
+    return await axios().post(LOGIN_PATH + "/verify", "");
+  };
 }

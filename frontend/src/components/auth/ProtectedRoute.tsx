@@ -1,8 +1,8 @@
 import { Route, Redirect, RouteProps } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAxiosInstance as axios, removeTokens } from "../../utils/auth/auth";
+import { removeTokens } from "../../utils/auth/auth";
 import { ACCESS_TOKEN } from "../../utils/constants/tokens";
-import { verifyToken } from "../../infra/auth";
+import { LoginController } from "../../controller/LoginController";
 
 const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -11,7 +11,7 @@ const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   useEffect(() => {
     const verifyAccessToken = async () => {
       try {
-        verifyToken();
+        LoginController.verifyToken();
         setIsAuthenticated(true);
         setIsLoading(false);
       } catch (e) {

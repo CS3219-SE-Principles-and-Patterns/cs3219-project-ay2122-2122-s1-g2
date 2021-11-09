@@ -16,14 +16,14 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import { removeTokens } from "./utils/auth/auth";
 import { ACCESS_TOKEN } from "./utils/constants/tokens";
-import { verifyToken } from "./infra/auth";
+import { LoginController } from "./controller/LoginController";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
     const verifyAccessToken = async () => {
       try {
-        verifyToken();
+        LoginController.verifyToken();
         setIsAuthenticated(true);
       } catch (e) {
         removeTokens();

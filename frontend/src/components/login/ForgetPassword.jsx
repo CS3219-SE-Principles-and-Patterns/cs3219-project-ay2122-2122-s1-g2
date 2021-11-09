@@ -1,6 +1,6 @@
 import "./Login.css";
 import { useForm } from "react-hook-form";
-import { resetPassword } from "../../infra/auth";
+import { LoginController } from "../../controller/LoginController";
 import { landingEnum } from "../../utils/constants/enums";
 import { useState } from "react";
 import { Box, FormControl, Grid, Typography } from "@mui/material";
@@ -16,7 +16,7 @@ const ForgetPassword = ({ setLandingStatus }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    let response = await resetPassword(data).catch((e) => {
+    let response = await LoginController.resetPassword(data).catch((e) => {
       setError("password", { message: e.response.data });
     });
 
