@@ -10,6 +10,9 @@ const loginRoutes = require("./routes/loginRoutes.js");
 
 app.use("/api/login", loginRoutes);
 
+app.get("/", (req, res) => {
+  res.status(200);
+})
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server up and running on port ${port}!`);

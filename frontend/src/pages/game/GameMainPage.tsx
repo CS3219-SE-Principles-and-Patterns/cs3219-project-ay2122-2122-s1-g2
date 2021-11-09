@@ -15,12 +15,12 @@ import GameEndPage from "./GameEndPage";
 import GameWaitingPage from "./GameWaitingPage";
 import { ProfileController } from "../../controller/ProfileController";
 import GamePage from "./GamePage";
-import socketClient from "socket.io-client";
+import io from "socket.io-client";
 import OpponentFoundPage from "./OpponentFoundPage";
 
 const SERVER: string = "http://34.126.141.177";
-
-const socket: any = socketClient(SERVER);
+// const SERVER: string = "http://localhost:4000";
+const socket: any = io(SERVER);
 
 const GameMainPage = (props: any) => {
   const findOpponent = (username: string, language: string) => {
