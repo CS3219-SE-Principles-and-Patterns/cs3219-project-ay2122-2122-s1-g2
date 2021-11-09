@@ -20,4 +20,7 @@ export class LoginController {
     const user: LoginUser = LoginUser.create(props);
     return await LoginInfra.getNewAccessToken(user);
   };
+  public static verifyToken = async () => {
+    return await LoginInfra.verifyToken();
+  };
 }

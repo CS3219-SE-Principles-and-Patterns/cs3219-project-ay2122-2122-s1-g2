@@ -18,15 +18,15 @@ import GamePage from "./GamePage";
 import socketClient from "socket.io-client";
 import OpponentFoundPage from "./OpponentFoundPage";
 
-const SERVER: string = "http://localhost:4000";
+const SERVER: string = "http://34.126.141.177";
 
-var socket: any = socketClient(SERVER);
+const socket: any = socketClient(SERVER);
 
 const GameMainPage = (props: any) => {
   const findOpponent = (username: string, language: string) => {
     console.log("Finding opponent...");
     setStatus(gameState.FINDING_OPPPONENT);
-    socket.emit("Match Player", { username: username, language: language }); 
+    socket.emit("Match Player", { username: username, language: language });
     socket.on("match found", () => {
       setStatus(gameState.OPPONENT_FOUND);
     });
@@ -34,19 +34,18 @@ const GameMainPage = (props: any) => {
       setStatus(gameState.DEFAULT);
     });
     socket.on("Player finished", (data: any) => {
-      if (data != null){
+      if (data != null) {
         setScore(data.score);
         setResult(data.result);
         setStatus(gameState.WAITING_FOR_FINISH);
         socket.emit("Player finished");
       } else {
-        socket.emit("Player finished", {emit: false});
+        socket.emit("Player finished", { emit: false });
       }
-    })
+    });
     socket.on("End game", (data: any) => {
       setStatus(gameState.FINISH);
-      socket.disconnect()
-      // socket = socketClient(SERVER);
+      socket.disconnect();
     });
   };
   const [languages, setLanguages] = useState<string[]>([]);
@@ -112,7 +111,7 @@ const GameMainPage = (props: any) => {
       ) : status === gameState.WAITING_FOR_FINISH ? (
         <GameWaitingPage />
       ) : status === gameState.FINISH ? (
-        <GameEndPage result={result} score={score} setStatus={setStatus}/>
+        <GameEndPage result={result} score={score} setStatus={setStatus} />
       ) : (
         <p>Error</p>
       )}

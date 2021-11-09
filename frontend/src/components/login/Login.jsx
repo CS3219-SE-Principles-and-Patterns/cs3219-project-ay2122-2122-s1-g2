@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { landingEnum } from "../../utils/constants/enums";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { getNewAccessToken } from "../../infra/auth";
 import { setTokens } from "../../utils/auth/auth";
 import { FormControl, Grid, Typography } from "@mui/material";
 import { CssButton, CssTextField } from "../common/Components";
@@ -25,7 +24,9 @@ const Login = ({ setLandingStatus, setIsAuthenticated }) => {
   };
   const silentRefresh = async (expiresIn, refreshToken) => {
     await setTimeoutAsync(expiresIn);
-    const response = await getNewAccessToken({ refreshToken: refreshToken });
+    const response = await LoginController.getNewAccessToken({
+      refreshToken: refreshToken,
+    });
     if (response) {
       const {
         accessToken: newAccessToken,
@@ -37,15 +38,17 @@ const Login = ({ setLandingStatus, setIsAuthenticated }) => {
     }
   };
   const onSubmit = async (data) => {
-    let response = await LoginController.loginUser(data).catch((e) => {
+    try {
+      let response = await LoginController.loginUser(data);
+      if (response) {
+        const { accessToken, refreshToken, expiresIn } = response.data;
+        setTokens(accessToken, refreshToken);
+        silentRefresh(expiresIn, refreshToken);
+        setIsAuthenticated(true);
+        setSuccess(true);
+      }
+    } catch (e) {
       setError("password", { message: e.response.data.error });
-    });
-    if (response) {
-      const { accessToken, refreshToken, expiresIn } = response.data;
-      setTokens(accessToken, refreshToken);
-      silentRefresh(expiresIn, refreshToken);
-      setIsAuthenticated(true);
-      setSuccess(true);
     }
   };
   return success ? (

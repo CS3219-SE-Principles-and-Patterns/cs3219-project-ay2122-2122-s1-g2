@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 const Profile = require("../models/profile.js");
 const Token = require("../models/token.js");
 
-// const db = process.env.MONGO_URI;
-const db = 'mongodb://127.0.0.1:27017'
+const db = process.env.MONGO_URI;
+// const db = 'mongodb://127.0.0.1:27017'
 mongoose
   .connect(db, {
     useNewUrlParser: true,
@@ -105,17 +105,18 @@ const DatabaseManager = {
     });
   },
   getAll: async (req, res) => {
-    try {
-      const profiles = await Profile.find();
-      res.json({
-        message: "Success",
-        data: profiles,
-      });
-    } catch (err) {
-      res.status(400).json({
-        error: err.toString(),
-      });
-    }
+    res.send("success");
+    // try {
+    //   const profiles = await Profile.find();
+    //   res.json({
+    //     message: "Success",
+    //     data: profiles,
+    //   });
+    // } catch (err) {
+    //   res.status(400).json({
+    //     error: err.toString(),
+    //   });
+    // }
   },
   get: async (req, res) => {
     try {

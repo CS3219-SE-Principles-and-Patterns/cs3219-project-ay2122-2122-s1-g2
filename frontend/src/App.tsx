@@ -11,19 +11,19 @@ import CreateProfilePage from "./pages/profile/CreateProfilePage";
 import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
 import LeaderBoardPage from "./pages/leaderboard/LeaderboardPage";
-
-import NavBar from "./components/common/NavBar";
+import NavBar from "./components/common/Navbar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-import { getAxiosInstance as axios, removeTokens } from "./utils/auth/auth";
+import { removeTokens } from "./utils/auth/auth";
 import { ACCESS_TOKEN } from "./utils/constants/tokens";
+import { LoginController } from "./controller/LoginController";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
     const verifyAccessToken = async () => {
       try {
-        await axios().post("http://localhost:3000/api/login/verify");
+        LoginController.verifyToken();
         setIsAuthenticated(true);
       } catch (e) {
         removeTokens();
