@@ -8,8 +8,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-const io = require("socket.io")(http, {
-	cors: {
+const port = process.env.PORT || 4000;
+
+const server = http.listen(port, () => {
+	console.log(`Server up and running on port ${port}!`);
+});
+
+const io = require("socket.io")(server, {
+cors: {
 	  origin: "*"
 	}
 });
@@ -18,11 +24,6 @@ const matchmakingRoutes = require("./routes/matchmakingRoutes.js");
 const {playerMatcher, deletePlayer, delay} = require("./playerMatchingUtils/utils");
 
 app.use("/api/matchmaking", matchmakingRoutes);
-
-const port = process.env.PORT || 4000;
-const server = http.listen(port, () => {
-	console.log(`Server up and running on port ${port}!`);
-});
 
 io.on('connection', (socket) => {
 	console.log("In backend")
@@ -56,7 +57,6 @@ io.on('connection', (socket) => {
 		var matchInfo = await playerMatcher(socket, player, 10)
 		var isMatched = matchInfo.matched;
 		room = matchInfo.room;
-		socket.join()
 		if (!isMatched) {
 			socket.emit("no match found");
 			deletePlayer(player.username);
@@ -82,7 +82,9 @@ io.on('connection', (socket) => {
 			console.log(score, result)
 			result = result >= 3
 			if (!result) score = -1*score
+			score = Math.floor(score)
 			Player.rating += score
+			Player.rating = Math.floor(Player.rating)
 			Player.result = result 
 			socket.emit("Player finished", {result: result, score: score, room: room});
 			await DatabaseManager.put(Player);
@@ -114,4 +116,7 @@ io.on('connection', (socket) => {
 })
 
 
-module.exports = server;
+module.exports = {
+	server,
+	io
+};

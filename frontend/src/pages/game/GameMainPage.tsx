@@ -46,7 +46,7 @@ const GameMainPage = (props: any) => {
     socket.on("End game", (data: any) => {
       setStatus(gameState.FINISH);
       socket.disconnect()
-      socket = socketClient(SERVER);
+      // socket = socketClient(SERVER);
     });
   };
   const [languages, setLanguages] = useState<string[]>([]);
