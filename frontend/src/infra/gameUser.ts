@@ -1,6 +1,6 @@
 import { getAxiosInstance as axios } from "../utils/auth/auth";
 
-const GAME_PATH = "http://localhost:4000/api/matchmaking";
+const GAME_PATH = "http://34.126.141.177/api/matchmaking";
 
 export class GameInfra {
   public static getAllUsers = (): Promise<any> => {

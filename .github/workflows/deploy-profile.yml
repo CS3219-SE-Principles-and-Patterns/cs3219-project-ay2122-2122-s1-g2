@@ -8,8 +8,6 @@ name: Deploy Profile Microservice
 on:
   push:
     branches:
-      - gke
-      - gke2
       - master
 
 env:
