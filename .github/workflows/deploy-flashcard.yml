@@ -73,4 +73,5 @@ jobs:
           ./kustomize edit set image $IMAGE=gcr.io/$PROJECT_ID/$IMAGE
           kubectl apply -k .
           kubectl logs deployment/$IMAGE
+          kubectl rollout restart deployment $IMAGE
           kubectl rollout status deployment $IMAGE
