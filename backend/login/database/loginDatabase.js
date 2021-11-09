@@ -6,7 +6,7 @@ const Profile = require("../models/profile.js");
 const Token = require("../models/token.js");
 
 const db = process.env.MONGO_URI;
-
+// const db = 'mongodb://127.0.0.1:27017'
 mongoose
   .connect(db, {
     useNewUrlParser: true,

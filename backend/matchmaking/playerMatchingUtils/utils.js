@@ -28,15 +28,17 @@ const playerMatcher = async (socket, player, time) => {
     if (time == 0) {
         return {matched: false, room: ""};
     }
-    if (!players.includes(player)){
+    if (players.findIndex((p_user) => p_user.username === username) == -1){
         players.push(player)
+    } else {
+        return {matches: false, room: ""}
     }
     player.matchFound = false;
     for (let i = 0; i < players.length; i++) {
         var matchPlayer = players[i]
 		if (matchPlayer.username != player.username 
             && matchPlayer.language == player.language 
-            && Math.abs(matchPlayer.rating - player.rating) <= 200) {
+            && Math.abs(matchPlayer.rating - player.rating) <= 500) {
             player.room = matchPlayer.username; // make them both have the same room
             player.matchFound = true;
 			matchPlayer.matchFound = true;
@@ -45,7 +47,7 @@ const playerMatcher = async (socket, player, time) => {
             // remove both players from the array of players in the waiting queue
             deletePlayer(player.username);
             await delay(5);
-			//deletePlayer(otherPlayerName);
+			deletePlayer(otherPlayerName);
             return {matched: true, room: otherPlayerName};
 		}
 	}
@@ -57,7 +59,7 @@ const playerMatcher = async (socket, player, time) => {
 const deletePlayer = (username) => {
 	const index = players.findIndex((p_user) => p_user.username === username);  
     if (index !== -1) {
-	  return players.splice(index, 1)[0];
+      players.splice(index, 1)[0];
 	}
 }
 
