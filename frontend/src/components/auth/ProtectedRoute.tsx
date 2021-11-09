@@ -2,6 +2,7 @@ import { Route, Redirect, RouteProps } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAxiosInstance as axios, removeTokens } from "../../utils/auth/auth";
 import { ACCESS_TOKEN } from "../../utils/constants/tokens";
+import { verifyToken } from "../../infra/auth";
 
 const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,7 +11,7 @@ const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   useEffect(() => {
     const verifyAccessToken = async () => {
       try {
-        await axios().post("http://localhost:3000/api/login/verify");
+        verifyToken();
         setIsAuthenticated(true);
         setIsLoading(false);
       } catch (e) {

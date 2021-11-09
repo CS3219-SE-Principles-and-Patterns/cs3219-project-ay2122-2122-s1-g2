@@ -14,15 +14,16 @@ import LeaderBoardPage from "./pages/leaderboard/LeaderboardPage";
 import NavBar from "./components/common/NavBar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-import { getAxiosInstance as axios, removeTokens } from "./utils/auth/auth";
+import { removeTokens } from "./utils/auth/auth";
 import { ACCESS_TOKEN } from "./utils/constants/tokens";
+import { verifyToken } from "./infra/auth";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
     const verifyAccessToken = async () => {
       try {
-        await axios().post("http://localhost:3000/api/login/verify");
+        verifyToken();
         setIsAuthenticated(true);
       } catch (e) {
         removeTokens();
