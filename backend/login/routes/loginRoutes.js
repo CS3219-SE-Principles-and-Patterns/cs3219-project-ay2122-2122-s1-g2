@@ -3,6 +3,11 @@ const router = express.Router();
 
 const DatabaseManager = require("../database/loginDatabase.js");
 
+router.get("/healthz", (req, res) => {
+  res.send("ok inside");
+  console.log("ok inside");
+});
+
 router.get("/", DatabaseManager.getAll);
 
 router.get("/:username", DatabaseManager.get);

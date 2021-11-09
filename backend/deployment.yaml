@@ -17,7 +17,7 @@ spec:
           image: flashcard
           imagePullPolicy: Never
           ports:
-            - containerPort: 1000
+            - containerPort: 6000
 ---
 apiVersion: apps/v1
 kind: Deployment

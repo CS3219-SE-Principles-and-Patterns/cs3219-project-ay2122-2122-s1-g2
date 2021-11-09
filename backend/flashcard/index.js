@@ -16,7 +16,7 @@ app.use(
 );
 const flashcardRoutes = require("./routes/flashcardRoutes.js");
 
-app.use("/api/flashcard", flashcardRoutes);
+app.use("/api/flashcard", flashcSardRoutes);
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {
