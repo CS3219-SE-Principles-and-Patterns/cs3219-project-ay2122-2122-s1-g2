@@ -26,7 +26,7 @@ metadata:
   labels:
     run: matchmaking
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 90
       targetPort: 5000
