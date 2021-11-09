@@ -32,7 +32,6 @@ const FlashCardDetailPage = () => {
     const getFlashCard = async () => {
       const flashCardSet = await FlashCardController.getFlashCard(id);
 
-      console.log(flashCardSet);
       setFlashcard(flashCardSet);
       setCards(flashCardSet.flashcards);
       setCardSize(flashCardSet.flashcards.length);
