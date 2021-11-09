@@ -83,7 +83,6 @@ io.on("connection", (socket) => {
     var matchInfo = await playerMatcher(socket, player, 10);
     var isMatched = matchInfo.matched;
     room = matchInfo.room;
-    socket.join();
     if (!isMatched) {
       socket.emit("no match found");
       deletePlayer(player.username);

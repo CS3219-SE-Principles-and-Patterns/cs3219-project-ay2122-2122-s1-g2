@@ -29,8 +29,10 @@ const playerMatcher = async (socket, player, time) => {
   if (time == 0) {
     return { matched: false, room: "" };
   }
-  if (!players.includes(player)) {
+  if (players.findIndex((p_user) => p_user.username === username) == -1) {
     players.push(player);
+  } else {
+    return { matched: false, room: "" };
   }
   player.matchFound = false;
   for (let i = 0; i < players.length; i++) {
