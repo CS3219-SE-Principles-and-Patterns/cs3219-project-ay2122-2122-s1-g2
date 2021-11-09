@@ -11,8 +11,7 @@ import CreateProfilePage from "./pages/profile/CreateProfilePage";
 import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
 import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
 import LeaderBoardPage from "./pages/leaderboard/LeaderboardPage";
-
-import NavBar from "./components/common/Navbar";
+import NavBar from "./components/common/NavBar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import { getAxiosInstance as axios, removeTokens } from "./utils/auth/auth";
