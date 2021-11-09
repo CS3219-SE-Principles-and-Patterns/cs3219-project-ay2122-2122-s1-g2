@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Game = require('../models/game');
 
-const db = process.env.MONGO_URI;
+// const db = process.env.MONGO_URI;
+const db = 'mongodb://127.0.0.1:27017'
 // Connect to MongoDB
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
@@ -129,16 +130,35 @@ const DatabaseManager = {
 		// frontend cannot update the game database only get from it
 		try {
 			const currUser = await Game.findOne({ username: player.username });
-			if (!currUser) throw "Sorry! User does not exist.";
-			if (currUser.ratings.length == 0) throw "Sorry! User does not have any languages assigned.";
-			const userRatings = currUser.ratings;
-			for (let i = 0; i < userRatings.length; i++) {
-				if (player.language == userRatings[i].language) 
-					currUser.ratings[i].rating = player.rating;
+			if (!currUser) {
+				const language = ["Korean", "Japanese"];
+				const rating = player.rating;
+				ratings = []
+				for (let i = 0; i < 2; i++) {
+					if (player.language == language[i]) ratings.push({language: language[i], rating: rating})
+					else ratings.push({language: language[i], rating: 1000}) 
+				}
+				const user = Game({
+					username: player.username,
+					ratings: ratings,
+					history: []
+				});
+				
+				const savedUser = await user.save();
+				return savedUser;				
+			} 
+			else if (currUser.ratings.length == 0) throw "Sorry! User does not have any languages assigned.";	
+			else {
+				const userRatings = currUser.ratings;
+				for (let i = 0; i < userRatings.length; i++) {
+					if (player.language == userRatings[i].language) 
+						currUser.ratings[i].rating = player.rating;
+				}
+				const savedUser = await currUser.save();
+				return savedUser;
 			}
-			const savedUser = await currUser.save();
-			return savedUser;
 		} catch(err) {
+			console.log(err);
 			return err;
 		}
 	},
