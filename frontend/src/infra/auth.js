@@ -1,6 +1,6 @@
 import { getAxiosInstance as axios } from "../utils/auth/auth";
 
-const LOGIN_PATH = "http://localhost:3000/api/login";
+const LOGIN_PATH = "http://35.240.188.57/api/login";
 
 export const loginUser = async (data) => {
   return await axios().post(LOGIN_PATH + "/login", data);

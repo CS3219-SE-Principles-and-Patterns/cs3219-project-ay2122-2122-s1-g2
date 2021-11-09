@@ -8,8 +8,7 @@ name: Deploy Matchmaking Microservice
 on:
   push:
     branches:
-      - gke
-      - gke2
+      - master
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
