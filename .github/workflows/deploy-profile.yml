@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - master
+      - game-fix
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
