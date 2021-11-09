@@ -28,8 +28,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 90
-      targetPort: 6000
+    - port: 80
+      targetPort: 3333
       protocol: TCP
   selector:
     run: flashcard
