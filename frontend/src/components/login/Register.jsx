@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { registerUser } from "../../infra/auth";
 import { landingEnum } from "../../utils/constants/enums";
 import CreateProfilePage from "../../pages/profile/CreateProfilePage";
 import { FormControl, Grid, Typography } from "@mui/material";
 import { CssButton, CssTextField } from "../common/Components";
 import { Box } from "@mui/system";
+import { LoginController } from "../../controller/LoginController";
 
 const Register = ({ setLandingStatus }) => {
   const [registered, setRegistered] = useState(false);
@@ -22,7 +22,7 @@ const Register = ({ setLandingStatus }) => {
   const password = useRef({});
   password.current = watch("password", "");
   const onSubmit = async (data) => {
-    const response = await registerUser(data).catch((e) => {
+    const response = await LoginController.registerUser(data).catch((e) => {
       setError("username", { message: e.response.data.error });
     });
 
@@ -60,6 +60,7 @@ const Register = ({ setLandingStatus }) => {
             <FormControl>
               <CssTextField
                 label="Password"
+                type="password"
                 {...register("password", { required: true })}
               />
               {errors.password?.type === "required" && (
@@ -69,6 +70,7 @@ const Register = ({ setLandingStatus }) => {
             <FormControl>
               <CssTextField
                 label="Re-enter Password"
+                type="password"
                 {...register("validatePassword", {
                   validate: (value) =>
                     value === password.current || "The passwords do not match.",

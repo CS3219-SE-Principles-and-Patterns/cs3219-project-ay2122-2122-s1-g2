@@ -12,30 +12,30 @@ import { GameUser } from "../../domain/gameUser";
 import { GameController } from "../../controller/GameController";
 
 const GameUserRecord = (props: any) => {
-  const [ratings, setRatings] = useState<number[]>([]);
-  const [languages, setLanguages] = useState<string[]>([]);
-  const [results, setResults] = useState<boolean[]>([]);
-  const [languageHistory, setLanguageHistory] = useState<string[]>([]);
+  // const [ratings, setRatings] = useState<number[]>([]);
+  // const [languages, setLanguages] = useState<string[]>([]);
+  // const [results, setResults] = useState<boolean[]>([]);
+  // const [languageHistory, setLanguageHistory] = useState<string[]>([]);
   
-  useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const history: GameUser = await GameController.getUserHistory(props.username);
-        setLanguages(history.languages);
-        setResults(history.resultHistory);
-        setLanguageHistory(history.languageHistory);
-        setRatings(history.ratings);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchHistory();
-  }, []);
+  // useEffect(() => {
+  //   const fetchHistory = async () => {
+  //     try {
+  //       const history: GameUser = await GameController.getUserHistory(props.username);
+  //       setLanguages(history.languages);
+  //       setResults(history.resultHistory);
+  //       setLanguageHistory(history.languageHistory);
+  //       setRatings(history.ratings);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   fetchHistory();
+  // }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }} textAlign="center">
       <h1>Game</h1>
-      <Grid container justifyContent="center">
+      {/* <Grid container justifyContent="center">
         <Box component="span">
           <Stack>
             <List component="nav">
@@ -72,7 +72,7 @@ const GameUserRecord = (props: any) => {
             </List>
           </Stack>
         </Box>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };

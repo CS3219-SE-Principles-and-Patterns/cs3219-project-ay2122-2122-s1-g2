@@ -27,7 +27,7 @@ const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
       setIsLoading(false);
       setIsAuthenticated(false);
     }
-  });
+  }, []);
   return isLoading ? (
     <p>Loading</p>
   ) : (

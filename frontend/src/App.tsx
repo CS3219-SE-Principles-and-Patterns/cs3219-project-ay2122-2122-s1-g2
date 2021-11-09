@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import { Box } from "@mui/system";
+
 import Game from "./pages/game/GameMainPage";
 import Home from "./pages/common/HomePage";
+import ProfilePage from "./pages/profile/ProfilePage";
 import LandingPage from "./pages/common/LandingPage";
 import CreateProfilePage from "./pages/profile/CreateProfilePage";
 import CreateFlashCardPage from "./pages/flashcard/CreateFlashCardPage";
-import { Box } from "@mui/system";
-import NavBar from "./components/common/Navbar";
-import ProfilePage from "./pages/profile/ProfilePage";
 import FlashCardDetailPage from "./pages/flashcard/FlashCardDetailPage";
+import LeaderBoardPage from "./pages/leaderboard/LeaderboardPage";
+
+import NavBar from "./components/common/Navbar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 import { getAxiosInstance as axios, removeTokens } from "./utils/auth/auth";
 import { ACCESS_TOKEN } from "./utils/constants/tokens";
 
@@ -33,7 +38,7 @@ const App = () => {
       removeTokens();
       setIsAuthenticated(false);
     }
-  });
+  }, []);
 
   return (
     <Router>
@@ -42,9 +47,15 @@ const App = () => {
           {isAuthenticated ? <NavBar /> : <div></div>}
           <Switch>
             <Route path="/" exact>
-              <LandingPage setIsAuthenticated={setIsAuthenticated}/>
+              <LandingPage
+                setIsAuthenticated={setIsAuthenticated}
+                isAuthenticated={isAuthenticated}
+              />
             </Route>
-            <ProtectedRoute children={<Home />} path="/home" />
+            <ProtectedRoute
+              children={<Home setIsAuthenticated={setIsAuthenticated} />}
+              path="/home"
+            />
 
             <ProtectedRoute
               children={<CreateProfilePage isEdit={false} />}
@@ -71,6 +82,11 @@ const App = () => {
             <ProtectedRoute
               path="/flashcard/:id"
               children={<FlashCardDetailPage />}
+            />
+
+            <ProtectedRoute
+              path="/leaderboard"
+              children={<LeaderBoardPage />}
             />
 
             <ProtectedRoute children={<Game />} path="/game" />

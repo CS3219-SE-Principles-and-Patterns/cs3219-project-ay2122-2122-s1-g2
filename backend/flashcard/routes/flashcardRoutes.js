@@ -7,12 +7,14 @@ const DatabaseManager = require("../database/flashcardDatabase.js");
 router
   .route("/")
   .post(flashcardController.authTokenMW, flashcardController.create)
-  .get(flashcardController.authTokenMW, flashcardController.getAll)
+  .get(flashcardController.authTokenMW, flashcardController.getAll) // This is actually repeated with the /:id version
   .put(flashcardController.authTokenMW, flashcardController.updateDetails);
 
 router
   .route("/:id")
   .get(flashcardController.authTokenMW, flashcardController.get)
   .delete(flashcardController.authTokenMW, flashcardController.delete);
+
+router.route("/default/:language").get(flashcardController.getDefault);
 
 module.exports = router;

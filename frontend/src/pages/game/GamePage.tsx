@@ -1,15 +1,7 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography, FormControl, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  CircularProgress,
-} from "@mui/material";
 import { useState, useEffect } from "react";
 import "./GamePage.scss";
-import { CssButton } from "../../components/common/Components";
 
 const GamePage = (props: any) => {
   const [question, setQuestion] = useState<string>("Not yet");
@@ -17,27 +9,42 @@ const GamePage = (props: any) => {
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
   const [answers, setAnswers] = useState<string[]>([]);
   const [timing, setTiming] = useState<any>(new Date());
+  const [correctNumber, setCorrectNumber] = useState<number>(0);
+  const [round, setRound] = useState<number>(0);
   const socket = props.socket;
   useEffect(() => {
-    socket.on("flashcard", (data: any) => {
-      setQuestion(data.question);
-      setAnswers(data.answers);
-      setCorrectAnswer(data.correctAnswer);
-      setTiming(new Date());
-      setStatus(true);
-    });
+    const socketListener = () => {
+      socket.on("flashcard", (data: any) => {
+        if (data == null){
+          return;
+        }
+        setQuestion(data.question);
+        setAnswers(data.answers);
+        setCorrectAnswer(data.correctAnswer);
+        setTiming(new Date());
+        setStatus(true);
+      });
+    }
+    socketListener();
   }, []);
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (answer: any) => {
     var currTime: any = new Date();
     var time = Math.abs(currTime - timing);
-    var result = event.target.value == correctAnswer;
-    socket.emit("answer", { gameRes: result, timing: time }); // idk how to get this timing yet
+    var result = answer == correctAnswer;
+    socket.emit("answer", { gameRes: result, timing: time });
+    if (result) {
+      setCorrectNumber(correctNumber + 1);
+    }
+    setRound(round + 1)
     handleQuestionChange();
   };
 
   const handleQuestionChange = () => {
     socket.on("flashcard", (data: any) => {
+      if (data == null){
+        return;
+      }
       setQuestion(data.question);
       setAnswers(data.answers);
       setCorrectAnswer(data.correctAnswer);
@@ -55,7 +62,7 @@ const GamePage = (props: any) => {
                 <Button
                   variant="text"
                   className="game-button"
-                  onClick={handleSubmit}
+                  onClick={() => handleSubmit(answer)}
                 >
                   {answer}
                 </Button>
@@ -63,6 +70,7 @@ const GamePage = (props: any) => {
             ))}
           </Grid>
         </FormControl>
+        <Typography>You have answered {correctNumber}/{round} questions correctly</Typography>
       </Box>
     );
   } else {

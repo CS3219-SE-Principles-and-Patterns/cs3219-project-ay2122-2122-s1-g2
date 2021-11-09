@@ -1,53 +1,75 @@
-const { assert } = require("chai");
-require('dotenv').config()
+require("dotenv").config();
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
-const jwt = require('jsonwebtoken');
+let should = chai.should();
+const jwt = require("jsonwebtoken");
+const ROUTE = "/api/profile/";
 
 const app = require("../index");
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const generateToken = (username) => {
-    return jwt.sign({
-        username: username
-    }, ACCESS_SECRET);  
+  return jwt.sign(
+    {
+      username: username,
+    },
+    ACCESS_SECRET
+  );
 };
 
-describe('Testing Profile Routes', () => {
-	const testUsername = "passwordis123";
-	const accessToken = generateToken(testUsername);
-	const profileDetails = {
-		username: testUsername,
-		languages: ["Japanese", "Korean"],
-		proficiencies: [3, 4]
-	}
+describe("Testing Profile Routes", () => {
+  const testUsername = "passwordis123";
+  const accessToken = generateToken(testUsername);
+  const profileDetails = {
+    username: testUsername,
+    languages: ["Japanese", "Korean"],
+    proficiencies: [3, 4],
+  };
 
-	context('CREATE: /api/profile', () => {
-		it('Able to create profile without error', async () => {
-			const res = await chai.request(app)
-				.post(`/api/profile`)
-				.send(profileDetails);
-			assert.ifError(res.error);
-		});
-	});
+  context("CREATE: /", () => {
+    it("Able to create profile successfully", async () => {
+      const res = await chai.request(app).post(ROUTE).send(profileDetails);
+      res.should.have.status(200);
+    });
+    it("Error: Create profile with empty body", async () => {
+      const res = await chai.request(app).post(ROUTE).send("");
+      res.should.have.status(401);
+      res.body.should.have
+        .property("error")
+        .eql("Unable to get user details from database");
+    });
+  });
 
-	context('UPDATE: /api/profile', () => {
-		it('Able to update profile without error', async () => {
-			const res = await chai.request(app)
-				.put(`/api/profile`)
-				.send(profileDetails)
-				.set("Authorization", `Bearer ${accessToken}`);
-			assert.ifError(res.error);
-		});
-	});
+  context("UPDATE: /", () => {
+    it("Able to update profile successfully", async () => {
+      const res = await chai
+        .request(app)
+        .put(ROUTE)
+        .send(profileDetails)
+        .set("Authorization", `Bearer ${accessToken}`);
+      res.should.have.status(200);
+    });
+    it("Error: Update profile with empty body", async () => {
+      const res = await chai
+        .request(app)
+        .put(ROUTE)
+        .send("")
+        .set("Authorization", `Bearer ${accessToken}`);
+      res.should.have.status(400);
+      res.body.should.have
+        .property("error")
+        .eql("TypeError: Cannot read property 'length' of undefined");
+    });
+  });
 
-	context('GET: /api/profile', () => {
-		it('Able to get profile details without error', async () => {
-			const res = await chai.request(app)
-				.get(`/api/profile`)
-				.set("Authorization", `Bearer ${accessToken}`);
-			assert.ifError(res.error);
-		});
-	});
+  context("GET: /", () => {
+    it("Able to get profile details successfully", async () => {
+      const res = await chai
+        .request(app)
+        .get(ROUTE)
+        .set("Authorization", `Bearer ${accessToken}`);
+      res.should.have.status(200);
+    });
+  });
 });

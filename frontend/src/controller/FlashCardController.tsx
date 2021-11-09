@@ -1,4 +1,4 @@
-import { Card, CardProps, FlashCardSet, FlashCardSetProps } from "../domain/flashcard";
+import { FlashCardSet, FlashCardSetProps } from "../domain/flashcard";
 import { FlashCardInfra } from "../infra/flashcard";
 
 export class FlashCardController {
@@ -9,6 +9,12 @@ export class FlashCardController {
 
   public static getAllFlashCards = async (): Promise<FlashCardSet[]> => {
     const res = await FlashCardInfra.getAllFlashCards();
+    const flashcards: [] = res.data.data;
+    return flashcards.map((flashcard) => FlashCardSet.create(flashcard));
+  };
+
+  public static getDefaultFlashCards = async (language: string): Promise<FlashCardSet[]> => {
+    const res = await FlashCardInfra.getDefaultFlashcards(language);
     const flashcards: [] = res.data.data;
     return flashcards.map((flashcard) => FlashCardSet.create(flashcard));
   };

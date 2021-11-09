@@ -20,13 +20,13 @@ const gameDelay = async (socket, time) => {
 	
 const playerMatcher = async (socket, player, time) => {
     if (player.matchFound) {
-        console.log(player.room)
         socket.join(player.room)
+        let room = player.room
         deletePlayer(player.username)
-        return true
+        return {matched: true, room: room}
     }
     if (time == 0) {
-        return false;
+        return {matched: false, room: ""};
     }
     if (!players.includes(player)){
         players.push(player)
@@ -46,7 +46,7 @@ const playerMatcher = async (socket, player, time) => {
             deletePlayer(player.username);
             await delay(5);
 			//deletePlayer(otherPlayerName);
-            return true;
+            return {matched: true, room: otherPlayerName};
 		}
 	}
 	player.room = player.username;
@@ -56,7 +56,7 @@ const playerMatcher = async (socket, player, time) => {
 
 const deletePlayer = (username) => {
 	const index = players.findIndex((p_user) => p_user.username === username);  
-	if (index !== -1) {
+    if (index !== -1) {
 	  return players.splice(index, 1)[0];
 	}
 }

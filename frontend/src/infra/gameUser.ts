@@ -4,9 +4,14 @@ const GAME_PATH = "http://localhost:4000/api/matchmaking";
 
 export class GameInfra {
   public static getAllUsers = (): Promise<any> => {
-    return axios().get(GAME_PATH);
+    return axios().get(`${GAME_PATH}/getall`);
   };
-  public static getUserHistory = (username: any): Promise<any> => {
-    return axios().get(`${GAME_PATH}/${username}`);
+
+  public static getUser = (): Promise<any> => {
+    return axios().get(`${GAME_PATH}`);
+  };
+
+  public static updateUser = (): Promise<any> => {
+    return axios().post(`${GAME_PATH}`);
   };
 }

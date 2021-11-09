@@ -20,7 +20,7 @@ describe('Testing Matchmaking Routes', () => {
 	const accessToken = generateToken(testUsername);
 	const profileDetails = {
 		username: testUsername, 
-		ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}, {language: "Chinese", rating: 1000}], 
+		ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}], 
 		history:[]
 	};
 	context('INSERT: /api/matchmaking/', () => {
