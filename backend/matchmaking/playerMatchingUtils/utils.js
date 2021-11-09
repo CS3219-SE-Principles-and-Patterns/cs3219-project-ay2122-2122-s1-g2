@@ -28,7 +28,7 @@ const playerMatcher = async (socket, player, time) => {
     if (time == 0) {
         return {matched: false, room: ""};
     }
-    if (players.findIndex((p_user) => p_user.username === username) == -1){
+    if (players.findIndex((p_user) => p_user.username === player.username) == -1){
         players.push(player)
     } else {
         return {matches: false, room: ""}
