@@ -32,13 +32,13 @@ describe("Testing Login Routes", () => {
     });
   });
 
-  context("GET: /", () => {
-    it("Able to get all inserted data", async () => {
-      const res = await chai.request(app).get(ROUTE);
-      res.should.have.status(200);
-      res.body.data.should.have.lengthOf.above(0);
-    });
-  });
+  // context("GET: /", () => {
+  //   it("Able to get all inserted data", async () => {
+  //     const res = await chai.request(app).get(ROUTE);
+  //     res.should.have.status(200);
+  //     res.body.data.should.have.lengthOf.above(0);
+  //   });
+  // });
 
   context("GET: /:username", () => {
     it("Able to get specific inserted data", async () => {
