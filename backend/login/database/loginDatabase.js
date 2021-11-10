@@ -105,7 +105,7 @@ const DatabaseManager = {
     });
   },
   getAll: async (req, res) => {
-    res.send("success");
+    res.status(200).send("success");
     // try {
     //   const profiles = await Profile.find();
     //   res.json({
