@@ -146,7 +146,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = {
-	server,
-	io
-};
+module.exports = server;
