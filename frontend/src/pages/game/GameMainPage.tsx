@@ -20,7 +20,7 @@ import OpponentFoundPage from "./OpponentFoundPage";
 
 const SERVER: string = "http://34.126.141.177";
 // const SERVER: string = "http://localhost:4000";
-const socket: any = io(SERVER);
+const socket: any = io(SERVER, {transports: ['websocket']});
 
 const GameMainPage = (props: any) => {
   const findOpponent = (username: string, language: string) => {
