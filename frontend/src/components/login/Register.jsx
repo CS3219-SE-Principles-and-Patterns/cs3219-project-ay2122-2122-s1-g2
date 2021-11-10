@@ -33,7 +33,11 @@ const Register = ({ setLandingStatus }) => {
   };
   return (
     <Grid container sx={{ width: "80vw" }}>
-      <Grid container sm={6}></Grid>
+      <Grid container sm={6}>
+        <Box sx={{ width: "80%" }}>
+          <img src="home_icon2.jpg" style={{ width: "100%" }}></img>
+        </Box>
+      </Grid>
       {page === 0 ? (
         <Grid container sm={6}>
           <Grid item xs={5}></Grid>

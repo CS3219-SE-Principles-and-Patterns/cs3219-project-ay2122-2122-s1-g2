@@ -23,14 +23,15 @@ describe('Testing Matchmaking Routes', () => {
 		ratings:[{language: "Korean", rating: 1000}, {language: "Japanese", rating: 1000}], 
 		history:[]
 	};
-	// context('INSERT: /api/matchmaking/', () => {
-	// 	it('Able to create game user without error', async () => {
-	// 		const res = await chai.request(app)
-	// 			.post(`/api/matchmaking`)
-	// 			.send(profileDetails);
-	// 		assert.ifError(res.error);
-	// 	});
-	// });
+
+	context('INSERT: /api/matchmaking/', () => {
+		it('Able to create game user without error', async () => {
+			const res = await chai.request(app)
+				.post(`/api/matchmaking`)
+				.send(profileDetails);
+			assert.ifError(res.error);
+		});
+	});
 
 	context('GETALL: /api/matchmaking/getall', () => {
 		it('Able to getAll game user without error', async () => {
@@ -47,6 +48,7 @@ describe('Testing Matchmaking Routes', () => {
 				.get(`/api/matchmaking`)
 				.set("Authorization", `Bearer ${accessToken}`)
 				.send(profileDetails);
+
 			if (!res.error && res.body.data.username != testUsername) {
 				res.error = new Error("Unable to get the updated user");
 			}
