@@ -33,29 +33,29 @@ io.on("connection", (socket) => {
   console.log("In backend");
   var questions = [
     {
-      question: "Select the correct answer",
-      correctAnswer: "No",
-      answers: ["Hi", "No", "Eat", "Sh"],
+      question: `What is \"I\" in Japanese?`,
+      correctAnswer: "わたし",
+      answers: ["わたしたち", "わたし", "あなた", "あのかた"],
     },
     {
-      question: "Select what your heart chooses",
-      correctAnswer: "Noooo",
-      answers: ["Hiiii", "Noooo", "Eatttt", "Shhhh"],
+      question: "What is \"that person, he / she\" in Japanese?",
+      correctAnswer: "あのかた",
+      answers: ["あなた", "あのかた", "わたしたち", "わたし"],
     },
     {
-      question: "Select my answer",
-      correctAnswer: "No",
-      answers: ["Hi", "No", "Eat", "Sh"],
+      question: "What is \"we\" in Japanese?",
+      correctAnswer: "わたしたち",
+      answers: ["あなた", "わたしたち", "わたしたち", "わたし"],
     },
     {
-      question: "Select the wrong answer",
-      correctAnswer: "No",
-      answers: ["Hi", "No", "Eat", "Sh"],
+      question: "What is \"Ladies and gentleman, all of you\" in Japanese",
+      correctAnswer: "まなさん",
+      answers: ["あなた", "まなさん", "わたしたち", "わたし"],
     },
     {
-      question: "correct answer",
-      correctAnswer: "No",
-      answers: ["Hi", "No", "Eat", "Sh"],
+      question: "What is \"Child's suffix\" in Japanese?",
+      correctAnswer: "〜ちゃん",
+      answers: ["あなた", "〜ちゃん", "わたしたち", "わたし"],
     },
   ];
   let rounds = 0;
@@ -146,7 +146,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = {
-	server,
-	io
-};
+module.exports = server;
